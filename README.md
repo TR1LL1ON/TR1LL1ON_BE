@@ -1,5 +1,7 @@
 # TR1LL1ON_BE
 
+## Main에 push 하지 말아주세요 !!
+
 ### ✅ Commit log
 
 ```
