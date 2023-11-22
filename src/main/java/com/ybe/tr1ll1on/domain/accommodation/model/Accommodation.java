@@ -1,9 +1,12 @@
 package com.ybe.tr1ll1on.domain.accommodation.model;
 
+import com.ybe.tr1ll1on.domain.likes.model.Likes;
+import com.ybe.tr1ll1on.domain.product.model.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +23,7 @@ public class Accommodation {
     private String address;
     private String latitude;
     private String longitude;
-    private String addressCode;
+    private String regionCode;
     private String phone;
 
     @ManyToOne
@@ -28,8 +31,14 @@ public class Accommodation {
     private AccommodationCategory category;
 
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<AccommodationImage> images;
+    private List<AccommodationImage> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Product> productList = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "accommodation")
     private AccommodationFacility facility;
+
+    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Likes> likesList = new ArrayList<>();
 }

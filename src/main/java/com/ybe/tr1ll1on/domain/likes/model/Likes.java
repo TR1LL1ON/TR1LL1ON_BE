@@ -1,26 +1,26 @@
-package com.ybe.tr1ll1on.domain.cart.model;
+package com.ybe.tr1ll1on.domain.likes.model;
 
+import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @NoArgsConstructor
-public class Cart {
+public class Likes {
+
     @Id
-    @Column(name = "cart_id")
+    @Column(name = "like_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<CartItem> cartItem = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "accommodation_id")
+    private Accommodation accommodation;
 }
