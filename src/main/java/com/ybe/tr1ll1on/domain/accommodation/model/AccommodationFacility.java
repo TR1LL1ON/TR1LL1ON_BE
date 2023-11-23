@@ -13,11 +13,11 @@ public class AccommodationFacility {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "accommodation_facility_id")
     private Long id;
-    private Boolean cooking;
-    private Boolean parking;
-    private Boolean sports;
-    private Boolean sauna;
-    private Boolean beauty;
+    private Boolean hasCooking;
+    private Boolean hasParking;
+    private Boolean hasSports;
+    private Boolean hasSauna;
+    private Boolean hasBeauty;
 
     @OneToOne
     @JoinColumn(name = "accommodation_id")
