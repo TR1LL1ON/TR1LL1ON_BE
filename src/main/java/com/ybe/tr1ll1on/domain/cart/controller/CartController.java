@@ -1,6 +1,6 @@
 package com.ybe.tr1ll1on.domain.cart.controller;
 
-import com.ybe.tr1ll1on.domain.cart.dto.CartItemDTO;
+import com.ybe.tr1ll1on.domain.cart.dto.CartItemResponse;
 import com.ybe.tr1ll1on.domain.cart.service.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("")
-    public List<CartItemDTO> getAllCartList(){
+    public List<CartItemResponse> getAllCartList(){
         return cartService.getAllCartItems();
     }
 

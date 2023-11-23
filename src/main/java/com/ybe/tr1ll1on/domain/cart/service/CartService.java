@@ -1,6 +1,6 @@
 package com.ybe.tr1ll1on.domain.cart.service;
 
-import com.ybe.tr1ll1on.domain.cart.dto.CartItemDTO;
+import com.ybe.tr1ll1on.domain.cart.dto.CartItemResponse;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.cart.repository.CartItemRepository;
 import com.ybe.tr1ll1on.domain.cart.repository.CartRepository;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -18,13 +19,11 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
 
     @Comment("장바구니상품 전체조회")
-    public List<CartItemDTO> getAllCartItems() {
+    public List<CartItemResponse> getAllCartItems() {
         List<CartItem> cartItems = cartItemRepository.findAll();
-        List<CartItemDTO> result = new ArrayList<>();
-        for (CartItem cartItem : cartItems) {
-            result.add(convertToCartItemDTO(cartItem));
-        }
-        return result;
+        return cartItems.stream()
+                .map(CartItemResponse::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Comment("장바구니에 상품 추가")
@@ -39,15 +38,4 @@ public class CartService {
 
 
 
-    private CartItemDTO convertToCartItemDTO(CartItem cartItem) {
-        CartItemDTO cartItemDTO = new CartItemDTO();
-        cartItemDTO.setId(cartItem.getId());
-        cartItemDTO.setStartDate(cartItem.getStartDate());
-        cartItemDTO.setEndDate(cartItem.getEndDate());
-        cartItemDTO.setPersonNumber(cartItem.getPersonNumber());
-        cartItemDTO.setPrice(cartItem.getPrice());
-        cartItemDTO.setProductId(cartItem.getProduct().getId());
-        cartItemDTO.setAccommodationId(cartItem.getAccommodation().getId());
-        return cartItemDTO;
-    }
 }
