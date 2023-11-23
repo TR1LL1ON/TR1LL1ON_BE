@@ -19,5 +19,5 @@ Remove : 파일 삭제
 ### ✅ Branch Naming
 
 ```
-feature/#이슈번호
+feature/#이슈번호_간단 설명(주제)
 ```
