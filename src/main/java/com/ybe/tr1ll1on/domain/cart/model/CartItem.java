@@ -16,9 +16,16 @@ public class CartItem {
     @Column(name = "cart_item_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "start_date")
     private LocalDateTime startDate;
+
+    @Column(name = "end_date")
     private LocalDateTime endDate;
+
+    @Column(name = "person_number")
     private Integer personNumber;
+
     private Integer price;
 
     @ManyToOne
@@ -28,4 +35,8 @@ public class CartItem {
     @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @OneToOne
+    @JoinColumn(name = "accommodation_id")
+    private Accommodation accommodation;
 }
