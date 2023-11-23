@@ -15,6 +15,6 @@ public class AccommodationImage {
     private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name = "accomodation_id")
+    @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 }

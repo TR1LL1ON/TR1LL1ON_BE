@@ -27,7 +27,7 @@ public class Accommodation {
     private String phone;
 
     @ManyToOne
-    @JoinColumn(name = "accommodation_category_id")
+    @JoinColumn(name = "category_id")
     private AccommodationCategory category;
 
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -36,7 +36,7 @@ public class Accommodation {
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Product> productList = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "accommodation")
+    @OneToOne(mappedBy = "accommodation", cascade = CascadeType.ALL)
     private AccommodationFacility facility;
 
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
