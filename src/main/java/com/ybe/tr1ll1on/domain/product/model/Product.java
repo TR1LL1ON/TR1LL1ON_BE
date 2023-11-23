@@ -25,10 +25,6 @@ public class Product {
     private String checkOut;
     private Integer standardNumber;
     private Integer maxNumber;
-    private String bedType;
-    private Integer bedNumber;
-    private Boolean isSmoke;
-    private Boolean isBalcony;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id")
@@ -45,4 +41,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ProductImage> productImageList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private ProductFacility productFacility;
 }
