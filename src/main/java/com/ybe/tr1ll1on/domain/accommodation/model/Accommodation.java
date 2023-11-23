@@ -19,11 +19,10 @@ public class Accommodation {
     @Column(name = "accommodation_id")
     private Long id;
     private String name;
-    private String info;
     private String address;
     private String latitude;
     private String longitude;
-    private String regionCode;
+    private String areaCode;
     private String phone;
 
     @ManyToOne
