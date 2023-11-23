@@ -34,14 +34,14 @@ public class Product {
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private OrderItem orderItem;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private CartItem cartItem;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<ProductInfo> productInfoList = new ArrayList<>();
+    private List<ProductInfoPerNight> productInfoPerNightList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ProductImage> productImageList = new ArrayList<>();

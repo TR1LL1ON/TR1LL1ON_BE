@@ -9,9 +9,9 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ProductInfo {
+public class ProductInfoPerNight {
     @Id
-    @Column(name = "product_info_id")
+    @Column(name = "product_info_per_night_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate date;

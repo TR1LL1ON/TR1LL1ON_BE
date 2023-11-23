@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class ProductImage {
 
     @Id
-    @Column(name = "product_image_id")
+    @Column(name = "image_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String imageUrl;
