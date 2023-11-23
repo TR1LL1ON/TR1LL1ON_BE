@@ -2,17 +2,12 @@ package com.ybe.tr1ll1on;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
-import com.ybe.tr1ll1on.domain.accommodation.model.AccommodationFacility;
-import com.ybe.tr1ll1on.domain.accommodation.model.AccommodationImage;
-import com.ybe.tr1ll1on.domain.accommodation.model.Category;
+import com.ybe.tr1ll1on.domain.accommodation.model.*;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationFacilityRepository;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationImageRepository;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
-import com.ybe.tr1ll1on.domain.accommodation.repository.CategoryRepository;
-import com.ybe.tr1ll1on.domain.product.Repository.ProductFacilityRepository;
-import com.ybe.tr1ll1on.domain.product.Repository.ProductImageRepository;
-import com.ybe.tr1ll1on.domain.product.Repository.ProductRepository;
+import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationCategoryRepository;
+import com.ybe.tr1ll1on.domain.product.repository.*;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.model.ProductFacility;
 import com.ybe.tr1ll1on.domain.product.model.ProductImage;
@@ -31,7 +26,7 @@ import java.util.*;
 public class AppStartupRunner implements ApplicationRunner {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private AccommodationCategoryRepository accommodationCategoryRepository;
     @Autowired
     private AccommodationRepository accommodationRepository;
     @Autowired
@@ -51,7 +46,7 @@ public class AppStartupRunner implements ApplicationRunner {
     }
 
     @Transactional
-    private void saveAccommodationData() throws URISyntaxException, JsonProcessingException {
+    public void saveAccommodationData() throws URISyntaxException, JsonProcessingException {
         String link = "https://apis.data.go.kr/B551011/KorService1/searchStay1";
         String MobileOS = "ETC";
         String MobileApp = "AppTest";
@@ -76,7 +71,7 @@ public class AppStartupRunner implements ApplicationRunner {
         List<Map<String, Object>> itemMap = (List<Map<String, Object>>) itemsMap.get("item");
 
         for (Map<String, Object> item : itemMap) {
-            Category category = saveCategory(item);
+            AccommodationCategory category = saveCategory(item);
             Accommodation accommodation = saveAccommodation(item);
             AccommodationFacility accommodationFacility = saveAccommodationFacility(item);
 
@@ -94,8 +89,8 @@ public class AppStartupRunner implements ApplicationRunner {
         String name = (String) item.get("title");
         String address = (String) item.get("addr1");
         String phone = (String) item.get("tel");
-        Double longitude = Double.parseDouble((String) item.get("mapx"));
-        Double latitude = Double.parseDouble((String) item.get("mapy"));
+        String longitude =(String) item.get("mapx");
+        String latitude = (String) item.get("mapy");
         String areaCode = (String) item.get("areacode");
 
         return Accommodation.builder()
@@ -108,11 +103,11 @@ public class AppStartupRunner implements ApplicationRunner {
                 .build();
     }
 
-    private Category saveCategory(Map<String, Object> item) {
+    private AccommodationCategory saveCategory(Map<String, Object> item) {
         String categoryCode = (String) item.get("cat3");
 
-        return categoryRepository.findByCategoryCode(categoryCode)
-                .orElseGet(() -> categoryRepository.save(new Category(categoryCode)));
+        return accommodationCategoryRepository.findByCategoryCode(categoryCode)
+                .orElseGet(() -> accommodationCategoryRepository.save(new AccommodationCategory(categoryCode)));
     }
 
     private AccommodationFacility saveAccommodationFacility(Map<String, Object> item) throws URISyntaxException, JsonProcessingException {
@@ -163,7 +158,7 @@ public class AppStartupRunner implements ApplicationRunner {
         return null;
     }
 
-    private void saveAccommodationAndFacility(Accommodation accommodation, Category category, AccommodationFacility accommodationFacility) {
+    private void saveAccommodationAndFacility(Accommodation accommodation, AccommodationCategory category, AccommodationFacility accommodationFacility) {
         accommodation.setCategory(category);
         Accommodation savedAccommodation = accommodationRepository.save(accommodation);
 
