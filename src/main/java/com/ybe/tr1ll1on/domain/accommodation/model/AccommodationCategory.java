@@ -18,6 +18,6 @@ public class AccommodationCategory {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "accommodation_category",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Accommodation> accommodationList = new ArrayList<>();
 }
