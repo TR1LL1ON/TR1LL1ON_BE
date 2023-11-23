@@ -1,7 +1,9 @@
 package com.ybe.tr1ll1on.global.constants;
 
 public class ApiConstants {
-    public static final String LINK = "http://apis.data.go.kr/B551011/KorService1/detailIntro1";
+    public static final String LINK_STAY = "https://apis.data.go.kr/B551011/KorService1/searchStay1";
+    public static final String LINK_INTRO = "http://apis.data.go.kr/B551011/KorService1/detailIntro1";
+    public static final String LINK_INFO = "http://apis.data.go.kr/B551011/KorService1/detailInfo1";
     public static final String MOBILE_OS = "ETC";
     public static final String MOBILE_APP = "AppTest";
     public static final String TYPE = "json";

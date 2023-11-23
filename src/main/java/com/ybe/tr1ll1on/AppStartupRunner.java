@@ -55,8 +55,10 @@ public class AppStartupRunner implements ApplicationRunner {
     @Transactional
     private void saveAccommodationData() throws URISyntaxException, JsonProcessingException {
         String url = String.format("%s?MobileOS=%s&MobileApp=%s&_type=%s&arrange=%s&serviceKey=%s",
-                LINK, MOBILE_OS, MOBILE_APP, TYPE, ARRANGE, SERVICE_KEY);
+                LINK_STAY, MOBILE_OS, MOBILE_APP, TYPE, ARRANGE, SERVICE_KEY);
         URI uri = new URI(url);
+
+        System.out.println(url);
 
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(uri, String.class);
@@ -76,13 +78,13 @@ public class AppStartupRunner implements ApplicationRunner {
             // 3. 데이터베이스 저장을 위한 AccommodationFacility Entity 생성
             AccommodationFacility accommodationFacility = createAccommodationFacility(item);
             // 4. 생성한 Accommodation 및 AccommodationFacility 정보를 데이터베이스에 저장
-            saveAccommodationAndFacility(category, accommodation, accommodationFacility);
+            Accommodation saveAccommodation = saveAccommodationAndFacility(category, accommodation, accommodationFacility);
 
             // 5. AccommodationImage Entity 생성 및 데이터베이스 저장
             createAndSaveAccommodationImages(item, accommodation);
 
             // 6. 해당 Accommodation Entity 연관 Product Entities 생성 및 데이터베이스 저장
-            saveProductData(item, accommodation);
+            saveProductData(item, saveAccommodation);
         }
     }
 
@@ -116,7 +118,7 @@ public class AppStartupRunner implements ApplicationRunner {
         String contentTypeId = (String) item.get("contenttypeid");
 
         String url = String.format("%s?ServiceKey=%s&contentTypeId=%s&contentId=%s&MobileOS=%s&MobileApp=%s&_type=%s",
-                LINK, SERVICE_KEY, contentTypeId, contentId, MOBILE_OS, MOBILE_APP, TYPE);
+                LINK_INTRO, SERVICE_KEY, contentTypeId, contentId, MOBILE_OS, MOBILE_APP, TYPE);
         URI uri = new URI(url);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -145,12 +147,14 @@ public class AppStartupRunner implements ApplicationRunner {
         return accommodationFacility;
     }
 
-    private void saveAccommodationAndFacility(Category category, Accommodation accommodation, AccommodationFacility accommodationFacility) {
+    private Accommodation saveAccommodationAndFacility(Category category, Accommodation accommodation, AccommodationFacility accommodationFacility) {
         accommodation.setCategory(category);
         Accommodation savedAccommodation = accommodationRepository.save(accommodation);
 
         accommodationFacility.setAccommodation(savedAccommodation);
         accommodationFacilityRepository.save(accommodationFacility);
+
+        return savedAccommodation;
     }
 
     private void createAndSaveAccommodationImages(Map<String, Object> item, Accommodation accommodation) {
@@ -176,7 +180,7 @@ public class AppStartupRunner implements ApplicationRunner {
         String contentTypeId = (String) item.get("contenttypeid");
 
         String url = String.format("%s?ServiceKey=%s&contentTypeId=%s&contentId=%s&MobileOS=%s&MobileApp=%s&_type=%s",
-                LINK, SERVICE_KEY, contentTypeId, contentId, MOBILE_OS, MOBILE_APP, TYPE);
+                LINK_INFO, SERVICE_KEY, contentTypeId, contentId, MOBILE_OS, MOBILE_APP, TYPE);
         URI uri = new URI(url);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -200,57 +204,21 @@ public class AppStartupRunner implements ApplicationRunner {
             createAndSaveProductData(itemList, checkInTime, checkOutTime, accommodation);
 
         } else {
-            // 정보가 존재하지 않을 경우 임의로 생성
             Random random = new Random();
 
+            // 9. 객실에 대한 정보를 제공 하지 않는 경우, 객실 관련 정보를 랜덤으로 생성
             for (int i = 0; i < 3; i++) {
-                ProductFacility facility = ProductFacility.builder()
-                        .hasBath(random.nextBoolean())
-                        .hasAirCondition(random.nextBoolean())
-                        .hasTV(random.nextBoolean())
-                        .hasPC(random.nextBoolean())
-                        .hasCable(random.nextBoolean())
-                        .hasInternet(random.nextBoolean())
-                        .hasRefrigerator(random.nextBoolean())
-                        .hasToiletries(random.nextBoolean())
-                        .hasSofa(random.nextBoolean())
-                        .canCook(random.nextBoolean())
-                        .hasTable(random.nextBoolean())
-                        .hasHairDryer(random.nextBoolean())
-                        .build();
-
-                List<String> imageUrls = Arrays.asList(
-                        "http://tong.visitkorea.or.kr/cms/resource/50/2705650_image2_1.jpg",
-                        "http://tong.visitkorea.or.kr/cms/resource/51/2705651_image2_1.jpg",
-                        "http://tong.visitkorea.or.kr/cms/resource/35/2705635_image2_1.jpg"
-                );
-
-                List<ProductImage> productImages = new ArrayList<>();
-                for (String imageUrl : imageUrls) {
-                    ProductImage productImage = ProductImage.builder()
-                            .imageUrl(imageUrl)
-                            .build();
-                    productImages.add(productImage);
-                }
-
-                String[] roomTypes = {"스탠다드", "디럭스", "스위트"};
-                String roomType = roomTypes[random.nextInt(roomTypes.length)];
-
-                Product product = Product.builder()
-                        .name(roomType)
-                        .checkInTime("15:00")
-                        .checkOutTime("11:00")
-                        .standardNumber(random.nextInt(5) + 1)
-                        .maximumNumber(random.nextInt(5) + 6)
-                        .count(random.nextInt(20) + 1)
-                        .build();
-
+                // 10. 데이터베이스 저장을 위한 Random Product Entity 생성
+                Product product = createRandomProduct(accommodation, random);
                 product.setAccommodation(accommodation);
                 productRepository.save(product);
 
-                facility.setProduct(product);
-                productFacilityRepository.save(facility);
+                // 10. 데이터베이스 저장을 위한 Random ProductFacility Entity 생성
+                ProductFacility productFacility = createRandomProductFacility(random);
+                productFacility.setProduct(product);
+                productFacilityRepository.save(productFacility);
 
+                List<ProductImage> productImages = createRandomProductImages(random);
                 for (ProductImage productImage : productImages) {
                     productImage.setProduct(product);
                     productImageRepository.save(productImage);
@@ -323,12 +291,61 @@ public class AppStartupRunner implements ApplicationRunner {
         for (int i = 1; i <= 4; i++) {
             String imageUrl = (String) item.get("roomimg" + i);
 
-            if (imageUrl != null) {
+            if (!imageUrl.isEmpty()) {
                 ProductImage productImage = ProductImage.builder()
                         .imageUrl(imageUrl)
                         .build();
                 productImages.add(productImage);
             }
+        }
+
+        return productImages;
+    }
+
+    private static Product createRandomProduct(Accommodation accommodation, Random random) {
+        String[] roomTypes = {"슈페리어 룸", "디럭스 룸", "캐릭터 룸", "그랜드 디럭스 룸", "그랜드 디럭스 패밀리 트윈 룸", "프리미어 패밀리 트윈 룸", "주니어 스위트 룸", "디럭스 스위트 룸", "로얄 스위트 룸", "주니어 스위트 룸", "프리미어 스위트 룸"};
+        String roomType = roomTypes[random.nextInt(roomTypes.length)];
+
+        return Product.builder()
+                .name(roomType)
+                .checkInTime("15:00")
+                .checkOutTime("11:00")
+                .standardNumber(random.nextInt(5) + 1)
+                .maximumNumber(random.nextInt(5) + 6)
+                .count(random.nextInt(20) + 1)
+                .build();
+    }
+
+    private static ProductFacility createRandomProductFacility(Random random) {
+        return ProductFacility.builder()
+                .hasBath(random.nextBoolean())
+                .hasAirCondition(random.nextBoolean())
+                .hasTV(random.nextBoolean())
+                .hasPC(random.nextBoolean())
+                .hasCable(random.nextBoolean())
+                .hasInternet(random.nextBoolean())
+                .hasRefrigerator(random.nextBoolean())
+                .hasToiletries(random.nextBoolean())
+                .hasSofa(random.nextBoolean())
+                .canCook(random.nextBoolean())
+                .hasTable(random.nextBoolean())
+                .hasHairDryer(random.nextBoolean())
+                .build();
+    }
+
+    private static List<ProductImage> createRandomProductImages(Random random) {
+        List<String> imageUrls = Arrays.asList(
+                "http://tong.visitkorea.or.kr/cms/resource/50/2705650_image2_1.jpg",
+                "http://tong.visitkorea.or.kr/cms/resource/51/2705651_image2_1.jpg",
+                "http://tong.visitkorea.or.kr/cms/resource/35/2705635_image2_1.jpg"
+        );
+
+        List<ProductImage> productImages = new ArrayList<>();
+        for (String imageUrl : imageUrls) {
+            ProductImage productImage = ProductImage.builder()
+                    .imageUrl(imageUrl)
+                    .build();
+            productImages.add(productImage);
         }
 
         return productImages;

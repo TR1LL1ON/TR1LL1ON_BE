@@ -16,8 +16,8 @@ public class ProductFacility {
 
     private boolean hasBath;
     private boolean hasAirCondition;
-    private boolean hasTV;
-    private boolean hasPC;
+    private boolean hasTv;
+    private boolean hasPc;
     private boolean hasCable;
     private boolean hasInternet;
     private boolean hasRefrigerator;
