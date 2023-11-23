@@ -1,48 +1,51 @@
 package com.ybe.tr1ll1on.domain.product.model;
 
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
-import com.ybe.tr1ll1on.domain.cart.model.CartItem;
-import com.ybe.tr1ll1on.domain.order.model.OrderItem;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
+@Table(name = "product")
 @NoArgsConstructor
+@Getter
 public class Product {
-
     @Id
-    @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Long id;
-    private String name;
-    private Integer count;
-    private String checkIn;
-    private String checkOut;
-    private Integer standardNumber;
-    private Integer maxNumber;
-    private String bedType;
-    private Integer bedNumber;
-    private Boolean isSmoke;
-    private Boolean isBalcony;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    private String name;
+    private String checkInTime;
+    private String checkOutTime;
+    private int standardNumber;
+    private int maximumNumber;
+    private int count;
+
+    @ManyToOne
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
-    private OrderItem orderItem;
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    private ProductFacility facility;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
-    private CartItem cartItem;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductImage> images;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<ProductInfo> productInfoList = new ArrayList<>();
+    @Builder
+    public Product(String name, String checkInTime, String checkOutTime, int standardNumber, int maximumNumber, int count) {
+        this.name = name;
+        this.checkInTime = checkInTime;
+        this.checkOutTime = checkOutTime;
+        this.standardNumber = standardNumber;
+        this.maximumNumber = maximumNumber;
+        this.count = count;
+    }
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<ProductImage> productImageList = new ArrayList<>();
+    public void setAccommodation(Accommodation accommodation) {
+        this.accommodation = accommodation;
+    }
 }

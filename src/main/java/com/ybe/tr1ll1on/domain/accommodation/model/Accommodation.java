@@ -1,44 +1,45 @@
 package com.ybe.tr1ll1on.domain.accommodation.model;
 
-import com.ybe.tr1ll1on.domain.likes.model.Likes;
+
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "accommodation")
 @Getter
-@NoArgsConstructor
+@Builder
 public class Accommodation {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "accommodation_id")
     private Long id;
+
     private String name;
-    private String info;
     private String address;
-    private String latitude;
-    private String longitude;
-    private String regionCode;
     private String phone;
+    private double longitude;
+    private double latitude;
+
+    private String areaCode;
+
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.REMOVE)
+    private List<AccommodationImage> images;
 
     @ManyToOne
-    @JoinColumn(name = "accommodation_category_id")
-    private AccommodationCategory category;
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<AccommodationImage> images = new ArrayList<>();
+    @OneToOne(mappedBy = "accommodation")
+    private AccommodationFacility accommodationFacility;
 
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Product> productList = new ArrayList<>();
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
+    private List<Product> products;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "accommodation")
-    private AccommodationFacility facility;
-
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Likes> likesList = new ArrayList<>();
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }
