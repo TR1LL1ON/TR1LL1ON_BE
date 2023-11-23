@@ -1,5 +1,6 @@
 package com.ybe.tr1ll1on.domain.order.model;
 
+import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.global.common.Payment;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,4 +24,8 @@ public class Order {
 
     @OneToMany(mappedBy = "order",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<OrderItem> orderItemList = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
