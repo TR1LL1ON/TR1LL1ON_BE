@@ -1,12 +1,17 @@
 package com.ybe.tr1ll1on.domain.product.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 @Entity
+@Table(name = "product_facility")
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProductFacility {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +34,8 @@ public class ProductFacility {
     @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

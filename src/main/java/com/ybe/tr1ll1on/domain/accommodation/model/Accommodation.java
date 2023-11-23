@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "accommodation")
 @Getter
 @NoArgsConstructor
 public class Accommodation {
@@ -40,4 +41,7 @@ public class Accommodation {
 
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Likes> likesList = new ArrayList<>();
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

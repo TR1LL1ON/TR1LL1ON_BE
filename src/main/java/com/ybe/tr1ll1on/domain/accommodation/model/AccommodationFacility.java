@@ -1,12 +1,17 @@
 package com.ybe.tr1ll1on.domain.accommodation.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "accommodation_facility")
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class AccommodationFacility {
 
     @Id
@@ -22,4 +27,8 @@ public class AccommodationFacility {
     @OneToOne
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
+
+    public void setAccommodation(Accommodation accommodation) {
+        this.accommodation = accommodation;
+    }
 }
