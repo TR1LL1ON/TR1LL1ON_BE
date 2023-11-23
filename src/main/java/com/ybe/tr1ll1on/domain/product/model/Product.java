@@ -37,7 +37,8 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
     private OrderItem orderItem;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
     private CartItem cartItem;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

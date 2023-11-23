@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
 
@@ -18,26 +19,26 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Comment("체크인 날짜")
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private String startDate;
 
+    @Comment("체크아웃 날짜")
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    private String endDate;
 
     @Column(name = "person_number")
     private Integer personNumber;
 
     private Integer price;
 
+    @Comment("장바구니id")
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @OneToOne
-    @JoinColumn(name = "product_id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product_id")
     private Product product;
 
-    @OneToOne
-    @JoinColumn(name = "accommodation_id")
-    private Accommodation accommodation;
+
 }
