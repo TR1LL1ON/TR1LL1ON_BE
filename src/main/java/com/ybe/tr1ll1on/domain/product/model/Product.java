@@ -4,6 +4,7 @@ import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.order.model.OrderItem;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,8 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
+@Table(name = "product")
 @NoArgsConstructor
+@Getter
 public class Product {
 
     @Id
@@ -21,28 +23,42 @@ public class Product {
     private Long id;
     private String name;
     private Integer count;
-    private String checkIn;
-    private String checkOut;
+    private String checkInTime;
+    private String checkOutTime;
     private Integer standardNumber;
-    private Integer maxNumber;
-    private String bedType;
-    private Integer bedNumber;
-    private Boolean isSmoke;
-    private Boolean isBalcony;
+    private Integer maximumNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private OrderItem orderItem;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private CartItem cartItem;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<ProductInfo> productInfoList = new ArrayList<>();
+    private List<ProductInfoPerNight> productInfoPerNightList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ProductImage> productImageList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private ProductFacility productFacility;
+
+    public void setAccommodation(Accommodation accommodation) {
+        this.accommodation = accommodation;
+    }
+
+    @Builder
+    public Product(String name, String checkInTime, String checkOutTime, int standardNumber, int maximumNumber, int count) {
+        this.name = name;
+        this.checkInTime = checkInTime;
+        this.checkOutTime = checkOutTime;
+        this.standardNumber = standardNumber;
+        this.maximumNumber = maximumNumber;
+        this.count = count;
+    }
+
 }
