@@ -27,6 +27,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import static com.ybe.tr1ll1on.global.constants.ApiConstants.*;
+
 @Component
 public class AppStartupRunner implements ApplicationRunner {
 
@@ -52,22 +54,12 @@ public class AppStartupRunner implements ApplicationRunner {
 
     @Transactional
     private void saveAccommodationData() throws URISyntaxException, JsonProcessingException {
-        String link = "https://apis.data.go.kr/B551011/KorService1/searchStay1";
-        String MobileOS = "ETC";
-        String MobileApp = "AppTest";
-        String _type = "json";
-        String arrange = "R";
-        String serviceKey = "%2BDa2lT5XIGAE29yuGKFRC1c0iRzTfjBEYyD3W%2B16MAbFz%2FdH3O%2B9RWS2b2huHvLKfkThYs3qdbCYxjuDBlhGsA%3D%3D";
-
         String url = String.format("%s?MobileOS=%s&MobileApp=%s&_type=%s&arrange=%s&serviceKey=%s",
-                link, MobileOS, MobileApp, _type, arrange, serviceKey);
+                LINK, MOBILE_OS, MOBILE_APP, TYPE, ARRANGE, SERVICE_KEY);
         URI uri = new URI(url);
 
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(
-                uri,
-                String.class
-        );
+        String response = restTemplate.getForObject(uri, String.class);
 
         Map<String, Object> map = new ObjectMapper().readValue(response, Map.class);
         Map<String, Object> responseMap = (Map<String, Object>) map.get("response");
@@ -76,21 +68,32 @@ public class AppStartupRunner implements ApplicationRunner {
         List<Map<String, Object>> itemMap = (List<Map<String, Object>>) itemsMap.get("item");
 
         for (Map<String, Object> item : itemMap) {
-            Category category = saveCategory(item);
-            Accommodation accommodation = saveAccommodation(item);
-            AccommodationFacility accommodationFacility = saveAccommodationFacility(item);
+            // 1. Category Entity 생성 및 데이터베이스 저장
+            Category category = createAndSaveCategory(item);
 
-            // Accommodation 및 Facility 관련 정보를 저장
-            saveAccommodationAndFacility(accommodation, category, accommodationFacility);
-            //  Accommodation 이미지 정보 저장
-            saveAccommodationImages(accommodation, item);
+            // 2. 데이터베이스 저장을 위한 Accommodation Entity 생성
+            Accommodation accommodation = createAccommodation(item);
+            // 3. 데이터베이스 저장을 위한 AccommodationFacility Entity 생성
+            AccommodationFacility accommodationFacility = createAccommodationFacility(item);
+            // 4. 생성한 Accommodation 및 AccommodationFacility 정보를 데이터베이스에 저장
+            saveAccommodationAndFacility(category, accommodation, accommodationFacility);
 
-            //  Product 정보 설정
-            setProductData(accommodation, item);
+            // 5. AccommodationImage Entity 생성 및 데이터베이스 저장
+            createAndSaveAccommodationImages(item, accommodation);
+
+            // 6. 해당 Accommodation Entity 연관 Product Entities 생성 및 데이터베이스 저장
+            saveProductData(item, accommodation);
         }
     }
 
-    private Accommodation saveAccommodation(Map<String, Object> item) {
+    private Category createAndSaveCategory(Map<String, Object> item) {
+        String categoryCode = (String) item.get("cat3");
+
+        return categoryRepository.findByCategoryCode(categoryCode)
+                .orElseGet(() -> categoryRepository.save(new Category(categoryCode)));
+    }
+
+    private Accommodation createAccommodation(Map<String, Object> item) {
         String name = (String) item.get("title");
         String address = (String) item.get("addr1");
         String phone = (String) item.get("tel");
@@ -108,62 +111,41 @@ public class AppStartupRunner implements ApplicationRunner {
                 .build();
     }
 
-    private Category saveCategory(Map<String, Object> item) {
-        String categoryCode = (String) item.get("cat3");
-
-        return categoryRepository.findByCategoryCode(categoryCode)
-                .orElseGet(() -> categoryRepository.save(new Category(categoryCode)));
-    }
-
-    private AccommodationFacility saveAccommodationFacility(Map<String, Object> item) throws URISyntaxException, JsonProcessingException {
+    private AccommodationFacility createAccommodationFacility(Map<String, Object> item) throws URISyntaxException, JsonProcessingException {
         String contentId = (String) item.get("contentid");
         String contentTypeId = (String) item.get("contenttypeid");
 
-        String link = "http://apis.data.go.kr/B551011/KorService1/detailIntro1";
-        String MobileOS = "ETC";
-        String MobileApp = "AppTest";
-        String _type = "json";
-        String serviceKey = "%2BDa2lT5XIGAE29yuGKFRC1c0iRzTfjBEYyD3W%2B16MAbFz%2FdH3O%2B9RWS2b2huHvLKfkThYs3qdbCYxjuDBlhGsA%3D%3D";
-
         String url = String.format("%s?ServiceKey=%s&contentTypeId=%s&contentId=%s&MobileOS=%s&MobileApp=%s&_type=%s",
-                link, serviceKey, contentTypeId, contentId, MobileOS, MobileApp, _type);
+                LINK, SERVICE_KEY, contentTypeId, contentId, MOBILE_OS, MOBILE_APP, TYPE);
         URI uri = new URI(url);
 
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(
-                uri,
-                String.class
-        );
+        String response = restTemplate.getForObject(uri, String.class);
 
         Map<String, Object> map = new ObjectMapper().readValue(response, Map.class);
         Map<String, Object> responseMap = (Map<String, Object>) map.get("response");
         Map<String, Object> bodyMap = (Map<String, Object>) responseMap.get("body");
         Map<String, Object> itemsMap = (Map<String, Object>) bodyMap.get("items");
-        List<Map<String, Object>> itemList = (List<Map<String, Object>>) itemsMap.get("item");
+        Map<String, Object> itemMap = ((List<Map<String, Object>>) itemsMap.get("item")).get(0);
 
-        if (itemList != null && !itemList.isEmpty()) {
-            Map<String, Object> itemMap = itemList.isEmpty() ? Collections.emptyMap() : itemList.get(0);
+        boolean hasCooking = String.valueOf(itemMap.get("chkcooking")).contains("가능");
+        boolean hasParking = String.valueOf(itemMap.get("parkinglodging")).contains("가능");
+        boolean hasSports = String.valueOf(itemMap.get("sports")).equals("1");
+        boolean hasSauna = String.valueOf(itemMap.get("sauna")).equals("1");
+        boolean hasBeauty = String.valueOf(itemMap.get("beauty")).equals("1");
 
-            boolean hasCooking = extractBooleanValue(itemMap, "chkcooking", "가능");
-            boolean hasParking = extractBooleanValue(itemMap, "parkinglodging", "가능");
-            boolean hasSports = extractBooleanValue(itemMap, "sports", "1");
-            boolean hasSauna = extractBooleanValue(itemMap, "sauna", "1");
-            boolean hasBeauty = extractBooleanValue(itemMap, "beauty", "1");
+        AccommodationFacility accommodationFacility = AccommodationFacility.builder()
+                .hasCooking(hasCooking)
+                .hasParking(hasParking)
+                .hasSports(hasSports)
+                .hasSauna(hasSauna)
+                .hasBeauty(hasBeauty)
+                .build();
 
-            AccommodationFacility accommodationFacility = AccommodationFacility.builder()
-                    .hasCooking(hasCooking)
-                    .hasParking(hasParking)
-                    .hasSports(hasSports)
-                    .hasSauna(hasSauna)
-                    .hasBeauty(hasBeauty)
-                    .build();
-
-            return accommodationFacility;
-        }
-        return null;
+        return accommodationFacility;
     }
 
-    private void saveAccommodationAndFacility(Accommodation accommodation, Category category, AccommodationFacility accommodationFacility) {
+    private void saveAccommodationAndFacility(Category category, Accommodation accommodation, AccommodationFacility accommodationFacility) {
         accommodation.setCategory(category);
         Accommodation savedAccommodation = accommodationRepository.save(accommodation);
 
@@ -171,13 +153,13 @@ public class AppStartupRunner implements ApplicationRunner {
         accommodationFacilityRepository.save(accommodationFacility);
     }
 
-    private void saveAccommodationImages(Accommodation accommodation, Map<String, Object> item) {
+    private void createAndSaveAccommodationImages(Map<String, Object> item, Accommodation accommodation) {
         List<AccommodationImage> accommodationImages = new ArrayList<>();
 
         for (int i = 1; i <= 2; i++) {
             String imageUrl = (String) item.get("firstimage" + (i == 1 ? "" : i));
 
-            if (imageUrl != null && !imageUrl.isEmpty()) {
+            if (imageUrl != null) {
                 AccommodationImage accommodationImage = AccommodationImage.builder()
                         .imageUrl(imageUrl)
                         .build();
@@ -189,18 +171,12 @@ public class AppStartupRunner implements ApplicationRunner {
         accommodationImageRepository.saveAll(accommodationImages);
     }
 
-    private void setProductData(Accommodation accommodation, Map<String, Object> item) throws URISyntaxException, JsonProcessingException {
+    private void saveProductData(Map<String, Object> item, Accommodation accommodation) throws URISyntaxException, JsonProcessingException {
         String contentId = (String) item.get("contentid");
         String contentTypeId = (String) item.get("contenttypeid");
 
-        String link = "http://apis.data.go.kr/B551011/KorService1/detailInfo1";
-        String MobileOS = "ETC";
-        String MobileApp = "AppTest";
-        String _type = "json";
-        String serviceKey = "%2BDa2lT5XIGAE29yuGKFRC1c0iRzTfjBEYyD3W%2B16MAbFz%2FdH3O%2B9RWS2b2huHvLKfkThYs3qdbCYxjuDBlhGsA%3D%3D";
-
         String url = String.format("%s?ServiceKey=%s&contentTypeId=%s&contentId=%s&MobileOS=%s&MobileApp=%s&_type=%s",
-                link, serviceKey, contentTypeId, contentId, MobileOS, MobileApp, _type);
+                LINK, SERVICE_KEY, contentTypeId, contentId, MOBILE_OS, MOBILE_APP, TYPE);
         URI uri = new URI(url);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -220,8 +196,8 @@ public class AppStartupRunner implements ApplicationRunner {
             Map<String, Object> itemsMap = (Map<String, Object>) itemsObject;
             List<Map<String, Object>> itemList = (List<Map<String, Object>>) itemsMap.get("item");
 
-            // 상품 및 상품 편의 관련 저장
-            saveProductAndFacilit(itemList, checkInTime, checkOutTime, accommodation);
+            // 7. Product Entity 및 ProductFacility Entity 생성 및 데이터베이스 저장
+            createAndSaveProductData(itemList, checkInTime, checkOutTime, accommodation);
 
         } else {
             // 정보가 존재하지 않을 경우 임의로 생성
@@ -282,25 +258,47 @@ public class AppStartupRunner implements ApplicationRunner {
             }
         }
     }
-    private void saveProductAndFacilit (List<Map<String, Object>> itemList, String checkintime, String checkouttime, Accommodation accommodation) throws URISyntaxException, JsonProcessingException {
 
+    private void createAndSaveProductData(List<Map<String, Object>> itemList, String checkintime, String checkouttime, Accommodation accommodation) throws URISyntaxException, JsonProcessingException {
         for (Map<String, Object> item : itemList) {
+            // 8. Product Entity 생성 및 데이터베이스 저장
             Product product = createProduct(item, checkintime, checkouttime, accommodation);
             product.setAccommodation(accommodation);
             productRepository.save(product);
 
+            // 9. ProductFacility Entity 생성 및 데이터베이스 저장
             ProductFacility productFacility = createProductFacility(item);
             productFacility.setProduct(product);
             productFacilityRepository.save(productFacility);
 
+            // 10. ProductImage Entities 생성 및 데이터베이스 저장
             List<ProductImage> productImages = createProductImages(item);
             for (ProductImage productImage : productImages) {
                 productImage.setProduct(product);
                 productImageRepository.save(productImage);
             }
-
         }
+    }
 
+    private Product createProduct(Map<String, Object> item, String checkintime, String checkouttime, Accommodation accommodation) {
+        Random random = new Random();
+
+        String name = (String) item.get("roomtitle");
+        int count = item.get("roomcount") != null ? Integer.parseInt((String) item.get("roomcount")) : random.nextInt(10) + 1;
+        int standardNumber = item.get("roombasecount") != null ? Integer.parseInt((String) item.get("roombasecount")) : random.nextInt(10) + 1;
+        int maximumNumber = item.get("roommaxcount") != null ? Integer.parseInt((String) item.get("roommaxcount")) : standardNumber + random.nextInt(10) + 1;
+
+        Product product = Product.builder()
+                .name(name)
+                .checkInTime(checkintime)
+                .checkOutTime(checkouttime)
+                .standardNumber(standardNumber)
+                .maximumNumber(maximumNumber)
+                .count(count)
+                .build();
+        product.setAccommodation(accommodation);
+
+        return product;
     }
 
     private ProductFacility createProductFacility(Map<String, Object> item) {
@@ -322,41 +320,18 @@ public class AppStartupRunner implements ApplicationRunner {
 
     private List<ProductImage> createProductImages(Map<String, Object> item) {
         List<ProductImage> productImages = new ArrayList<>();
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 4; i++) {
             String imageUrl = (String) item.get("roomimg" + i);
-            if (imageUrl != null && !imageUrl.isEmpty()) {
+
+            if (imageUrl != null) {
                 ProductImage productImage = ProductImage.builder()
                         .imageUrl(imageUrl)
                         .build();
                 productImages.add(productImage);
             }
         }
+
         return productImages;
-    }
-
-    private Product createProduct(Map<String, Object> item, String checkintime, String checkouttime, Accommodation accommodation) {
-        String name = (String) item.get("roomtitle");
-        int count = item.get("roomcount") != null ? Integer.parseInt((String) item.get("roomcount")) : 3; // 기본값 3
-        int standardNumber = item.get("roombasecount") != null ? Integer.parseInt((String) item.get("roombasecount")) : 3; // 기본값 3
-        int maximumNumber = item.get("roommaxcount") != null ? Integer.parseInt((String) item.get("roommaxcount")) : 3; // 기본값 3
-
-        Product product = Product.builder()
-                .name(name)
-                .checkInTime(checkintime)
-                .checkOutTime(checkouttime)
-                .standardNumber(standardNumber)
-                .maximumNumber(maximumNumber)
-                .count(count)
-                .build();
-        product.setAccommodation(accommodation);
-
-        return product;
-    }
-
-    private boolean extractBooleanValue(Map<String, Object> itemMap, String key, String trueValue) {
-        return Optional.ofNullable((String) itemMap.get(key))
-                .map(value -> value.contains(trueValue))
-                .orElse(false);
     }
 }
 
