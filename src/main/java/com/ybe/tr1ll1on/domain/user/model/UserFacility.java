@@ -18,4 +18,9 @@ public class UserFacility {
     private Boolean sports;
     private Boolean sauna;
     private Boolean beauty;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }
