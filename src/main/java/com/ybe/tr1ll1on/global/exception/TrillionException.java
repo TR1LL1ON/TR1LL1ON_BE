@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class TrillionException extends RuntimeException {
 
     ExceptionCode errorCode;
