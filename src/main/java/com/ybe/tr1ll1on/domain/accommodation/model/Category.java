@@ -11,19 +11,22 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class AccommodationCategory {
+@Table(name = "category")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     private Long id;
+
+    @Column(name = "category_code")
     private String categoryCode;
 
     @OneToMany(mappedBy = "category",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Accommodation> accommodationList = new ArrayList<>();
 
     @Builder
-    public AccommodationCategory(String categoryCode){
+    public Category(String categoryCode){
         this.categoryCode = categoryCode;
     }
 }
