@@ -14,8 +14,10 @@
 //import com.ybe.tr1ll1on.domain.product.model.Product;
 //import com.ybe.tr1ll1on.domain.product.model.ProductFacility;
 //import com.ybe.tr1ll1on.domain.product.model.ProductImage;
+//import com.ybe.tr1ll1on.domain.product.model.ProductInfoPerNight;
 //import com.ybe.tr1ll1on.domain.product.repository.ProductFacilityRepository;
 //import com.ybe.tr1ll1on.domain.product.repository.ProductImageRepository;
+//import com.ybe.tr1ll1on.domain.product.repository.ProductInfoPerNightRepository;
 //import com.ybe.tr1ll1on.domain.product.repository.ProductRepository;
 //import java.time.DayOfWeek;
 //import java.time.LocalDate;
@@ -37,7 +39,6 @@
 //@RequiredArgsConstructor
 //public class AppStartupRunner implements ApplicationRunner {
 //
-//
 //    private final CategoryRepository categoryRepository;
 //
 //    private final AccommodationRepository accommodationRepository;
@@ -52,9 +53,9 @@
 //
 //    private final ProductImageRepository productImageRepository;
 //
+//    private final ProductInfoPerNightRepository productInfoPerNightRepository;
 //
 //    private final int PRICE_MAX = 10, PRICE_MIN = 5;
-//
 //
 //    @Override
 //    public void run(ApplicationArguments args) throws Exception {
@@ -66,8 +67,6 @@
 //        String url = String.format("%s?numOfRows=%s&MobileOS=%s&MobileApp=%s&_type=%s&arrange=%s&serviceKey=%s",
 //                LINK_STAY, numOfRows, MOBILE_OS, MOBILE_APP, TYPE, ARRANGE, SERVICE_KEY);
 //        URI uri = new URI(url);
-//
-//        System.out.println(url);
 //
 //        RestTemplate restTemplate = new RestTemplate();
 //        String response = restTemplate.getForObject(uri, String.class);
@@ -133,48 +132,39 @@
 //        RestTemplate restTemplate = new RestTemplate();
 //        String response = restTemplate.getForObject(uri, String.class);
 //
+//        AccommodationFacility accommodationFacility;
 //        try {
 //            Map<String, Object> map = new ObjectMapper().readValue(response, Map.class);
 //            Map<String, Object> responseMap = (Map<String, Object>) map.get("response");
 //            Map<String, Object> bodyMap = (Map<String, Object>) responseMap.get("body");
 //            Map<String, Object> itemsMap = (Map<String, Object>) bodyMap.get("items");
-//            List<Map<String, Object>> itemList = (List<Map<String, Object>>) itemsMap.get("item");
+//            Map<String, Object> itemMap = ((List<Map<String, Object>>) itemsMap.get("item")).get(0);
 //
-//            if (itemList != null && !itemList.isEmpty()) {
-//                Map<String, Object> itemMap =
-//                        itemList.isEmpty() ? Collections.emptyMap() : itemList.get(0);
+//            boolean hasCooking = String.valueOf(itemMap.get("chkcooking")).contains("가능");
+//            boolean hasParking = String.valueOf(itemMap.get("parkinglodging")).contains("가능");
+//            boolean hasSports = String.valueOf(itemMap.get("sports")).equals("1");
+//            boolean hasSauna = String.valueOf(itemMap.get("sauna")).equals("1");
+//            boolean hasBeauty = String.valueOf(itemMap.get("beauty")).equals("1");
 //
-//                boolean hasCooking = extractBooleanValue(itemMap, "chkcooking", "가능");
-//                boolean hasParking = extractBooleanValue(itemMap, "parkinglodging", "가능");
-//                boolean hasSports = extractBooleanValue(itemMap, "sports", "1");
-//                boolean hasSauna = extractBooleanValue(itemMap, "sauna", "1");
-//                boolean hasBeauty = extractBooleanValue(itemMap, "beauty", "1");
-//
-//                AccommodationFacility accommodationFacility = AccommodationFacility.builder()
-//                        .hasCooking(hasCooking)
-//                        .hasParking(hasParking)
-//                        .hasSports(hasSports)
-//                        .hasSauna(hasSauna)
-//                        .hasBeauty(hasBeauty)
-//                        .build();
-//
-//                return accommodationFacility;
-//            }
+//            accommodationFacility = AccommodationFacility.builder()
+//                    .hasCooking(hasCooking)
+//                    .hasParking(hasParking)
+//                    .hasSports(hasSports)
+//                    .hasSauna(hasSauna)
+//                    .hasBeauty(hasBeauty)
+//                    .build();
 //
 //        } catch (JsonParseException e) {
-//
-//            AccommodationFacility accommodationFacility = AccommodationFacility.builder()
+//            accommodationFacility = AccommodationFacility.builder()
 //                    .hasBeauty(true)
 //                    .hasParking(true)
 //                    .hasSports(true)
 //                    .hasSauna(true)
 //                    .hasBeauty(true)
 //                    .build();
-//
-//            return accommodationFacility;
 //        }
 //
-//        return null;
+//        return accommodationFacility;
 //    }
 //
 //    private Accommodation saveAccommodationAndFacility(Category category, Accommodation accommodation, AccommodationFacility accommodationFacility) {
