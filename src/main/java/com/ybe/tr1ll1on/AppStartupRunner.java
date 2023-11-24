@@ -7,10 +7,10 @@ import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationFacilityRep
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationImageRepository;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationCategoryRepository;
-import com.ybe.tr1ll1on.domain.product.repository.*;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.model.ProductFacility;
 import com.ybe.tr1ll1on.domain.product.model.ProductImage;
+import com.ybe.tr1ll1on.domain.product.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
