@@ -23,16 +23,22 @@ public class Accommodation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "accommodation_id")
     private Long id;
+
     private String name;
+
     private String address;
+
     private String latitude;
+
     private String longitude;
+
     private String areaCode;
+
     private String phone;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private AccommodationCategory category;
+    private Category category;
 
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<AccommodationImage> images = new ArrayList<>();
@@ -40,29 +46,14 @@ public class Accommodation {
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Product> productList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "accommodation", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private AccommodationFacility facility;
 
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Likes> likesList = new ArrayList<>();
 
-    public void setCategory(AccommodationCategory category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
-//    @Builder
-//    public Accommodation(Long id, String name, String address, String latitude, String longitude, String areaCode, String phone, AccommodationCategory category, List<AccommodationImage> images, List<Product> productList, AccommodationFacility facility, List<Likes> likesList) {
-//        this.id = id;
-//        this.name = name;
-//        this.address = address;
-//        this.latitude = latitude;
-//        this.longitude = longitude;
-//        this.areaCode = areaCode;
-//        this.phone = phone;
-//        this.category = category;
-//        this.images = images;
-//        this.productList = productList;
-//        this.facility = facility;
-//        this.likesList = likesList;
-//    }
 }
