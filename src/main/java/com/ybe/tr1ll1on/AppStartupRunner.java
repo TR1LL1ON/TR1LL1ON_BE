@@ -89,7 +89,7 @@ public class AppStartupRunner implements ApplicationRunner {
         String name = (String) item.get("title");
         String address = (String) item.get("addr1");
         String phone = (String) item.get("tel");
-        String longitude =(String) item.get("mapx");
+        String longitude = (String) item.get("mapx");
         String latitude = (String) item.get("mapy");
         String areaCode = (String) item.get("areacode");
 
@@ -277,7 +277,8 @@ public class AppStartupRunner implements ApplicationRunner {
             }
         }
     }
-    private void saveProductAndFacilit (List<Map<String, Object>> itemList, String checkintime, String checkouttime, Accommodation accommodation) throws URISyntaxException, JsonProcessingException {
+
+    private void saveProductAndFacilit(List<Map<String, Object>> itemList, String checkintime, String checkouttime, Accommodation accommodation) throws URISyntaxException, JsonProcessingException {
 
         for (Map<String, Object> item : itemList) {
             Product product = createProduct(item, checkintime, checkouttime, accommodation);
