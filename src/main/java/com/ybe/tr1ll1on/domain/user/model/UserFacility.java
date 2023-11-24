@@ -1,5 +1,6 @@
 package com.ybe.tr1ll1on.domain.user.model;
 
+import com.ybe.tr1ll1on.domain.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
