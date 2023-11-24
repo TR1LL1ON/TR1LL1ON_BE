@@ -21,7 +21,7 @@ public class CartController {
         return cartService.getAllCarts();
     }
 
-    @PostMapping("/{productId}")
+    @PostMapping(value = "/{productId}")
     @ResponseStatus(HttpStatus.CREATED)
     public AddCartItemResponse addCartItem(@PathVariable Long productId, @RequestBody AddCartItemRequest request) {
         return cartService.addCartItem(productId, request.getUserId());

@@ -1,6 +1,5 @@
 package com.ybe.tr1ll1on.domain.cart.model;
 
-import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import jakarta.persistence.*;
 import lombok.Data;

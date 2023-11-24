@@ -5,8 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class GetCartResponse {
+public class CartDto {
     private Long cartId;
     private List<CartItemDto> cartItems;
-    private List<CartDto> carts;
 }

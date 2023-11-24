@@ -1,9 +1,6 @@
 package com.ybe.tr1ll1on.domain.cart.service;
 
-import com.ybe.tr1ll1on.domain.cart.dto.AddCartItemResponse;
-import com.ybe.tr1ll1on.domain.cart.dto.CartItemDto;
-import com.ybe.tr1ll1on.domain.cart.dto.GetCartResponse;
-import com.ybe.tr1ll1on.domain.cart.dto.RemoveCartItemResponse;
+import com.ybe.tr1ll1on.domain.cart.dto.*;
 import com.ybe.tr1ll1on.domain.cart.model.Cart;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.cart.repository.CartItemRepository;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,24 +24,34 @@ public class CartServiceImpl implements CartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
 
+
     @Override
     public GetCartResponse getAllCarts() {
         List<Cart> carts = cartRepository.findAll();
-        List<CartItemDto> cartItemDtos = carts.stream()
-                .map(cart -> cart.getCartItem().stream()
-                        .map(cartItem -> new CartItemDto(
-                                cartItem.getId(),
-                                cartItem.getProduct().getId(),
-                                cartItem.getPersonNumber(),
-                                cartItem.getPrice()
-                        ))
-                        .collect(Collectors.toList())
-                )
-                .flatMap(List::stream)
+        List<CartDto> cartDtos = carts.stream()
+                .map(cart -> {
+                    CartDto cartDto = new CartDto();
+                    cartDto.setCartId(cart.getId());
+                    List<CartItemDto> cartItemDtos = cart.getCartItem().stream()
+                            .map(cartItem -> {
+                                CartItemDto cartItemDto = new CartItemDto();
+                                cartItemDto.setCartItemId(cartItem.getId());
+                                cartItemDto.setProductId(cartItem.getProduct().getId());
+                                cartItemDto.setPersonNumber(cartItem.getPersonNumber());
+                                cartItemDto.setPrice(cartItem.getPrice());
+                                cartItemDto.setProductName(cartItem.getProduct().getName());
+                                cartItemDto.setCheckInTime(cartItem.getProduct().getCheckInTime());
+                                cartItemDto.setCheckOutTime(cartItem.getProduct().getCheckOutTime());
+                                return cartItemDto;
+                            })
+                            .collect(Collectors.toList());
+                    cartDto.setCartItems(cartItemDtos);
+                    return cartDto;
+                })
                 .collect(Collectors.toList());
 
         GetCartResponse response = new GetCartResponse();
-        response.setCartItems(cartItemDtos);
+        response.setCarts(cartDtos);
 
         return response;
     }
