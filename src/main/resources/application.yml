@@ -1,12 +1,9 @@
-server:
-  port: 8080
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://miniproject.cwwqogbd32f8.us-east-2.rds.amazonaws.com:3306/MiniProject?useSSL=false&serverTimezone=UTC
-    username: ${DB.ID}
-    password: ${DB.PWD}
+    username: ${{ secrets.DB_ID }}
+    password: ${{ secrets.DB_PWD }}
 
   jpa:
     hibernate:
