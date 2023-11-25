@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccommodationController {
     private final AccommodationService accommodationService;
 
-    @GetMapping("/")
-    public List<AccommodationResponseDTO> getAll() {
+    @GetMapping("/test")
+    public List<AccommodationResponseDTO> getTest() {
         return accommodationService.getAll();
     }
 }
