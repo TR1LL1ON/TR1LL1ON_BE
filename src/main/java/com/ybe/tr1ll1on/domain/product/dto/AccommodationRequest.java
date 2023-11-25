@@ -1,5 +1,8 @@
 package com.ybe.tr1ll1on.domain.product.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +13,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccomodationRequest {
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+public class AccommodationRequest {
 
     private LocalDate checkIn;
 
