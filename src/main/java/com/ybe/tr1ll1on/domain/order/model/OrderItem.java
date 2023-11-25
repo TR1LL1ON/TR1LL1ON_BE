@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Getter
 @NoArgsConstructor
+@Getter
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,7 @@ public class OrderItem {
     private LocalDate endDate;
     private Integer personNumber;
     private Integer price;
+    private boolean reviewWritten;
 
     @OneToOne
     @JoinColumn(name = "product_id")
@@ -28,5 +29,12 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Orders orders;
 
+    public void setReviewWritten(boolean reviewWritten) {
+        this.reviewWritten = reviewWritten;
+    }
 
+
+    public boolean getReviewWritten() {
+        return reviewWritten;
+    }
 }
