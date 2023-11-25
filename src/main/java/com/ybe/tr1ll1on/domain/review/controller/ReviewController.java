@@ -1,10 +1,10 @@
-package com.ybe.tr1ll1on.review.controller;
+package com.ybe.tr1ll1on.domain.review.controller;
 
-import com.ybe.tr1ll1on.review.dto.request.ReviewCreateRequest;
-import com.ybe.tr1ll1on.review.dto.request.ReviewUpdateRequest;
-import com.ybe.tr1ll1on.review.dto.response.ReviewCreateResponse;
-import com.ybe.tr1ll1on.review.dto.response.ReviewListResponse;
-import com.ybe.tr1ll1on.review.service.ReviewService;
+import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
+import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
+import com.ybe.tr1ll1on.domain.review.dto.response.ReviewCreateResponse;
+import com.ybe.tr1ll1on.domain.review.service.ReviewService;
+import com.ybe.tr1ll1on.domain.review.dto.response.ReviewListResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

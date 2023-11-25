@@ -3,7 +3,7 @@ package com.ybe.tr1ll1on.domain.product.model;
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.order.model.OrderItem;
-import com.ybe.tr1ll1on.review.model.Review;
+import com.ybe.tr1ll1on.domain.review.model.Review;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.ybe.tr1ll1on.review.dto.request;
+package com.ybe.tr1ll1on.domain.review.dto.request;
 
-import com.ybe.tr1ll1on.review.model.Review;
+import com.ybe.tr1ll1on.domain.review.model.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

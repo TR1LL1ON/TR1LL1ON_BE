@@ -1,4 +1,4 @@
-package com.ybe.tr1ll1on.review.dto.request;
+package com.ybe.tr1ll1on.domain.review.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

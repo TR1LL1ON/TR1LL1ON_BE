@@ -1,8 +1,8 @@
-package com.ybe.tr1ll1on.review.model;
+package com.ybe.tr1ll1on.domain.review.model;
 
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.product.model.Product;
-import com.ybe.tr1ll1on.review.dto.request.ReviewUpdateRequest;
+import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

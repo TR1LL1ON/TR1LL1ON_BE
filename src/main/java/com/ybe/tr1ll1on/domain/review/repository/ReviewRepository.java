@@ -1,7 +1,7 @@
-package com.ybe.tr1ll1on.review.repository;
+package com.ybe.tr1ll1on.domain.review.repository;
 
+import com.ybe.tr1ll1on.domain.review.model.Review;
 import com.ybe.tr1ll1on.domain.user.model.User;
-import com.ybe.tr1ll1on.review.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

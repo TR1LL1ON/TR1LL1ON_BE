@@ -1,6 +1,6 @@
-package com.ybe.tr1ll1on.review.dto.response;
+package com.ybe.tr1ll1on.domain.review.dto.response;
 
-import com.ybe.tr1ll1on.review.model.Review;
+import com.ybe.tr1ll1on.domain.review.model.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,18 +9,18 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class ReviewListResponse {
+public class ReviewCreateResponse {
 
     private Long reviewId;
     private String comment;
     private int rating;
     private LocalDate reviewDate;
 
-    public static ReviewListResponse fromEntity(Review review) {
-        return ReviewListResponse.builder()
+    public static ReviewCreateResponse fromEntity(Review review) {
+        return ReviewCreateResponse.builder()
                 .reviewId(review.getId())
                 .comment(review.getComment())
                 .rating(review.getRating())
@@ -28,4 +28,3 @@ public class ReviewListResponse {
                 .build();
     }
 }
-
