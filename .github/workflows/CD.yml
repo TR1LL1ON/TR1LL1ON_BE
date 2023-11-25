@@ -46,6 +46,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.CICD_SECRET_KEY }}
           aws-region: ${{ secrets.CICD_REGION }}
           
+      - name: application.yml
+        run: |
+          mkdir -p src/main/resources
+          touch ./src/main/resources/application.yml
+          echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
+          cat ./src/main/resources/application.yml
+          
       # script files 복사
       - name: Copy script
         run: cp ./scripts/*.sh ./deploy
