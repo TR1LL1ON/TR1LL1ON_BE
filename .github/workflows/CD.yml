@@ -69,5 +69,5 @@ jobs:
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name cicd-project \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=trillion-cicd-bucket,bundleType=zip,key=trillion/$GITHUB_SHA.zip \
+          --s3-location bucket=trillion-cicd-bucket,bundleType=zip,key=TR1LL1ON_BE/$GITHUB_SHA.zip \
           --region ap-northeast-2 \
