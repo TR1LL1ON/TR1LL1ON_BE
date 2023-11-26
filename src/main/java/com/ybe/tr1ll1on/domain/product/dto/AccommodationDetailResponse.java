@@ -1,9 +1,7 @@
 package com.ybe.tr1ll1on.domain.product.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.ybe.tr1ll1on.global.dto.ImageResponse;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -37,19 +35,11 @@ public class AccommodationDetailResponse {
 
     private double score;
 
-    private List<ImageResponse> image;
+    private List<AccommodationImageResponse> image;
 
     private List<ProductResponse> rooms;
 
-    private boolean hasBeauty;
-
-    private boolean hasCooking;
-
-    private boolean hasSauna;
-
-    private boolean hasParking;
-
-    private boolean hasSports;
+    private AccommodationFacilityResponse facility;
 
     private String latitude;
 
