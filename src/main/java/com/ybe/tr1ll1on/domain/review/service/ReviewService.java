@@ -14,7 +14,7 @@ import com.ybe.tr1ll1on.domain.product.model.Product;
 
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
-import com.ybe.tr1ll1on.global.exception.TrillionExceptionCode;
+import com.ybe.tr1ll1on.domain.review.exception.ReviewExceptionCode;
 import com.ybe.tr1ll1on.domain.review.exception.ReviewNotFoundException;
 import com.ybe.tr1ll1on.domain.review.repository.ReviewRepository;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
@@ -54,10 +54,10 @@ public class ReviewService {
         // 상품 정보
         Long orderItemId = reviewCreateRequest.getOrderItemId();
         OrderItem orderItem = orderItemRepository.findById(orderItemId)
-                .orElseThrow(() -> new OrderItemNotFoundException(TrillionExceptionCode.ORDER_ITEM_NOT_FOUND));
+                .orElseThrow(() -> new OrderItemNotFoundException(ReviewExceptionCode.ORDER_ITEM_NOT_FOUND));
 
         if (orderItem.getReviewWritten()) {
-            throw new ReviewAlreadyWrittenException(TrillionExceptionCode.REVIEW_CONFLICT);
+            throw new ReviewAlreadyWrittenException(ReviewExceptionCode.REVIEW_CONFLICT);
         }
 
         Product product = orderItem.getProduct();
@@ -81,7 +81,7 @@ public class ReviewService {
     public ReviewUpdateResponse updateReview(Long reviewId, ReviewUpdateRequest reviewUpdateRequest) {
         // 리뷰 정보
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(TrillionExceptionCode.REVIEW_NOT_FOUND));
+                .orElseThrow(() -> new ReviewNotFoundException(ReviewExceptionCode.REVIEW_NOT_FOUND));
 
         // 리뷰 수정
         review.update(reviewUpdateRequest);
@@ -96,7 +96,7 @@ public class ReviewService {
     public ResponseEntity<String> deleteReview(Long reviewId) {
         // 리뷰 정보
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(TrillionExceptionCode.REVIEW_NOT_FOUND));
+                .orElseThrow(() -> new ReviewNotFoundException(ReviewExceptionCode.REVIEW_NOT_FOUND));
 
         // 데이터베이스에서 리뷰 삭제. 재작성 불가. ReviewWritten true 유지.
         reviewRepository.delete(review);
