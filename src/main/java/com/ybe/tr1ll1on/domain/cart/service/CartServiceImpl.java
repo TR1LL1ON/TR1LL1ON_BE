@@ -1,6 +1,8 @@
 package com.ybe.tr1ll1on.domain.cart.service;
 
 import com.ybe.tr1ll1on.domain.cart.dto.*;
+import com.ybe.tr1ll1on.domain.cart.error.CartIdNotFoundException;
+import com.ybe.tr1ll1on.domain.cart.error.ProductNotExistException;
 import com.ybe.tr1ll1on.domain.cart.model.Cart;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.cart.repository.CartItemRepository;
@@ -15,6 +17,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.ybe.tr1ll1on.domain.cart.error.CartIdNotFoundExceptionCode.CARTID_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.cart.error.ProductNotExsitExceptionCode.PRODUCT_NOT_FOUND;
+
 @Service
 @AllArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -28,37 +33,30 @@ public class CartServiceImpl implements CartService {
     public GetCartResponse getAllCarts() {
         List<Cart> carts = cartRepository.findAll();
         List<CartDto> cartDtos = carts.stream()
-                .map(cart -> {
-                    CartDto cartDto = new CartDto();
-                    cartDto.setCartId(cart.getId());
-                    List<CartItemDto> cartItemDtos = cart.getCartItem().stream()
-                            .map(cartItem -> {
-                                CartItemDto cartItemDto = new CartItemDto();
-                                cartItemDto.setCartItemId(cartItem.getId());
-                                cartItemDto.setProductId(cartItem.getProduct().getId());
-                                cartItemDto.setPersonNumber(cartItem.getPersonNumber());
-                                cartItemDto.setPrice(cartItem.getPrice());
-                                cartItemDto.setProductName(cartItem.getProduct().getName());
-                                cartItemDto.setCheckInTime(cartItem.getProduct().getCheckInTime());
-                                cartItemDto.setCheckOutTime(cartItem.getProduct().getCheckOutTime());
-                                return cartItemDto;
-                            })
-                            .collect(Collectors.toList());
-                    cartDto.setCartItems(cartItemDtos);
-                    return cartDto;
-                })
+                .map(cart -> CartDto.builder()
+                        .cartId(cart.getId())
+                        .cartItems(cart.getCartItem().stream()
+                                .map(cartItem -> CartItemDto.builder()
+                                        .cartItemId(cartItem.getId())
+                                        .productId(cartItem.getProduct().getId())
+                                        .personNumber(cartItem.getPersonNumber())
+                                        .price(cartItem.getPrice())
+                                        .productName(cartItem.getProduct().getName())
+                                        .checkInTime(cartItem.getProduct().getCheckInTime())
+                                        .checkOutTime(cartItem.getProduct().getCheckOutTime())
+                                        .build())
+                                .collect(Collectors.toList()))
+                        .build())
                 .collect(Collectors.toList());
-
-        GetCartResponse response = new GetCartResponse();
-        response.setCarts(cartDtos);
-
-        return response;
+        return GetCartResponse.builder()
+                .carts(cartDtos)
+                .build();
     }
 
     @Override
     public AddCartItemResponse addCartItem(AddCartItemRequest request) {
         Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + request.getProductId()));
+                .orElseThrow(() -> new ProductNotExistException(PRODUCT_NOT_FOUND));
 
         // 사용자 정보가 없으므로, 사용자 ID만으로 간단히 사용자를 생성하여 사용
         User user = new User();
@@ -90,20 +88,23 @@ public class CartServiceImpl implements CartService {
         return response;
     }
 
+
+
     @Override
     @Transactional
-    public RemoveCartItemResponse removeCartItem(Long cartItemId) {
+    public RemoveCartItemResponse removeCartItem(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartIdNotFoundException(CARTID_NOT_FOUND));
 
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new RuntimeException("Cart item not found with id: " + cartItemId));
+        System.out.println("Found cart with ID: " + cartId);
 
-        cartItemRepository.delete(cartItem);
-
-        System.out.println("Deleted cart item with ID: " + cartItemId);
+        cartRepository.delete(cart);
 
         RemoveCartItemResponse response = new RemoveCartItemResponse();
-        response.setCartItemId(cartItemId);
+        response.setCartId(cartId);
+
 
         return response;
     }
+
 }

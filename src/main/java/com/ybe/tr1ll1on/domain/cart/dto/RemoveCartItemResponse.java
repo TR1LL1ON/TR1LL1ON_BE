@@ -4,5 +4,7 @@ import lombok.Data;
 
 @Data
 public class RemoveCartItemResponse {
-    private Long cartItemId;
+    private Long cartId;
+
+
 }

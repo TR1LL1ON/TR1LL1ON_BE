@@ -4,6 +4,7 @@ import com.ybe.tr1ll1on.domain.cart.dto.AddCartItemRequest;
 import com.ybe.tr1ll1on.domain.cart.dto.AddCartItemResponse;
 import com.ybe.tr1ll1on.domain.cart.dto.GetCartResponse;
 import com.ybe.tr1ll1on.domain.cart.dto.RemoveCartItemResponse;
+import jakarta.transaction.Transactional;
 
 public interface CartService {
 

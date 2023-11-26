@@ -1,10 +1,16 @@
 package com.ybe.tr1ll1on.domain.cart.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GetCartResponse {
     private Long cartId;
     private List<CartItemDto> cartItems;

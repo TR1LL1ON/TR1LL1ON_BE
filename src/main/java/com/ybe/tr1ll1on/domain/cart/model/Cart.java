@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+
 public class Cart {
     @Id
     @Column(name = "cart_id")
