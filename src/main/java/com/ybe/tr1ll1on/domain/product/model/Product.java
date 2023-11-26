@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Setter;
 
 @Entity
 @Table(name = "product")
@@ -45,6 +46,7 @@ public class Product {
     private List<ProductImage> productImageList = new ArrayList<>();
 
     @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @Setter
     private ProductFacility productFacility;
 
     public void setAccommodation(Accommodation accommodation) {
