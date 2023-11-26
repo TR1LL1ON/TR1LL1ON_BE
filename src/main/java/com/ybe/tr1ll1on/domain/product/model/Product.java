@@ -64,5 +64,4 @@ public class Product {
         this.maximumNumber = maximumNumber;
         this.count = count;
     }
-
 }

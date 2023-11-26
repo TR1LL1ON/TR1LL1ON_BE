@@ -2,6 +2,7 @@ package com.ybe.tr1ll1on.domain.review.service;
 
 import com.ybe.tr1ll1on.domain.order.exception.OrderItemNotFoundException;
 import com.ybe.tr1ll1on.domain.review.dto.response.ReviewCreateResponse;
+import com.ybe.tr1ll1on.domain.review.dto.response.ReviewUpdateResponse;
 import com.ybe.tr1ll1on.domain.review.exception.ReviewAlreadyWrittenException;
 import com.ybe.tr1ll1on.domain.review.model.Review;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
@@ -63,6 +64,7 @@ public class ReviewService {
 
         // 리뷰 엔티티 생성
         Review review = reviewCreateRequest.toEntity();
+        review.setOrderItem(orderItem);
         review.setUser(user);
         review.setProduct(product);
 
@@ -76,9 +78,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public ResponseEntity<String> updateReview(Long reviewId, ReviewUpdateRequest reviewUpdateRequest) {
-        System.out.println(reviewId);
-
+    public ReviewUpdateResponse updateReview(Long reviewId, ReviewUpdateRequest reviewUpdateRequest) {
         // 리뷰 정보
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException(TrillionExceptionCode.REVIEW_NOT_FOUND));
@@ -89,7 +89,7 @@ public class ReviewService {
         // 수정된 리뷰 데이터베이스 업데이트
         Review updatedReview = reviewRepository.save(review);
 
-        return ResponseEntity.ok("리뷰 수정이 완료되었습니다.");
+        return ReviewUpdateResponse.fromEntity(updatedReview);
     }
 
     @Transactional

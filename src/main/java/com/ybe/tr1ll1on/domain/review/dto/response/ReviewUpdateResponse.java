@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewCreateResponse {
+public class ReviewUpdateResponse {
 
     private String message;
     private ReviewDetails review;
@@ -32,9 +32,9 @@ public class ReviewCreateResponse {
         private LocalDate reviewDate;
     }
 
-    public static ReviewCreateResponse fromEntity(Review review) {
-        return ReviewCreateResponse.builder()
-                .message("리뷰가 성공적으로 작성되었습니다.")
+    public static ReviewUpdateResponse fromEntity(Review review) {
+        return ReviewUpdateResponse.builder()
+                .message("리뷰가 성공적으로 수정되었습니다.")
                 .review(ReviewDetails.builder()
                         .userId(review.getUser().getId())
                         .orderItemId(review.getOrderItem().getId())

@@ -3,6 +3,7 @@ package com.ybe.tr1ll1on.domain.review.controller;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.response.ReviewCreateResponse;
+import com.ybe.tr1ll1on.domain.review.dto.response.ReviewUpdateResponse;
 import com.ybe.tr1ll1on.domain.review.service.ReviewService;
 import com.ybe.tr1ll1on.domain.review.dto.response.ReviewListResponse;
 import jakarta.validation.Valid;
@@ -26,15 +27,16 @@ public class ReviewController {
 
     @PostMapping
     public ResponseEntity<ReviewCreateResponse> createReview(@Valid @RequestBody ReviewCreateRequest reviewCreateRequest) {
-        ReviewCreateResponse response = reviewService.createReview(reviewCreateRequest);
-        return ResponseEntity.ok(response);
+        ReviewCreateResponse reviewCreateResponse = reviewService.createReview(reviewCreateRequest);
+        return ResponseEntity.ok(reviewCreateResponse);
     }
 
     @PutMapping("/{reviewId}")
-    public ResponseEntity<String> updateReview(
+    public ResponseEntity<ReviewUpdateResponse> updateReview(
             @PathVariable Long reviewId,
             @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
-        return reviewService.updateReview(reviewId, reviewUpdateRequest);
+        ReviewUpdateResponse reviewUpdateResponse = reviewService.updateReview(reviewId, reviewUpdateRequest);
+        return ResponseEntity.ok(reviewUpdateResponse);
     }
 
     @DeleteMapping("/{reviewId}")

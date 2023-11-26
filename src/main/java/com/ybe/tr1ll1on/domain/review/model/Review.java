@@ -1,5 +1,6 @@
 package com.ybe.tr1ll1on.domain.review.model;
 
+import com.ybe.tr1ll1on.domain.order.model.OrderItem;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
@@ -24,6 +25,10 @@ public class Review {
     private int rating;
     private LocalDate reviewDate;
 
+    @OneToOne
+    @JoinColumn(name = "order_item_id")
+    private OrderItem orderItem;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -40,16 +45,16 @@ public class Review {
         this.reviewDate = reviewDate;
     }
 
+    public void setOrderItem(OrderItem orderItem) { this.orderItem = orderItem; }
     public void setUser(User user) {
         this.user = user;
     }
-
     public void setProduct(Product product){
         this.product = product;
     }
 
     public void update(ReviewUpdateRequest reviewUpdateRequest) {
-        this.comment = comment;
-        this.rating = rating;
+        this.comment = reviewUpdateRequest.getComment();
+        this.rating = reviewUpdateRequest.getRating();
     }
 }
