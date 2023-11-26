@@ -32,11 +32,11 @@ public class Product {
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private OrderItem orderItem;
-
-    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private CartItem cartItem;
+//    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private OrderItem orderItem;
+//
+//    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private CartItem cartItem;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ProductInfoPerNight> productInfoPerNightList = new ArrayList<>();
