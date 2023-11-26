@@ -24,7 +24,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/{accommodation_id}")
-    public ResponseEntity<AccommodationDetailResponse> getProductList(
+    public ResponseEntity<AccommodationDetailResponse> getAccommodationDetail(
         @PathVariable("accommodation_id") final Long accommodationId,
         @RequestBody final AccommodationRequest accommodationRequest
     ) {
