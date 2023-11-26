@@ -1,7 +1,11 @@
 package com.ybe.tr1ll1on.domain.product.controller;
 
+import static com.ybe.tr1ll1on.domain.product.error.ProductExceptionCode.CHECKIN_EQUALS_CHECKOUT;
+
 import com.ybe.tr1ll1on.domain.product.dto.AccommodationDetailResponse;
 import com.ybe.tr1ll1on.domain.product.dto.AccommodationRequest;
+import com.ybe.tr1ll1on.domain.product.error.ProductException;
+import com.ybe.tr1ll1on.domain.product.error.ProductExceptionCode;
 import com.ybe.tr1ll1on.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +33,10 @@ public class ProductController {
         @RequestBody final AccommodationRequest accommodationRequest
     ) {
         log.info("HÎ11" + accommodationId+", "+ accommodationRequest.getPersonNumber());
+        //TODO checkIn 과 checkOut은 같은 날짜이면 안됨!!
+        if (accommodationRequest.getCheckIn().isEqual(accommodationRequest.getCheckOut())) {
+            throw new ProductException(CHECKIN_EQUALS_CHECKOUT);
+        }
         return ResponseEntity.ok(
                 productService.getProduct(accommodationId, accommodationRequest)
         );
