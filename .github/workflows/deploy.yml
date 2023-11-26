@@ -33,6 +33,11 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+    # 2-1) yml 파일 추가 
+    - name: Create application.yml
+      run: |
+        mkdir -p src/main/resources
+        echo "${{ secrets.APPLICATION_YML }}" > src/main/resources/application.yml
         
     # 3) gradlew 권한 설정
     - name: Grant execute permission for gradlew
