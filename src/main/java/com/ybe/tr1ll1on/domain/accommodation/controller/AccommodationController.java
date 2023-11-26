@@ -31,7 +31,7 @@ public class AccommodationController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String region
     ) {
-        if (!accommodationRequestDTO.getCheckOut().isBefore(accommodationRequestDTO.getCheckIn())) {
+        if (!accommodationRequestDTO.getCheckOut().isAfter(accommodationRequestDTO.getCheckIn())) {
             throw new InvalidDateException(CHECKIN_IS_AFTER_CHECKOUT);
         }
         if (category != null) {
