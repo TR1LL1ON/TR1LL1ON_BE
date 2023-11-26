@@ -17,8 +17,8 @@ public class CartItem {
     @Column(name = "cart_item_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private String checkInTime;
+    private String checkOutTime;
     private Integer personNumber;
     private Integer price;
 

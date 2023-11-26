@@ -8,12 +8,11 @@ import com.ybe.tr1ll1on.domain.cart.repository.CartRepository;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.repository.ProductRepository;
 import com.ybe.tr1ll1on.domain.user.model.User;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,17 +56,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public AddCartItemResponse addCartItem(Long productId, Long userId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
-
-        // UserRepository가 없으므로 주석 처리
-        // User user = userRepository.findById(userId)
-        //         .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+    public AddCartItemResponse addCartItem(AddCartItemRequest request) {
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + request.getProductId()));
 
         // 사용자 정보가 없으므로, 사용자 ID만으로 간단히 사용자를 생성하여 사용
         User user = new User();
-        user.setId(userId);
+        user.setId(request.getUserId());
 
         // Check if the user has a cart, if not, create one
         Cart cart = user.getCart();
@@ -76,14 +71,14 @@ public class CartServiceImpl implements CartService {
             cart.setUser(user);
             cartRepository.save(cart);
             user.setCart(cart);
-            // UserRepository가 없으므로 주석 처리
-            // userRepository.save(user);
         }
 
         CartItem cartItem = new CartItem();
-        cartItem.setStartDate(LocalDateTime.now());
+        cartItem.setCheckInTime(product.getCheckInTime());
+        cartItem.setCheckOutTime(product.getCheckOutTime());
         cartItem.setProduct(product);
         cartItem.setCart(cart);
+        cartItem.setPersonNumber(request.getPersonNumber());
 
         cartItemRepository.save(cartItem);
 
@@ -96,12 +91,15 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public RemoveCartItemResponse removeCartItem(Long cartItemId) {
 
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new RuntimeException("Cart item not found with id: " + cartItemId));
 
         cartItemRepository.delete(cartItem);
+
+        System.out.println("Deleted cart item with ID: " + cartItemId);
 
         RemoveCartItemResponse response = new RemoveCartItemResponse();
         response.setCartItemId(cartItemId);

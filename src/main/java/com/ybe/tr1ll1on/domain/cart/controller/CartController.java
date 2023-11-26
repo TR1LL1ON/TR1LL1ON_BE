@@ -24,7 +24,8 @@ public class CartController {
     @PostMapping(value = "/{productId}")
     @ResponseStatus(HttpStatus.CREATED)
     public AddCartItemResponse addCartItem(@PathVariable Long productId, @RequestBody AddCartItemRequest request) {
-        return cartService.addCartItem(productId, request.getUserId());
+        request.setProductId(productId);  // 이 부분을 추가해 productId를 설정합니다.
+        return cartService.addCartItem(request);
     }
 
     @DeleteMapping("/{cartItemId}")
