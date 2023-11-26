@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum InvalidDateExceptionCode implements ExceptionCode {
 
-    CHECKIN_IS_AFTER_CHECKOUT(HttpStatus.BAD_REQUEST, "CHECKIN_IS_AFTER_CHECKOUT", "체크인 날짜는 체크아웃 날짜 이후일 수 없습니다");
+    CHECKIN_IS_AFTER_CHECKOUT(HttpStatus.BAD_REQUEST, "CHECKIN_IS_AFTER_CHECKOUT", "체크아웃 날짜는 체크인 날짜 이후여야 합니다");
 
     private final HttpStatus status;
     private final String code;
