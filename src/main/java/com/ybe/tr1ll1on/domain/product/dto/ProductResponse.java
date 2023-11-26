@@ -2,7 +2,6 @@ package com.ybe.tr1ll1on.domain.product.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.ybe.tr1ll1on.global.dto.ImageResponse;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +24,9 @@ public class ProductResponse {
 
     private Integer count;
 
-    private Integer price;
+    private Double averPrice;
+
+    private Integer totalPrice;
 
     private Integer maxNumber;
 
@@ -35,5 +36,5 @@ public class ProductResponse {
 
     private ProductFacilityResponse facility;
 
-    private List<ImageResponse> image;
+    private List<ProductImageResponse> image;
 }
