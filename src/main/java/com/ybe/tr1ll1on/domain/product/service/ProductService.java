@@ -34,8 +34,14 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductInfoPerNightRepository productInfoPerNightRepository;
 
+    /**
+     * 숙박 상세 정보를 얻음.
+     * @param accommodationId
+     * @param request
+     * @return
+     */
     @Transactional
-    public AccommodationDetailResponse getProduct (
+    public AccommodationDetailResponse getAccommodationDetail(
             Long accommodationId, AccommodationRequest request
     ) {
         List<ProductResponse> productResponseList = new ArrayList<>();
@@ -43,8 +49,8 @@ public class ProductService {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
                 .orElseThrow(() -> new ProductException(EMPTY_PRODUCT));
         List<Product> productList = productRepository
-                .findByAccommodationIdAndStandardNumberLessThanEqual(
-                        accommodationId, request.getPersonNumber());
+                .findByAccommodationIdAndStandardNumberLessThanEqualAndMaximumNumberGreaterThanEqual(
+                        accommodationId, request.getPersonNumber(), request.getPersonNumber());
         
         if (productList == null) {
             throw new ProductException(EMPTY_PRODUCT);
@@ -52,9 +58,7 @@ public class ProductService {
 
         for (Product p : productList) {
             productResponseList.add(
-                    getProduct(
-                            p, request.getCheckIn(), request.getCheckOut().minusDays(1)
-                    )
+                    getProductDetail(p, request)
             );
         }
 
@@ -85,29 +89,37 @@ public class ProductService {
                 .build();
     }
 
-    private ProductResponse getProduct(Product p, LocalDate checkIn, LocalDate checkOut) {
-        //checkIn, checkOut dateUtil 필요.
-        //checkIn, checkOut 에서 날짜 범위가 11.24 ~ 12.10 넘어가면 조정 필ㅊ
+    /**
+     * 객실(상품) 정보를 얻음.
+     * @param p
+     * @param req
+     * @return
+     */
+    private ProductResponse getProductDetail(Product p, AccommodationRequest req) {
         Double averPrice = 0.0;
         Integer totalPrice = 0;
         boolean isSold = true;
-        Integer count = p.getCount();
+        Integer count = p.getCount(); //총 남은 객실
+        LocalDate checkIn = req.getCheckIn(), checkOut = req.getCheckOut();
+
+        /* TODO 체크아웃 날짜 -1 을 해야, 1박이 됨 */
         List<ProductInfoPerNight> productInfoPerNightList =
                 productInfoPerNightRepository.findByDateBetweenAndProductId(
-                        checkIn, checkOut, p.getId()
+                        checkIn, checkOut.minusDays(1), p.getId()
                 );
+
         for (ProductInfoPerNight pi : productInfoPerNightList) {
             if (pi.getCount() <= 0) {
                 isSold = false;
                 totalPrice = 0;
-                count = -1;
+                count = 0;
                 break;
             }
             totalPrice += pi.getPrice();
             count = Math.min(count, pi.getCount());
         }
-        //평균 가격 계산
-        averPrice = (double) (totalPrice / (Period.between(checkIn, checkOut).getDays() + 1));
+        // TODO 평균 가격 계산 (체크아웃 - 체크인)
+        averPrice = (double) (totalPrice / (Period.between(checkIn, checkOut).getDays()));
 
         return ProductResponse.builder()
                 .roomId(p.getId())
@@ -128,7 +140,15 @@ public class ProductService {
                 .facility(
                         ProductFacilityResponse.of(p.getProductFacility())
                 )
-                .build()
-                ;
+                .build();
+    }
+
+    public ProductResponse getProduct(
+            Long accommodationId, Long productId, AccommodationRequest request
+    ) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new ProductException(EMPTY_PRODUCT));
+
+        return getProductDetail(product, request);
     }
 }
