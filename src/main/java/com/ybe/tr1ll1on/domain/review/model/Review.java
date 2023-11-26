@@ -22,7 +22,7 @@ public class Review {
     private Long id;
 
     private String comment;
-    private int rating;
+    private double rating;
     private LocalDate reviewDate;
 
     @OneToOne
@@ -38,7 +38,7 @@ public class Review {
     private Product product;
 
     @Builder
-    public Review (Long id, String comment, int rating, LocalDate reviewDate) {
+    public Review (Long id, String comment, double rating, LocalDate reviewDate) {
         this.id = id;
         this.comment = comment;
         this.rating = rating;

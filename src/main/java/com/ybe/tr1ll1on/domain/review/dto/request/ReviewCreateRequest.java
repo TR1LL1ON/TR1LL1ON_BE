@@ -16,7 +16,7 @@ public class ReviewCreateRequest {
 
     private Long orderItemId;
     private String comment;
-    private int rating;
+    private double rating;
 
     public Review toEntity() {
         return Review.builder()

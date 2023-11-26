@@ -28,7 +28,7 @@ public class ReviewUpdateResponse {
         private Long productId;
         private Long reviewId;
         private String comment;
-        private int rating;
+        private double rating;
         private LocalDate reviewDate;
     }
 
