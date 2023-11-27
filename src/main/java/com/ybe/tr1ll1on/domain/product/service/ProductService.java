@@ -1,6 +1,6 @@
 package com.ybe.tr1ll1on.domain.product.service;
 
-import static com.ybe.tr1ll1on.domain.product.error.ProductExceptionCode.EMPTY_PRODUCT;
+import static com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode.EMPTY_PRODUCT;
 
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
@@ -11,7 +11,7 @@ import com.ybe.tr1ll1on.domain.product.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.product.response.ProductFacilityResponse;
 import com.ybe.tr1ll1on.domain.product.response.ProductImageResponse;
 import com.ybe.tr1ll1on.domain.product.response.ProductResponse;
-import com.ybe.tr1ll1on.domain.product.error.ProductException;
+import com.ybe.tr1ll1on.domain.product.exception.ProductException;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.model.ProductInfoPerNight;
 import com.ybe.tr1ll1on.domain.product.repository.ProductInfoPerNightRepository;
