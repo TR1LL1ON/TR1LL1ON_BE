@@ -3,6 +3,7 @@ package com.ybe.tr1ll1on.domain.accommodation.service;
 import com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationRequestDTO;
 import com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationResponseDTO;
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
+import com.ybe.tr1ll1on.domain.accommodation.model.AccommodationImage;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,10 @@ public class AccommodationService {
         List<Accommodation> accommodationList = accommodationRepository.findAll();
         for (Accommodation accommodation : accommodationList) {
             accommodationResponseDTOList.add(
-                    new AccommodationResponseDTO(accommodation.getId(), accommodation.getName()));
+                    AccommodationResponseDTO.builder()
+                            .accommodationId(accommodation.getId())
+                            .name(accommodation.getName())
+                    .build());
         }
         return accommodationResponseDTOList;
     }
@@ -42,7 +46,7 @@ public class AccommodationService {
                 .stream()
                 .map(it -> AccommodationResponseDTO.builder()
                         .accommodationId(it.getAccommodationId())
-                        .imageUrl(it.getImageUrl())
+                        .imageUrl(it.getImageUrl()==null ? AccommodationImage.BASIC_ACCOMMODATION_IMG : it.getImageUrl())
                         .name(it.getName())
                         .price(it.getPrice())
                         .address(it.getAddress())

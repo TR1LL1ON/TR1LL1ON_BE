@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @Table(name = "accommodation")
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Accommodation {
@@ -56,4 +55,15 @@ public class Accommodation {
         this.category = category;
     }
 
+    @Builder
+    public Accommodation(String name, String address, String latitude, String longitude, String areaCode, String phone, Category category, AccommodationFacility facility) {
+        this.name = name;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.areaCode = areaCode;
+        this.phone = phone;
+        this.category = category;
+        this.facility = facility;
+    }
 }
