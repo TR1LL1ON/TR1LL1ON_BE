@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReviewUpdateRequest {
 
-    private String comment;
-    private double rating;
+    private double score;
+    private String content;
 }

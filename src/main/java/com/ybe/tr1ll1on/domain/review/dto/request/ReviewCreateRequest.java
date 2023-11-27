@@ -15,13 +15,13 @@ import java.time.LocalDate;
 public class ReviewCreateRequest {
 
     private Long orderItemId;
-    private String comment;
-    private double rating;
+    private double score;
+    private String content;
 
     public Review toEntity() {
         return Review.builder()
-                .comment(comment)
-                .rating(rating)
+                .score(score)
+                .content(content)
                 .reviewDate(LocalDate.now())
                 .build();
     }

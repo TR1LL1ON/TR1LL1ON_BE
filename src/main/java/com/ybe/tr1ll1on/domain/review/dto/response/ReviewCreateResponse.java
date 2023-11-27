@@ -1,5 +1,7 @@
 package com.ybe.tr1ll1on.domain.review.dto.response;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.ybe.tr1ll1on.domain.review.model.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,29 +23,32 @@ public class ReviewCreateResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class ReviewDetails {
+
+        private Long reviewId;
+        private LocalDate reviewDate;
+        private double score;
         private Long userId;
         private Long orderItemId;
         private Long accommodationId;
         private Long productId;
-        private Long reviewId;
-        private String comment;
-        private double rating;
-        private LocalDate reviewDate;
+        private String content;
+
     }
 
     public static ReviewCreateResponse fromEntity(Review review) {
         return ReviewCreateResponse.builder()
                 .message("리뷰가 성공적으로 작성되었습니다.")
-                .review(ReviewDetails.builder()
+                .review(ReviewCreateResponse.ReviewDetails.builder()
+                        .reviewId(review.getId())
+                        .reviewDate(review.getReviewDate())
+                        .score(review.getScore())
                         .userId(review.getUser().getId())
                         .orderItemId(review.getOrderItem().getId())
                         .accommodationId(review.getOrderItem().getProduct().getAccommodation().getId())
                         .productId(review.getProduct().getId())
-                        .reviewId(review.getId())
-                        .comment(review.getComment())
-                        .rating(review.getRating())
-                        .reviewDate(review.getReviewDate())
+                        .content(review.getContent())
                         .build())
                 .build();
     }

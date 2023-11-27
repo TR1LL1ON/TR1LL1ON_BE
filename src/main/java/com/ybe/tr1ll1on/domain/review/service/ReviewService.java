@@ -1,17 +1,14 @@
 package com.ybe.tr1ll1on.domain.review.service;
 
 import com.ybe.tr1ll1on.domain.order.exception.OrderItemNotFoundException;
-import com.ybe.tr1ll1on.domain.review.dto.response.ReviewCreateResponse;
-import com.ybe.tr1ll1on.domain.review.dto.response.ReviewUpdateResponse;
+import com.ybe.tr1ll1on.domain.review.dto.response.*;
 import com.ybe.tr1ll1on.domain.review.exception.ReviewAlreadyWrittenException;
 import com.ybe.tr1ll1on.domain.review.model.Review;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
-import com.ybe.tr1ll1on.domain.review.dto.response.ReviewListResponse;
 import com.ybe.tr1ll1on.domain.order.model.OrderItem;
 import com.ybe.tr1ll1on.domain.order.repository.OrderItemRepository;
 import com.ybe.tr1ll1on.domain.product.model.Product;
-
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
 import com.ybe.tr1ll1on.domain.review.exception.ReviewExceptionCode;
@@ -20,7 +17,6 @@ import com.ybe.tr1ll1on.domain.review.repository.ReviewRepository;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,18 +29,44 @@ public class ReviewService {
     private final OrderItemRepository orderItemRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 상품에 대한 리뷰 목록을 조회
+     *
+     * @param accommodationId 상품 ID
+     * @return 상품에 대한 리뷰 목록
+     */
     @Transactional
-    public List<ReviewListResponse> getAllReviews() {
+    public List<ProductReviewListResponse> getProductReviews(Long accommodationId) {
+        List<Review> reviews = reviewRepository.findReviewsByProductId(accommodationId);
+
+        return reviews.stream()
+                .map(ProductReviewListResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 현재 사용자의 리뷰 목록을 조회
+     *
+     * @return 현재 사용자의 리뷰 목록
+     */
+    @Transactional
+    public List<UserReviewListResponse> getUserReviews() {
         Long userId = SecurityUtil.getCurrentUserId();
         User user = userRepository.getUserById(userId);
 
         List<Review> reviews = reviewRepository.findReviewsByUser(user);
 
         return reviews.stream()
-                .map(ReviewListResponse::fromEntity)
+                .map(UserReviewListResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 리뷰를 생성합니다.
+     *
+     * @param reviewCreateRequest 리뷰 생성 요청 객체
+     * @return 생성된 리뷰의 응답 객체
+     */
     @Transactional
     public ReviewCreateResponse createReview(ReviewCreateRequest reviewCreateRequest) {
         // 사용자 정보
@@ -77,6 +99,13 @@ public class ReviewService {
         return ReviewCreateResponse.fromEntity(savedReview);
     }
 
+    /**
+     * 리뷰를 수정합니다.
+     *
+     * @param reviewId 리뷰 ID
+     * @param reviewUpdateRequest 리뷰 수정 요청 객체
+     * @return 수정된 리뷰의 응답 객체
+     */
     @Transactional
     public ReviewUpdateResponse updateReview(Long reviewId, ReviewUpdateRequest reviewUpdateRequest) {
         // 리뷰 정보
@@ -92,8 +121,14 @@ public class ReviewService {
         return ReviewUpdateResponse.fromEntity(updatedReview);
     }
 
+    /**
+     * 리뷰를 삭제합니다.
+     *
+     * @param reviewId 리뷰 ID
+     * @return 삭제된 리뷰의 응답 객체
+     */
     @Transactional
-    public ResponseEntity<String> deleteReview(Long reviewId) {
+    public ReviewDeleteResponse deleteReview(Long reviewId) {
         // 리뷰 정보
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException(ReviewExceptionCode.REVIEW_NOT_FOUND));
@@ -101,6 +136,6 @@ public class ReviewService {
         // 데이터베이스에서 리뷰 삭제. 재작성 불가. ReviewWritten true 유지.
         reviewRepository.delete(review);
 
-        return ResponseEntity.ok("리뷰 삭제가 완료되었습니다.");
+        return ReviewDeleteResponse.fromEntity(review);
     }
 }

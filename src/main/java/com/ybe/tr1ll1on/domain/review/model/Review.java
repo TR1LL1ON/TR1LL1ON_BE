@@ -21,9 +21,9 @@ public class Review {
     @Column(name = "review_id")
     private Long id;
 
-    private String comment;
-    private double rating;
+    private double score;
     private LocalDate reviewDate;
+    private String content;
 
     @OneToOne
     @JoinColumn(name = "order_item_id")
@@ -38,11 +38,11 @@ public class Review {
     private Product product;
 
     @Builder
-    public Review (Long id, String comment, double rating, LocalDate reviewDate) {
+    public Review (Long id, String content, double score, LocalDate reviewDate) {
         this.id = id;
-        this.comment = comment;
-        this.rating = rating;
+        this.score = score;
         this.reviewDate = reviewDate;
+        this.content = content;
     }
 
     public void setOrderItem(OrderItem orderItem) { this.orderItem = orderItem; }
@@ -54,7 +54,7 @@ public class Review {
     }
 
     public void update(ReviewUpdateRequest reviewUpdateRequest) {
-        this.comment = reviewUpdateRequest.getComment();
-        this.rating = reviewUpdateRequest.getRating();
+        this.score = reviewUpdateRequest.getScore();
+        this.content = reviewUpdateRequest.getContent();
     }
 }

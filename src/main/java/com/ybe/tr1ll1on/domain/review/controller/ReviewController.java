@@ -2,10 +2,8 @@ package com.ybe.tr1ll1on.domain.review.controller;
 
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
-import com.ybe.tr1ll1on.domain.review.dto.response.ReviewCreateResponse;
-import com.ybe.tr1ll1on.domain.review.dto.response.ReviewUpdateResponse;
+import com.ybe.tr1ll1on.domain.review.dto.response.*;
 import com.ybe.tr1ll1on.domain.review.service.ReviewService;
-import com.ybe.tr1ll1on.domain.review.dto.response.ReviewListResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +17,17 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
+
+    @GetMapping("/{accommodationId}")
+    public ResponseEntity<List<ProductReviewListResponse>> getProductReviews(@PathVariable Long accommodationId) {
+        List<ProductReviewListResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId);
+        return ResponseEntity.ok(productReviewListResponse);
+    }
+
     @GetMapping
-    public ResponseEntity<List<ReviewListResponse>> getReviews() {
-        List<ReviewListResponse> reviewListResponse = reviewService.getAllReviews();
-        return ResponseEntity.ok(reviewListResponse);
+    public ResponseEntity<List<UserReviewListResponse>> getUserReviews() {
+        List<UserReviewListResponse> userReviewListResponse = reviewService.getUserReviews();
+        return ResponseEntity.ok(userReviewListResponse);
     }
 
     @PostMapping
@@ -34,13 +39,14 @@ public class ReviewController {
     @PutMapping("/{reviewId}")
     public ResponseEntity<ReviewUpdateResponse> updateReview(
             @PathVariable Long reviewId,
-            @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
+            @Valid @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
         ReviewUpdateResponse reviewUpdateResponse = reviewService.updateReview(reviewId, reviewUpdateRequest);
         return ResponseEntity.ok(reviewUpdateResponse);
     }
 
     @DeleteMapping("/{reviewId}")
-    public ResponseEntity<String> deleteReview(@PathVariable Long reviewId) {
-        return reviewService.deleteReview(reviewId);
+    public ResponseEntity<ReviewDeleteResponse> deleteReview(@PathVariable Long reviewId) {
+        ReviewDeleteResponse reviewDeleteResponse = reviewService.deleteReview(reviewId);
+        return ResponseEntity.ok(reviewDeleteResponse);
     }
 }
