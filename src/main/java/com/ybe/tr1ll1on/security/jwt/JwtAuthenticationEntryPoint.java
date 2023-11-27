@@ -3,6 +3,7 @@ package com.ybe.tr1ll1on.security.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ybe.tr1ll1on.global.exception.ExceptionCode;
 import com.ybe.tr1ll1on.global.exception.TrillionExceptionCode;
+import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -28,22 +29,22 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException {
         ExceptionCode exception = (ExceptionCode) request.getAttribute("exception");
 
-        if (exception != null && exception.equals(TrillionExceptionCode.NOT_TOKEN)) {
-            exceptionHandler(response, TrillionExceptionCode.NOT_TOKEN);
+        if (exception != null && exception.equals(SecurityExceptionCode.NOT_TOKEN)) {
+            exceptionHandler(response, SecurityExceptionCode.NOT_TOKEN);
             return;
         }
 
-        if (exception != null && exception.equals(TrillionExceptionCode.INVALID_TOKEN)) {
-            exceptionHandler(response, TrillionExceptionCode.INVALID_TOKEN);
+        if (exception != null && exception.equals(SecurityExceptionCode.INVALID_TOKEN)) {
+            exceptionHandler(response, SecurityExceptionCode.INVALID_TOKEN);
             return;
         }
 
-        if (exception != null && exception.equals(TrillionExceptionCode.USER_NOT_FOUND)) {
-            exceptionHandler(response, TrillionExceptionCode.USER_NOT_FOUND);
+        if (exception != null && exception.equals(SecurityExceptionCode.USER_NOT_FOUND)) {
+            exceptionHandler(response, SecurityExceptionCode.USER_NOT_FOUND);
         }
     }
 
-    public void exceptionHandler(HttpServletResponse response, TrillionExceptionCode errorCode) throws IOException {
+    public void exceptionHandler(HttpServletResponse response, SecurityExceptionCode errorCode) throws IOException {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("status", errorCode.getStatus());
         responseBody.put("code", errorCode.getCode());

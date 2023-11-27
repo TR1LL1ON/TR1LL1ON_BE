@@ -4,6 +4,7 @@ import com.ybe.tr1ll1on.global.exception.TrillionExceptionCode;
 import com.ybe.tr1ll1on.security.dto.TokenDto;
 import com.ybe.tr1ll1on.security.exception.InvalidTokenException;
 import com.ybe.tr1ll1on.security.exception.NotTokenException;
+import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import com.ybe.tr1ll1on.security.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -122,7 +123,7 @@ public class JwtTokenProvider {
 
         // 2. 파싱된 claims에 대한 검증을 수행한다.
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new InvalidTokenException(TrillionExceptionCode.INVALID_TOKEN);
+            throw new InvalidTokenException(SecurityExceptionCode.INVALID_TOKEN);
         }
 
         // 3. claims에서 authorities를 추출한다.
@@ -162,7 +163,7 @@ public class JwtTokenProvider {
                 .filter(cookie -> REFRESH_TOKEN.equals(cookie.getName()))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseThrow(() -> new NotTokenException(TrillionExceptionCode.NOT_TOKEN));
+                .orElseThrow(() -> new NotTokenException(SecurityExceptionCode.NOT_TOKEN));
     }
 
     public Authentication getAuthenticationFromRefreshToken(String refreshToken) {
@@ -177,7 +178,7 @@ public class JwtTokenProvider {
             // 4. UserDetails를 이용하여 새로운 Authentication 객체를 생성한다.
             return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
         } else {
-            throw new InvalidTokenException(TrillionExceptionCode.INVALID_TOKEN);
+            throw new InvalidTokenException(SecurityExceptionCode.INVALID_TOKEN);
         }
     }
 

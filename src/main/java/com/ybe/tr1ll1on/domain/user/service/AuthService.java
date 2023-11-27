@@ -9,8 +9,8 @@ import com.ybe.tr1ll1on.domain.user.dto.response.SignUpResponse;
 import com.ybe.tr1ll1on.domain.user.exception.EmailAlreadyExistsException;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
-import com.ybe.tr1ll1on.global.exception.TrillionExceptionCode;
 import com.ybe.tr1ll1on.security.dto.TokenDto;
+import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import com.ybe.tr1ll1on.security.exception.UserNotFoundException;
 import com.ybe.tr1ll1on.security.jwt.JwtTokenProvider;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
@@ -40,7 +40,7 @@ public class AuthService {
     @Transactional
     public SignUpResponse signUp(SignUpRequest signUpRequest) {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new EmailAlreadyExistsException(TrillionExceptionCode.CONFLICT);
+            throw new EmailAlreadyExistsException(SecurityExceptionCode.CONFLICT);
         }
 
         User user = signUpRequest.toEntity(passwordEncoder);
@@ -64,7 +64,7 @@ public class AuthService {
         HttpHeaders responseHeaders = createAuthorizationHeader(tokenDTO.getAccessToken());
 
         User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(TrillionExceptionCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(SecurityExceptionCode.USER_NOT_FOUND));
 
         return new ResponseEntity<>(LoginResponse.builder()
                 .email(user.getEmail())
