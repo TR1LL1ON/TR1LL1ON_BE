@@ -1,12 +1,13 @@
 package com.ybe.tr1ll1on.domain.product.controller;
 
-import static com.ybe.tr1ll1on.domain.product.error.ProductExceptionCode.CHECKIN_EQUALS_CHECKOUT;
+import static com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode.CHECKIN_EQUALS_CHECKOUT;
 
 import com.ybe.tr1ll1on.domain.product.response.AccommodationDetailResponse;
 import com.ybe.tr1ll1on.domain.product.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.product.response.ProductResponse;
-import com.ybe.tr1ll1on.domain.product.error.ProductException;
+import com.ybe.tr1ll1on.domain.product.exception.ProductException;
 import com.ybe.tr1ll1on.domain.product.service.ProductService;
+import com.ybe.tr1ll1on.global.date.utill.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +29,10 @@ public class ProductController {
         @PathVariable("accommodation_id") final Long accommodationId,
         @RequestBody final AccommodationRequest accommodationRequest
     ) {
-        //TODO checkIn 과 checkOut은 같은 날짜이면 안됨!!
-        if (accommodationRequest.getCheckIn().isEqual(accommodationRequest.getCheckOut())) {
-            throw new ProductException(CHECKIN_EQUALS_CHECKOUT);
-        }
+//        TODO checkIn 과 checkOut은 같은 날짜이면 안됨!!
+        DateUtil.isValidCheckInBetweenCheckOut(
+                accommodationRequest.getCheckIn(), accommodationRequest.getCheckOut()
+        );
         return ResponseEntity.ok(
                 productService.getAccommodationDetail(accommodationId, accommodationRequest)
         );
@@ -44,9 +45,9 @@ public class ProductController {
             @RequestBody final AccommodationRequest accommodationRequest
     ) {
         //TODO checkIn 과 checkOut은 같은 날짜이면 안됨!!
-        if (accommodationRequest.getCheckIn().isEqual(accommodationRequest.getCheckOut())) {
-            throw new ProductException(CHECKIN_EQUALS_CHECKOUT);
-        }
+        DateUtil.isValidCheckInBetweenCheckOut(
+                accommodationRequest.getCheckIn(), accommodationRequest.getCheckOut()
+        );
         return ResponseEntity.ok(
                 productService.getProduct(accommodationId, product_id, accommodationRequest)
         );
