@@ -30,7 +30,7 @@ public class UserReviewListResponse {
                 .reviewId(review.getId())
                 .reviewDate(review.getReviewDate())
                 .score(review.getScore())
-                .orderItemId(review.getOrderItem().getProduct().getAccommodation().getId())
+                .orderItemId(review.getOrderItem().getId())
                 .accommodationId(review.getOrderItem().getProduct().getAccommodation().getId())
                 .productId(review.getProduct().getId())
                 .content(review.getContent())
