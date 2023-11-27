@@ -20,6 +20,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import static com.ybe.tr1ll1on.security.constants.JwtConstants.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import java.util.Arrays;
@@ -101,17 +103,31 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(
-                List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(
-                Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "OPTIONS", "PATCH"));
-        configuration.addAllowedHeader(("*"));
-        configuration.addExposedHeader("Authorization");
-        configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
+        // 클라이언트에서 preflight 요청 결과를 저장할 기간을 지정.
+        // 3600초 동안 preflight 요청을 캐시하는 설정으로, 첫 요청 이후 60초 동안은 OPTIONS 메소드를 사용하는 예비 요청을 보내지 않음.
+        configuration.setMaxAge(MAX_AGE_TIME);
 
+        // 요청을 허용하는 출처.
+        configuration.addAllowedOriginPattern("*");
+
+        // 요청을 허용하는 메서드.
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+
+        // 요청을 허용하는 헤더.
+        configuration.addAllowedHeader("*");
+
+        // Authorization Header 를 브라우저에 노출 시켜서, 클라이언트에서 JavaScript 로 읽을 수 있도록 허용.
+        // 인증 정보를 담고 있어 보안에 취약할 수 있기 때문에, Access Token 의 경우 유효 기간을 짧게 설정.
+        configuration.addExposedHeader(AUTHORIZATION_HEADER);
+
+        // 클라이언트 요청이 Cookie 및 Authorization Header Token 통해, 자격 증명을 해야 하는 경우 true 설정.
+        // 자바스크립트 요청에서 withCredentials : true 설정 시, 해당 요청에 대한 응답을 해줄 수 있는지 나타냄.
+        configuration.setAllowCredentials(true);
+
+        // 모든 경로에 대해 위에 정의한 CORS 구성을 등록.
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
 }
