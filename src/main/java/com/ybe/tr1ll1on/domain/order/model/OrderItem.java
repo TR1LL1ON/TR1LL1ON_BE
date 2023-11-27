@@ -24,7 +24,7 @@ public class OrderItem {
 
     private boolean reviewWritten;
 
-    @OneToOne(mappedBy = "review", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "orderItem", cascade = CascadeType.REMOVE)
     private Review review;
 
     @OneToOne
