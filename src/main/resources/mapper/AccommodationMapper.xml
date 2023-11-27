@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper">
+
+    <select id="findAvailableAccommodation"
+            parameterType="com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationRequestDTO"
+            resultType="com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationResponseDTO">
+
+        select main.accommodationId as accommodationId,
+               main.imageUrl        as imageUrl,
+               main.address         as address,
+               main.areaCode        as areaCode,
+               main.name            as name,
+               min(main.total)      as price
+        from (select accommodationId, imageUrl, address, areaCode, name, sum(price) as total
+              from (select a.accommodation_id as accommodationId,
+                           image_url          as imageUrl,
+                           address            as address,
+                           area_code          as areaCode,
+                           a.name             as name,
+                           price              as price,
+                           p.product_id       as productId
+                    from accommodation a
+                             left join (select image_url, accommodation_id
+                                        from accommodation_image
+                                        where accommodation_image_id in (select min(accommodation_image_id)
+                                                                         from accommodation_image
+                                                                         group by accommodation_id)) ai
+                                       on a.accommodation_id = ai.accommodation_id
+                             left join category c on a.category_id = c.category_id
+                             left join product p on a.accommodation_id = p.accommodation_id
+                             left join product_info_per_night pipn
+                                       on pipn.product_id = p.product_id and date between #{checkIn} and #{checkOut}
+                    where p.maximum_number <![CDATA[>=]]>
+                          #{personNumber}
+                        <if test="category != null">
+                            and c.category_code = #{category}
+                        </if>
+                        <if test="areaCode != null">
+                            and a.area_code = #{areaCode}
+                        </if>
+                    ) as sub
+              group by sub.accommodationId, sub.imageUrl, sub.address, sub.areaCode, sub.name, sub.productId) as main
+        group by main.accommodationId, main.imageUrl, main.address, main.areaCode, main.name
+    </select>
+</mapper>

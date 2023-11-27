@@ -1,19 +1,45 @@
 package com.ybe.tr1ll1on.domain.accommodation.controller;
 
+import com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationRequestDTO;
 import com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationResponseDTO;
+import com.ybe.tr1ll1on.domain.accommodation.error.InvalidDateException;
 import com.ybe.tr1ll1on.domain.accommodation.service.AccommodationService;
-import java.util.List;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static com.ybe.tr1ll1on.domain.accommodation.error.InvalidDateExceptionCode.CHECKIN_IS_AFTER_CHECKOUT;
+
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/products")
 public class AccommodationController {
     private final AccommodationService accommodationService;
 
-    @GetMapping("/")
-    public List<AccommodationResponseDTO> getAll() {
+    @GetMapping("/test")
+    public List<AccommodationResponseDTO> getTest() {
         return accommodationService.getAll();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AccommodationResponseDTO>> getAll(
+            @RequestBody @Valid AccommodationRequestDTO accommodationRequestDTO,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String region
+    ) {
+        if (!accommodationRequestDTO.getCheckOut().isAfter(accommodationRequestDTO.getCheckIn())) {
+            throw new InvalidDateException(CHECKIN_IS_AFTER_CHECKOUT);
+        }
+        if (category != null) {
+            accommodationRequestDTO.setCategory(category);
+        }
+        if (region != null) {
+            accommodationRequestDTO.setAreaCode(region);
+        }
+        return ResponseEntity.ok(accommodationService.findAccommodation(accommodationRequestDTO));
     }
 }

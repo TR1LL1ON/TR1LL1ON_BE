@@ -1,7 +1,6 @@
 # TR1LL1ON_BE
 
-## Main에 push 하지 말아주세요 !!
-
+## Main에 push 하지 말아주세요 !
 ### ✅ Commit log
 
 ```
@@ -19,7 +18,4 @@ Remove : 파일 삭제
 ```
 
 ### ✅ Branch Naming
-
-```
-feature/#이슈번호
-```
+feature/#이슈번호_간단 설명(주제)
