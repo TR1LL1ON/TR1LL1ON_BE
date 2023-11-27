@@ -1,7 +1,7 @@
-POST http://localhost:8080/carts/77
+POST http://localhost:8080/carts/22
 Content-Type: application/json
 
 {
-  "userId": 2,
+  "userId": 1,
   "personNumber": 5
 }

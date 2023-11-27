@@ -3,7 +3,6 @@ package com.ybe.tr1ll1on.domain.cart.model;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;

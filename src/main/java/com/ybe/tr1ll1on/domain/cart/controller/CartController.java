@@ -5,7 +5,6 @@ import com.ybe.tr1ll1on.domain.cart.dto.AddCartItemResponse;
 import com.ybe.tr1ll1on.domain.cart.dto.GetCartResponse;
 import com.ybe.tr1ll1on.domain.cart.dto.RemoveCartItemResponse;
 import com.ybe.tr1ll1on.domain.cart.service.CartService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

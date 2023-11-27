@@ -101,16 +101,19 @@ public class CartServiceImpl implements CartService {
         return response;
     }
 
-
     @Override
     @Transactional
     public RemoveCartItemResponse removeCartItem(Long cartId) {
+        // 해당 cartId에 대한 유효성 검사
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartIdNotFoundException(CARTID_NOT_FOUND));
 
+        // CartItem 삭제
         entityManager.createQuery("DELETE FROM CartItem ci WHERE ci.cart.id = :cartId")
                 .setParameter("cartId", cartId)
                 .executeUpdate();
 
-
+        // Cart 삭제
         cartRepository.deleteById(cartId);
 
         RemoveCartItemResponse response = new RemoveCartItemResponse();
@@ -118,7 +121,6 @@ public class CartServiceImpl implements CartService {
 
         return response;
     }
-
 
 
 
