@@ -2,6 +2,8 @@ package com.ybe.tr1ll1on.domain.user.model;
 
 import com.ybe.tr1ll1on.domain.cart.model.Cart;
 import com.ybe.tr1ll1on.domain.likes.model.Likes;
+import com.ybe.tr1ll1on.domain.order.model.Orders;
+import com.ybe.tr1ll1on.domain.review.model.Review;
 import com.ybe.tr1ll1on.security.common.Authority;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -35,7 +37,13 @@ public class User {
     private Cart cart;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Orders> orderList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Likes> likesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Review> reviewList = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserFacility userFacility;

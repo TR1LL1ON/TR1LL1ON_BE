@@ -2,7 +2,7 @@ package com.ybe.tr1ll1on.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ybe.tr1ll1on.global.exception.ExceptionCode;
-import com.ybe.tr1ll1on.global.exception.TrillionExceptionCode;
+import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +27,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        ExceptionCode errorCode = TrillionExceptionCode.ACCESS_DENIED;
+        ExceptionCode errorCode = SecurityExceptionCode.ACCESS_DENIED;
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("status", errorCode.getStatus());

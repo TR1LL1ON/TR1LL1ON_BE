@@ -1,7 +1,7 @@
 package com.ybe.tr1ll1on.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ybe.tr1ll1on.global.exception.TrillionExceptionCode;
+import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,14 +36,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 2. 토큰이 존재하지 않는 경우 다음 필터로 넘어간다.
         if (accessToken == null) {
-            request.setAttribute("exception", TrillionExceptionCode.NOT_TOKEN);
+            request.setAttribute("exception", SecurityExceptionCode.NOT_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
 
         // 3. 토큰이 유효하지 않은 경우 다음 필터로 넘어간다.
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            request.setAttribute("exception", TrillionExceptionCode.INVALID_TOKEN);
+            request.setAttribute("exception", SecurityExceptionCode.INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
@@ -53,7 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (UsernameNotFoundException e) {
-            request.setAttribute("exception", TrillionExceptionCode.USER_NOT_FOUND);
+            request.setAttribute("exception", SecurityExceptionCode.USER_NOT_FOUND);
         }
         // 5. 다음 필터로 넘어간다.
         filterChain.doFilter(request, response);

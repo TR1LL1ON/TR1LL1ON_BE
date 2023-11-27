@@ -2,7 +2,7 @@ package com.ybe.tr1ll1on.security.service;
 
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
-import com.ybe.tr1ll1on.global.exception.TrillionExceptionCode;
+import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import com.ybe.tr1ll1on.security.exception.UserNotFoundException;
 import com.ybe.tr1ll1on.security.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (byEmail.isPresent()) {
             return UserPrincipal.create(byEmail.get());
         } else {
-            throw new UserNotFoundException(TrillionExceptionCode.USER_NOT_FOUND);
+            throw new UserNotFoundException(SecurityExceptionCode.USER_NOT_FOUND);
         }
     }
 
@@ -34,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (byId.isPresent()) {
             return UserPrincipal.create(byId.get());
         } else {
-            throw new UserNotFoundException(TrillionExceptionCode.USER_NOT_FOUND);
+            throw new UserNotFoundException(SecurityExceptionCode.USER_NOT_FOUND);
         }
     }
 }
