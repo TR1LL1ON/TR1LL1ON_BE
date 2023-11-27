@@ -10,6 +10,7 @@ import com.ybe.tr1ll1on.domain.cart.repository.CartRepository;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.repository.ProductRepository;
 import com.ybe.tr1ll1on.domain.user.model.User;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
+    private final EntityManager entityManager;
 
 
     @Override
@@ -88,23 +90,24 @@ public class CartServiceImpl implements CartService {
         return response;
     }
 
-
-
     @Override
     @Transactional
     public RemoveCartItemResponse removeCartItem(Long cartId) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new CartIdNotFoundException(CARTID_NOT_FOUND));
+        // 하위 엔티티인 CartItem을 먼저 삭제
+        entityManager.createQuery("DELETE FROM CartItem ci WHERE ci.cart.id = :cartId")
+                .setParameter("cartId", cartId)
+                .executeUpdate();
 
-        System.out.println("Found cart with ID: " + cartId);
-
-        cartRepository.delete(cart);
+        // 상위 엔티티인 Cart를 삭제
+        cartRepository.deleteById(cartId);
 
         RemoveCartItemResponse response = new RemoveCartItemResponse();
         response.setCartId(cartId);
 
-
         return response;
     }
+
+
+
 
 }
