@@ -10,8 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ybe.tr1ll1on.domain.product.request.AccommodationRequest;
-import com.ybe.tr1ll1on.domain.product.error.ProductException;
-import com.ybe.tr1ll1on.domain.product.error.ProductExceptionCode;
+import com.ybe.tr1ll1on.domain.product.exception.ProductException;
+import com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode;
 import com.ybe.tr1ll1on.domain.product.service.ProductService;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
