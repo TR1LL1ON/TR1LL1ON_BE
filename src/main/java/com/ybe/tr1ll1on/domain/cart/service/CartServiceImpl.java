@@ -3,6 +3,8 @@ package com.ybe.tr1ll1on.domain.cart.service;
 import com.ybe.tr1ll1on.domain.cart.dto.*;
 import com.ybe.tr1ll1on.domain.cart.error.CartIdNotFoundException;
 import com.ybe.tr1ll1on.domain.cart.error.ProductNotExistException;
+import com.ybe.tr1ll1on.domain.cart.error.UserAlreadyHasCartException;
+import com.ybe.tr1ll1on.domain.cart.error.UserNotFoundException;
 import com.ybe.tr1ll1on.domain.cart.model.Cart;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.cart.repository.CartItemRepository;
@@ -10,6 +12,7 @@ import com.ybe.tr1ll1on.domain.cart.repository.CartRepository;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.repository.ProductRepository;
 import com.ybe.tr1ll1on.domain.user.model.User;
+import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 
 import static com.ybe.tr1ll1on.domain.cart.error.CartIdNotFoundExceptionCode.CARTID_NOT_FOUND;
 import static com.ybe.tr1ll1on.domain.cart.error.ProductNotExsitExceptionCode.PRODUCT_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.cart.error.UserAlreadyHasCartExceptionCode.USER_ALREADY_HAS_CART;
+import static com.ybe.tr1ll1on.domain.cart.error.UserNotFoundExceptionCode.USER_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
@@ -29,6 +34,7 @@ public class CartServiceImpl implements CartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final EntityManager entityManager;
+    private final UserRepository userRepository;
 
 
     @Override
@@ -57,31 +63,36 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public AddCartItemResponse addCartItem(AddCartItemRequest request) {
+
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new ProductNotExistException(PRODUCT_NOT_FOUND));
 
-        // 사용자 정보가 없으므로, 사용자 ID만으로 간단히 사용자를 생성하여 사용
-        User user = new User();
-        user.setId(request.getUserId());
 
-        // Check if the user has a cart, if not, create one
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+
+
         Cart cart = user.getCart();
         if (cart == null) {
             cart = new Cart();
             cart.setUser(user);
             cartRepository.save(cart);
             user.setCart(cart);
+        } else {
+            // 이미 사용자가 장바구니를 가지고 있다면 추가를 막고 예외를 발생시킵니다.
+            throw new UserAlreadyHasCartException(USER_ALREADY_HAS_CART);
         }
 
+        // 장바구니 아이템을 생성하고 저장합니다.
         CartItem cartItem = new CartItem();
         cartItem.setCheckInTime(product.getCheckInTime());
         cartItem.setCheckOutTime(product.getCheckOutTime());
         cartItem.setProduct(product);
         cartItem.setCart(cart);
         cartItem.setPersonNumber(request.getPersonNumber());
-
         cartItemRepository.save(cartItem);
 
+        // 응답을 생성하여 반환합니다.
         AddCartItemResponse response = new AddCartItemResponse();
         response.setCartItemId(cartItem.getId());
         response.setProductId(product.getId());
@@ -90,15 +101,16 @@ public class CartServiceImpl implements CartService {
         return response;
     }
 
+
     @Override
     @Transactional
     public RemoveCartItemResponse removeCartItem(Long cartId) {
-        // 하위 엔티티인 CartItem을 먼저 삭제
+
         entityManager.createQuery("DELETE FROM CartItem ci WHERE ci.cart.id = :cartId")
                 .setParameter("cartId", cartId)
                 .executeUpdate();
 
-        // 상위 엔티티인 Cart를 삭제
+
         cartRepository.deleteById(cartId);
 
         RemoveCartItemResponse response = new RemoveCartItemResponse();
