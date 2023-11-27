@@ -4,7 +4,11 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.3'
 }
 
-group = 'com.example'
+jar {
+	enabled = false
+}
+
+group = 'com.ybe'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -29,8 +33,8 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	//testImplementation 'org.springframework.security:spring-security-test'
-	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 tasks.named('bootBuildImage') {
