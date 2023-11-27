@@ -1,6 +1,6 @@
 package com.ybe.tr1ll1on.security.jwt;
 
-import com.ybe.tr1ll1on.global.exception.TrillionExceptionCode;
+import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import com.ybe.tr1ll1on.security.exception.UserNotFoundException;
 import com.ybe.tr1ll1on.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
             return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
         } else {
-            throw new UserNotFoundException(TrillionExceptionCode.USER_NOT_FOUND);
+            throw new UserNotFoundException(SecurityExceptionCode.USER_NOT_FOUND);
         }
     }
 
