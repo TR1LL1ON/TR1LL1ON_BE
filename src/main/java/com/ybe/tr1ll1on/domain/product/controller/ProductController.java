@@ -2,9 +2,9 @@ package com.ybe.tr1ll1on.domain.product.controller;
 
 import static com.ybe.tr1ll1on.domain.product.error.ProductExceptionCode.CHECKIN_EQUALS_CHECKOUT;
 
-import com.ybe.tr1ll1on.domain.product.dto.AccommodationDetailResponse;
-import com.ybe.tr1ll1on.domain.product.dto.AccommodationRequest;
-import com.ybe.tr1ll1on.domain.product.dto.ProductResponse;
+import com.ybe.tr1ll1on.domain.product.response.AccommodationDetailResponse;
+import com.ybe.tr1ll1on.domain.product.request.AccommodationRequest;
+import com.ybe.tr1ll1on.domain.product.response.ProductResponse;
 import com.ybe.tr1ll1on.domain.product.error.ProductException;
 import com.ybe.tr1ll1on.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;

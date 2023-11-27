@@ -1,4 +1,4 @@
-package com.ybe.tr1ll1on.domain.product.dto;
+package com.ybe.tr1ll1on.domain.product.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

@@ -4,13 +4,13 @@ import static com.ybe.tr1ll1on.domain.product.error.ProductExceptionCode.EMPTY_P
 
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
-import com.ybe.tr1ll1on.domain.product.dto.AccommodationDetailResponse;
-import com.ybe.tr1ll1on.domain.product.dto.AccommodationFacilityResponse;
-import com.ybe.tr1ll1on.domain.product.dto.AccommodationImageResponse;
-import com.ybe.tr1ll1on.domain.product.dto.AccommodationRequest;
-import com.ybe.tr1ll1on.domain.product.dto.ProductFacilityResponse;
-import com.ybe.tr1ll1on.domain.product.dto.ProductImageResponse;
-import com.ybe.tr1ll1on.domain.product.dto.ProductResponse;
+import com.ybe.tr1ll1on.domain.product.response.AccommodationDetailResponse;
+import com.ybe.tr1ll1on.domain.product.response.AccommodationFacilityResponse;
+import com.ybe.tr1ll1on.domain.product.response.AccommodationImageResponse;
+import com.ybe.tr1ll1on.domain.product.request.AccommodationRequest;
+import com.ybe.tr1ll1on.domain.product.response.ProductFacilityResponse;
+import com.ybe.tr1ll1on.domain.product.response.ProductImageResponse;
+import com.ybe.tr1ll1on.domain.product.response.ProductResponse;
 import com.ybe.tr1ll1on.domain.product.error.ProductException;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.model.ProductInfoPerNight;
