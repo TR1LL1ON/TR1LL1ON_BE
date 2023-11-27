@@ -24,4 +24,8 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<CartItem> cartItem = new ArrayList<>();
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
