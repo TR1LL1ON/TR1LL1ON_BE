@@ -1,7 +1,10 @@
 package com.ybe.tr1ll1on.domain.review.service;
 
+import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
+import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
 import com.ybe.tr1ll1on.domain.order.exception.OrderItemNotFoundException;
 import com.ybe.tr1ll1on.domain.review.dto.response.*;
+import com.ybe.tr1ll1on.domain.review.exception.AccommodationNotFoundException;
 import com.ybe.tr1ll1on.domain.review.exception.ReviewAlreadyWrittenException;
 import com.ybe.tr1ll1on.domain.review.model.Review;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
@@ -19,6 +22,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +32,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final OrderItemRepository orderItemRepository;
     private final UserRepository userRepository;
+    private final AccommodationRepository accommodationRepository;
 
     /**
      * 상품에 대한 리뷰 목록을 조회
@@ -37,11 +42,19 @@ public class ReviewService {
      */
     @Transactional
     public List<ProductReviewListResponse> getProductReviews(Long accommodationId) {
-        List<Review> reviews = reviewRepository.findReviewsByProductId(accommodationId);
+        Accommodation accommodation = accommodationRepository.findById(accommodationId)
+                .orElseThrow(() -> new AccommodationNotFoundException(ReviewExceptionCode.ACCOMMODATION_NOT_FOUND));
 
-        return reviews.stream()
-                .map(ProductReviewListResponse::fromEntity)
-                .collect(Collectors.toList());
+        List<Product> Products = accommodation.getProductList();
+        List<ProductReviewListResponse> productReviewListResponse = new ArrayList<>();
+
+        for (Product product : Products) {
+            List<Review> allReviews = product.getReviewList();
+            productReviewListResponse.addAll(allReviews.stream()
+                    .map(ProductReviewListResponse::fromEntity)
+                    .collect(Collectors.toList()));
+        }
+        return productReviewListResponse;
     }
 
     /**

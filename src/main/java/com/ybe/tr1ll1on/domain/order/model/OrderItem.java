@@ -24,8 +24,7 @@ public class OrderItem {
 
     private boolean reviewWritten;
 
-    @OneToOne
-    @JoinColumn(name = "review_id")
+    @OneToOne(mappedBy = "review", cascade = CascadeType.REMOVE)
     private Review review;
 
     @OneToOne
