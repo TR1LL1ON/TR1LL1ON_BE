@@ -25,7 +25,7 @@ public class AccommodationController {
         return accommodationService.getAll();
     }
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<List<AccommodationResponseDTO>> getAll(
             @RequestBody @Valid AccommodationRequestDTO accommodationRequestDTO,
             @RequestParam(required = false) String category,
