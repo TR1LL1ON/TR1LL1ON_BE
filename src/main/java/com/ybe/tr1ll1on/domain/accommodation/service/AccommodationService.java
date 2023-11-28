@@ -1,7 +1,7 @@
 package com.ybe.tr1ll1on.domain.accommodation.service;
 
-import com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationRequestDTO;
-import com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationResponseDTO;
+import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequestDTO;
+import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponseDTO;
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +39,12 @@ public class AccommodationService {
 
     @Transactional
     public List<AccommodationResponseDTO> findAccommodation(AccommodationRequestDTO accommodationRequestDTO){
+
+        LocalDate checkOut = accommodationRequestDTO.getCheckOut();
+        LocalDate checkOutYesterday = checkOut.minusDays(1);
+
+        accommodationRequestDTO.setCheckOut(checkOutYesterday);
+
         return mapper.findAvailableAccommodation(accommodationRequestDTO)
                 .stream()
                 .map(it -> AccommodationResponseDTO.builder()
