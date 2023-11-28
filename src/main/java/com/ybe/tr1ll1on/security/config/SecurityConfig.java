@@ -108,9 +108,7 @@ public class SecurityConfig {
         configuration.setMaxAge(MAX_AGE_TIME);
 
         // 요청을 허용하는 출처.
-        configuration.addAllowedOrigin("http://localhost:5173");
         configuration.addAllowedOrigin("https://tr1ll1on.vercel.app");
-
 
         // 요청을 허용하는 메서드.
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
