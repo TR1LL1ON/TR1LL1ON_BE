@@ -34,12 +34,6 @@ public class Product {
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-//    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private OrderItem orderItem;
-//
-//    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private CartItem cartItem;
-
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Review> reviewList = new ArrayList<>();
 
@@ -57,14 +51,4 @@ public class Product {
         this.accommodation = accommodation;
     }
 
-    @Builder
-    public Product(String name, String checkInTime,
-            String checkOutTime, int standardNumber, int maximumNumber, int count) {
-        this.name = name;
-        this.checkInTime = checkInTime;
-        this.checkOutTime = checkOutTime;
-        this.standardNumber = standardNumber;
-        this.maximumNumber = maximumNumber;
-        this.count = count;
-    }
 }

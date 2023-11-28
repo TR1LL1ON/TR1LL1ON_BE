@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AccommodationRequestDTO {
+public class AccommodationRequest {
     @NotNull
     LocalDate checkIn;
     @NotNull
