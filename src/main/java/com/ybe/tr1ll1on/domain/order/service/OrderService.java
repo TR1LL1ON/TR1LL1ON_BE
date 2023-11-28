@@ -5,7 +5,8 @@ import static com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode.INVALID
 import static com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode.PRODUCT_SOLD_OUT;
 import static com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode.EMPTY_PRODUCT;
 import static com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode.USER_NOT_FOUND;
-import static com.ybe.tr1ll1on.global.date.utill.DateUtil.isValidCheckInBetweenCheckOut;
+import static com.ybe.tr1ll1on.global.date.util.DateUtil.isValidCheckInBetweenCheckOut;
+
 
 import com.ybe.tr1ll1on.domain.cart.exception.CartIdNotFoundException;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
