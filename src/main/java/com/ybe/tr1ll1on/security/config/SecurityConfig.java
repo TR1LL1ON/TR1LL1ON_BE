@@ -107,7 +107,7 @@ public class SecurityConfig {
         // 3600초 동안 preflight 요청을 캐시하는 설정으로, 첫 요청 이후 60초 동안은 OPTIONS 메소드를 사용하는 예비 요청을 보내지 않음.
         configuration.setMaxAge(MAX_AGE_TIME);
 
-        // 요청을 허용하는 출처. //들어가라
+
         configuration.addAllowedOrigin("https://www.tr1ll1on.site/");
 
         // 요청을 허용하는 메서드.
