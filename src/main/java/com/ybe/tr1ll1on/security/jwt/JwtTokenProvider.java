@@ -12,8 +12,6 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,7 +34,6 @@ import static com.ybe.tr1ll1on.security.constants.JwtConstants.*;
  * JWT token 과 관련된 암호화 및 복호화 및 검증은 해당 클래스에서 수행된다.
  */
 @Component
-@Slf4j
 public class JwtTokenProvider {
     private final Key key;
     private final CustomUserDetailsService customUserDetailsService;
@@ -99,7 +96,6 @@ public class JwtTokenProvider {
                 .sameSite("None")
                 .build();
         // Response Header에도 Cookie를 저장한다.
-        log.info("set-cookie time: {}", LocalDateTime.now());
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
