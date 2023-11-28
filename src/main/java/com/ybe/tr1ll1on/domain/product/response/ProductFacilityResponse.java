@@ -10,7 +10,6 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ProductFacilityResponse {
     private boolean canCook;
 
