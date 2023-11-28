@@ -108,7 +108,7 @@ public class SecurityConfig {
         configuration.setMaxAge(MAX_AGE_TIME);
 
 
-        configuration.addAllowedOrigin("https://www.tr1ll1on.site");
+        configuration.addAllowedOrigin("*");
 
         // 요청을 허용하는 메서드.
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
