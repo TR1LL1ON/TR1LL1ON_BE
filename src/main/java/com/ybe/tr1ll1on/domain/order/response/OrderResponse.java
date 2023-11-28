@@ -31,7 +31,7 @@ public class OrderResponse {
                 .orders(
                     orders.getOrderItemList()
                        .stream()
-                       .map(it -> OrderItemResponse.of(it))
+                       .map(it -> OrderItemResponse.fromEntity(it))
                        .collect(Collectors.toList())
                 )
                 .payment(orders.getPayment())
