@@ -1,5 +1,7 @@
 package com.ybe.tr1ll1on.domain.user.dto.response;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.ybe.tr1ll1on.domain.order.dto.OrderItemResponse;
 import com.ybe.tr1ll1on.domain.order.model.Orders;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class MyPageDetailResponse {
     private Long orderId;
     private List<OrderItemResponse> orderItemList;

@@ -1,5 +1,7 @@
 package com.ybe.tr1ll1on.domain.user.dto.response;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.ybe.tr1ll1on.domain.order.model.Orders;
 import com.ybe.tr1ll1on.global.common.Payment;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class MyPageListResponse {
     private Long orderId;
     private Long AccommodationId;
