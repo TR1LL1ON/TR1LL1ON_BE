@@ -1,4 +1,4 @@
-package com.ybe.tr1ll1on.global.date.utill;
+package com.ybe.tr1ll1on.global.date.util;
 
 import static com.ybe.tr1ll1on.global.date.exception.InValidDateExceptionCode.CHECKIN_EQUALS_CHECKOUT;
 import static com.ybe.tr1ll1on.global.date.exception.InValidDateExceptionCode.CHECKIN_LATER_THEN_CHECKOUT;
