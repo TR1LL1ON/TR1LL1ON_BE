@@ -5,7 +5,7 @@ on:
   push:
     branches: [ "main" ]
    
-# flow에서 사용할 변수 같은 느낌입니다.
+# flow에서 사용할 변수 같은 느낌입니다..
 env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: trillion-github-actions-s3-bucket
