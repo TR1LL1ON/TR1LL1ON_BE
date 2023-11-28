@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -17,8 +17,8 @@ public class CartItem {
     @Column(name = "cart_item_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String checkInTime;
-    private String checkOutTime;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Integer personNumber;
     private Integer price;
 

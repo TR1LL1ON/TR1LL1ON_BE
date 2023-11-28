@@ -1,15 +1,16 @@
-package com.ybe.tr1ll1on.domain.cart.dto;
+package com.ybe.tr1ll1on.domain.cart.dto.request;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class AddCartItemRequest {
+@Builder
+public class CartRequest {
     private Long productId;
-    private Integer personNumber;
     private LocalDate checkIn;
     private LocalDate checkOut;
+    private Integer personNumber;
     private Integer price;
-
 }

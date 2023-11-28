@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,8 +18,8 @@ public class CartItemDto {
     private Integer personNumber;
     private Integer price;
     private String productName;
-    private String checkInTime;
-    private String checkOutTime;
+    private LocalDate checkInTime;
+    private LocalDate checkOutTime;
 
     public static CartItemDto from(CartItem cartItem) {
         return CartItemDto.builder()
@@ -26,8 +28,8 @@ public class CartItemDto {
                 .personNumber(cartItem.getPersonNumber())
                 .price(cartItem.getPrice())
                 .productName(cartItem.getProduct().getName())
-                .checkInTime(cartItem.getProduct().getCheckInTime())
-                .checkOutTime(cartItem.getProduct().getCheckOutTime())
+                .checkInTime(LocalDate.parse(cartItem.getProduct().getCheckInTime()))
+                .checkOutTime(LocalDate.parse(cartItem.getProduct().getCheckOutTime()))
                 .build();
     }
 }
