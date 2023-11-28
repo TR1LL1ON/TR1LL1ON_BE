@@ -2,6 +2,7 @@ package com.ybe.tr1ll1on.domain.product.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,8 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class ProductInfoPerNight {
     @Id
     @Column(name = "product_info_per_night_id")
@@ -24,12 +27,7 @@ public class ProductInfoPerNight {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Builder
-    public ProductInfoPerNight(Long id, LocalDate date, Integer price, Integer count, Product product) {
-        this.id = id;
-        this.date = date;
-        this.price = price;
-        this.count = count;
-        this.product = product;
+    public void decreaseCountByOne() {
+        this.count--;
     }
 }

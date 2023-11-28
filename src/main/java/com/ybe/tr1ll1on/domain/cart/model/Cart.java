@@ -2,15 +2,16 @@ package com.ybe.tr1ll1on.domain.cart.model;
 
 import com.ybe.tr1ll1on.domain.user.model.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
+@Data
 @NoArgsConstructor
+
 public class Cart {
     @Id
     @Column(name = "cart_id")
@@ -23,4 +24,8 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<CartItem> cartItem = new ArrayList<>();
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

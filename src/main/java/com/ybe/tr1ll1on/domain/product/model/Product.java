@@ -3,6 +3,7 @@ package com.ybe.tr1ll1on.domain.product.model;
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.order.model.OrderItem;
+import com.ybe.tr1ll1on.domain.review.model.Review;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +41,9 @@ public class Product {
 //    private CartItem cartItem;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Review> reviewList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ProductInfoPerNight> productInfoPerNightList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -63,5 +67,4 @@ public class Product {
         this.maximumNumber = maximumNumber;
         this.count = count;
     }
-
 }

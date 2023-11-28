@@ -7,12 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    //List<Product> findByAccommodationIdAndStandardNumberLessThanEqual(Long accommodationId, Integer personNumber);
 
-    /* select * from product where accommodation_id = ? and standard_number >= ? and maximum_number <=? */
-    List<Product> findByAccommodationIdAndStandardNumberLessThanEqualAndMaximumNumberGreaterThanEqual(
-            Long accommodationId,
-            Integer personNumber1,
-            Integer personNumber2
+    /* select * from product where accommodation_id = ? and maximum_number >= ? */
+    List<Product> findByAccommodationIdAndMaximumNumberIsGreaterThanEqual(
+            Long accommodationId, Integer personNumber
     );
 }

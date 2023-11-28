@@ -4,13 +4,13 @@ import static com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode.EMP
 
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
-import com.ybe.tr1ll1on.domain.product.response.AccommodationDetailResponse;
-import com.ybe.tr1ll1on.domain.product.response.AccommodationFacilityResponse;
-import com.ybe.tr1ll1on.domain.product.response.AccommodationImageResponse;
-import com.ybe.tr1ll1on.domain.product.request.AccommodationRequest;
-import com.ybe.tr1ll1on.domain.product.response.ProductFacilityResponse;
-import com.ybe.tr1ll1on.domain.product.response.ProductImageResponse;
-import com.ybe.tr1ll1on.domain.product.response.ProductResponse;
+import com.ybe.tr1ll1on.domain.product.dto.response.AccommodationDetailResponse;
+import com.ybe.tr1ll1on.domain.product.dto.response.AccommodationFacilityResponse;
+import com.ybe.tr1ll1on.domain.product.dto.response.AccommodationImageResponse;
+import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
+import com.ybe.tr1ll1on.domain.product.dto.response.ProductFacilityResponse;
+import com.ybe.tr1ll1on.domain.product.dto.response.ProductImageResponse;
+import com.ybe.tr1ll1on.domain.product.dto.response.ProductResponse;
 import com.ybe.tr1ll1on.domain.product.exception.ProductException;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.model.ProductInfoPerNight;
@@ -49,8 +49,8 @@ public class ProductService {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
                 .orElseThrow(() -> new ProductException(EMPTY_PRODUCT));
         List<Product> productList = productRepository
-                .findByAccommodationIdAndStandardNumberLessThanEqualAndMaximumNumberGreaterThanEqual(
-                        accommodationId, request.getPersonNumber(), request.getPersonNumber());
+                .findByAccommodationIdAndMaximumNumberIsGreaterThanEqual(
+                        accommodationId, request.getPersonNumber());
         
         if (productList == null) {
             throw new ProductException(EMPTY_PRODUCT);

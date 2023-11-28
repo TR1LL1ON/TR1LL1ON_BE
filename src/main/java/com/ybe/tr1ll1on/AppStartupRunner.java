@@ -265,6 +265,8 @@
 //                productImage.setProduct(product);
 //                productImageRepository.save(productImage);
 //            }
+//
+//            saveProductInfoPerNight(product);
 //        }
 //    }
 //
@@ -272,9 +274,17 @@
 //        Random random = new Random();
 //
 //        String name = (String) item.get("roomtitle");
-//        int count = item.get("roomcount") != null ? Integer.parseInt((String) item.get("roomcount")) : random.nextInt(10) + 1;
-//        int standardNumber = item.get("roombasecount") != null ? Integer.parseInt((String) item.get("roombasecount")) : random.nextInt(10) + 1;
-//        int maximumNumber = item.get("roommaxcount") != null ? Integer.parseInt((String) item.get("roommaxcount")) : standardNumber + random.nextInt(10) + 1;
+//        int count = item.get("roomcount") != null && !"0".equals(item.get("roomcount"))
+//                ? Integer.parseInt((String) item.get("roomcount"))
+//                : random.nextInt(10) + 1;
+//
+//        int standardNumber = item.get("roombasecount") != null && !"0".equals(item.get("roombasecount"))
+//                ? Integer.parseInt((String) item.get("roombasecount"))
+//                : random.nextInt(10) + 1;
+//
+//        int maximumNumber = item.get("roommaxcount") != null && !"0".equals(item.get("roommaxcount"))
+//                ? Integer.parseInt((String) item.get("roommaxcount"))
+//                : standardNumber + random.nextInt(10) + 1;
 //
 //        Product product = Product.builder()
 //                .name(name)

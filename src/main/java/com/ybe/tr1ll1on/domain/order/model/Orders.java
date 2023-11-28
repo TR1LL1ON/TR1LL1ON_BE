@@ -1,7 +1,11 @@
 package com.ybe.tr1ll1on.domain.order.model;
 
+import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.global.common.Payment;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,13 +16,22 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Orders {
     @Id
     @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date orderCreateDate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private LocalDateTime orderCreateDate;
+
     private Payment payment;
+
     private Integer totalPrice;
 
     @OneToMany(mappedBy = "orders",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
