@@ -1,8 +1,7 @@
 package com.ybe.tr1ll1on.domain.cart.service;
 
-import com.ybe.tr1ll1on.domain.cart.dto.AddCartItemRequest;
-import com.ybe.tr1ll1on.domain.cart.dto.AddCartItemResponse;
-import com.ybe.tr1ll1on.domain.cart.dto.RemoveCartItemResponse;
+import com.ybe.tr1ll1on.domain.cart.dto.request.AddCartItemRequest;
+import com.ybe.tr1ll1on.domain.cart.dto.response.AddCartItemResponse;
 import com.ybe.tr1ll1on.domain.cart.dto.response.CartResponse;
 import com.ybe.tr1ll1on.domain.cart.error.CartIdNotFoundException;
 import com.ybe.tr1ll1on.domain.cart.error.ProductNotExistException;
@@ -52,6 +51,8 @@ public class CartServiceImpl implements CartService {
         return cart.getCartItem().stream()
                 .map(cartItem -> CartResponse.builder()
                         .cartItemId(cartItem.getId())
+                        .accommodationId(cartItem.getProduct().getAccommodation().getId())
+                        .productId(cartItem.getProduct().getId())
                         .accommodationName(cartItem.getProduct().getAccommodation().getName())
                         .accommodationAddress(cartItem.getProduct().getAccommodation().getAddress())
                         .accommodationCategory(cartItem.getProduct().getAccommodation().getCategory().getCategoryCode())
@@ -78,19 +79,16 @@ public class CartServiceImpl implements CartService {
 
 
         Cart cart = user.getCart();
-//        if (cart == null) {
-//        } else {
-//            // 이미 사용자가 장바구니를 가지고 있다면 추가를 막고 예외를 발생시킵니다.
-//            throw new UserAlreadyHasCartException(USER_ALREADY_HAS_CART);
-//        }
-        // 장바구니 아이템을 생성하고 저장합니다.
-        CartItem cartItem = new CartItem();
-        cartItem.setStartDate(request.getCheckIn());
-        cartItem.setEndDate(request.getCheckOut());
-        cartItem.setProduct(product);
-        cartItem.setCart(cart);
-        cartItem.setPersonNumber(request.getPersonNumber());
-        cartItem.setPrice(request.getPrice());
+
+        CartItem cartItem = CartItem.builder()
+                .startDate(request.getCheckIn())
+                .endDate(request.getCheckOut())
+                .product(product)
+                .personNumber(request.getPersonNumber())
+                .price(request.getPrice())
+                .cart(cart)
+                .build();
+
 
         CartItem saved = cartItemRepository.save(cartItem);
 
@@ -105,28 +103,22 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public RemoveCartItemResponse removeCartItem(Long cartId) {
+    public void removeCartItem(Long cartItemId) {
         Long userId = SecurityUtil.getCurrentUserId();
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
-        // 해당 cartId에 대한 유효성 검사
-        Cart cart = cartRepository.findById(user.getCart().getId())
-                .orElseThrow(() -> new CartIdNotFoundException(CARTID_NOT_FOUND));
-
+        // 해당 cartItemId에 대한 유효성 검사
+        cartItemRepository.findById(cartItemId).orElseThrow(() -> new CartIdNotFoundException(CARTID_NOT_FOUND));
+        cartItemRepository.deleteById(cartItemId);
 
         // CartItem 삭제
-        entityManager.createQuery("DELETE FROM CartItem ci WHERE ci.cart.id = :cartId")
-                .setParameter("cartId", cartId)
-                .executeUpdate();
+//        entityManager.createQuery("DELETE FROM CartItem ci WHERE ci.cart.id = :cartId")
+//                .setParameter("cartId", cartId)
+//                .executeUpdate();
 
         // Cart 삭제
-        cartRepository.deleteById(cartId);
-
-        RemoveCartItemResponse response = new RemoveCartItemResponse();
-        response.setCartId(cartId);
-
-        return response;
+//        cartRepository.deleteById(cartId);
     }
 
 

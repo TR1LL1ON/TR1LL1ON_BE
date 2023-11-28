@@ -9,6 +9,8 @@ import java.time.LocalDate;
 @Data
 public class CartResponse {
     private Long cartItemId;
+    private Long accommodationId;
+    private Long productId;
     private String accommodationName;
     private String accommodationAddress;
     private String accommodationCategory;

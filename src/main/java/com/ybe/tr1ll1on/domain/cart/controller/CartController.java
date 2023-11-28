@@ -1,8 +1,7 @@
 package com.ybe.tr1ll1on.domain.cart.controller;
 
-import com.ybe.tr1ll1on.domain.cart.dto.AddCartItemRequest;
-import com.ybe.tr1ll1on.domain.cart.dto.AddCartItemResponse;
-import com.ybe.tr1ll1on.domain.cart.dto.RemoveCartItemResponse;
+import com.ybe.tr1ll1on.domain.cart.dto.request.AddCartItemRequest;
+import com.ybe.tr1ll1on.domain.cart.dto.response.AddCartItemResponse;
 import com.ybe.tr1ll1on.domain.cart.dto.response.CartResponse;
 import com.ybe.tr1ll1on.domain.cart.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +30,10 @@ public class CartController {
         AddCartItemResponse response = cartService.addCartItem(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
     @DeleteMapping("/{cartId}")
-    public RemoveCartItemResponse removeCartItem(@PathVariable Long cartId) {
-        return cartService.removeCartItem(cartId);
+    public void removeCartItem(@PathVariable Long cartId) {
+        cartService.removeCartItem(cartId);
     }
 
 }

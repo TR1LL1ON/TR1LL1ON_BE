@@ -1,8 +1,7 @@
 package com.ybe.tr1ll1on.domain.cart.service;
 
-import com.ybe.tr1ll1on.domain.cart.dto.AddCartItemRequest;
-import com.ybe.tr1ll1on.domain.cart.dto.AddCartItemResponse;
-import com.ybe.tr1ll1on.domain.cart.dto.RemoveCartItemResponse;
+import com.ybe.tr1ll1on.domain.cart.dto.request.AddCartItemRequest;
+import com.ybe.tr1ll1on.domain.cart.dto.response.AddCartItemResponse;
 import com.ybe.tr1ll1on.domain.cart.dto.response.CartResponse;
 
 import java.util.List;
@@ -13,6 +12,6 @@ public interface CartService {
 
     AddCartItemResponse addCartItem(AddCartItemRequest request);
 
-    RemoveCartItemResponse removeCartItem(Long cartItemId);
+    void removeCartItem(Long cartItemId);
 
 }

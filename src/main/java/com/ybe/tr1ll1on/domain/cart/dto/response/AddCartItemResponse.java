@@ -1,4 +1,4 @@
-package com.ybe.tr1ll1on.domain.cart.dto;
+package com.ybe.tr1ll1on.domain.cart.dto.response;
 
 import lombok.Data;
 
