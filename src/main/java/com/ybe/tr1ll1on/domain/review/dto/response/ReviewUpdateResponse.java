@@ -23,7 +23,6 @@ public class ReviewUpdateResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class ReviewDetails {
 
         private Long reviewId;
