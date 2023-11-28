@@ -2,6 +2,7 @@ package com.ybe.tr1ll1on.domain.review.service;
 
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
+import com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode;
 import com.ybe.tr1ll1on.domain.order.exception.OrderItemNotFoundException;
 import com.ybe.tr1ll1on.domain.review.dto.response.*;
 import com.ybe.tr1ll1on.domain.review.exception.AccommodationNotFoundException;
@@ -89,7 +90,7 @@ public class ReviewService {
         // 상품 정보
         Long orderItemId = reviewCreateRequest.getOrderItemId();
         OrderItem orderItem = orderItemRepository.findById(orderItemId)
-                .orElseThrow(() -> new OrderItemNotFoundException(ReviewExceptionCode.ORDER_ITEM_NOT_FOUND));
+                .orElseThrow(() -> new OrderItemNotFoundException(OrderExceptionCode.ORDER_ITEM_NOT_FOUND));
 
         if (orderItem.getReviewWritten()) {
             throw new ReviewAlreadyWrittenException(ReviewExceptionCode.REVIEW_CONFLICT);
