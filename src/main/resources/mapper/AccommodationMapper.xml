@@ -5,8 +5,8 @@
 <mapper namespace="com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper">
 
     <select id="findAvailableAccommodation"
-            parameterType="com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationRequestDTO"
-            resultType="com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationResponseDTO">
+            parameterType="com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequestDTO"
+            resultType="com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponseDTO">
 
         select main.accommodationId as accommodationId,
                main.imageUrl        as imageUrl,
