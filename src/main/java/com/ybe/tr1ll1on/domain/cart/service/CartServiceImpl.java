@@ -106,9 +106,14 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public RemoveCartItemResponse removeCartItem(Long cartId) {
+        Long userId = SecurityUtil.getCurrentUserId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         // 해당 cartId에 대한 유효성 검사
-        Cart cart = cartRepository.findById(cartId)
+        Cart cart = cartRepository.findById(user.getCart().getId())
                 .orElseThrow(() -> new CartIdNotFoundException(CARTID_NOT_FOUND));
+
 
         // CartItem 삭제
         entityManager.createQuery("DELETE FROM CartItem ci WHERE ci.cart.id = :cartId")

@@ -17,7 +17,6 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @Getter
-@Setter // 누가 넣은 건지 모르지만.. Setter 쓰면 안 된다고 합니다..
 @NoArgsConstructor
 public class User {
     @Id
