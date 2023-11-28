@@ -1,7 +1,9 @@
 package com.ybe.tr1ll1on.domain.accommodation.service;
 
 import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest;
+
 import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponse;
+
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
@@ -39,6 +41,7 @@ public class AccommodationService {
 
     @Transactional
     public List<AccommodationResponse> findAccommodation(AccommodationRequest accommodationRequest){
+
 
         LocalDate checkOut = accommodationRequest.getCheckOut();
         LocalDate checkOutYesterday = checkOut.minusDays(1);
