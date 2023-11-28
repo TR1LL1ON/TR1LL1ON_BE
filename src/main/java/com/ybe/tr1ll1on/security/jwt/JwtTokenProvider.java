@@ -91,9 +91,9 @@ public class JwtTokenProvider {
     private void storeRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
                 .httpOnly(true)     // 1. JavaScript에서 쿠키에 접근을 막기 위해 httpOnly 설정
-            //    .secure(true)       // 2. HTTPS에서만 쿠키 전송을 허용
+                .secure(true)       // 2. HTTPS에서만 쿠키 전송을 허용
                 .path("/auth")      // 3. 쿠키가 전송될 수 있는 경로 설정
-            //    .sameSite("None")    // 4. 동일 사이트와 크로스 사이트에 모두 쿠키 전송이 가능
+                .sameSite("None")    // 4. 동일 사이트와 크로스 사이트에 모두 쿠키 전송이 가능
                 .build();
         // Response Header에도 Cookie를 저장한다.
         response.addHeader("Set-Cookie", cookie.toString());
