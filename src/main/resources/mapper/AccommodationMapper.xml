@@ -5,7 +5,7 @@
 <mapper namespace="com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper">
 
     <select id="findAvailableAccommodation"
-            parameterType="com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequestDTO"
+            parameterType="com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest"
             resultType="com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponseDTO">
 
         select main.accommodationId as accommodationId,
