@@ -1,7 +1,5 @@
-package com.ybe.tr1ll1on.domain.product.response;
+package com.ybe.tr1ll1on.domain.product.dto.response;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.ybe.tr1ll1on.domain.product.model.ProductImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
