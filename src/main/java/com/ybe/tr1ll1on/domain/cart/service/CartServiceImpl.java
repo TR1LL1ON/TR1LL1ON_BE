@@ -77,7 +77,7 @@ public class CartServiceImpl implements CartService {
             cart = new Cart();
             cart.setUser(user);
             cartRepository.save(cart);
-            user.setCart(cart);
+//            user.setCart(cart);
         } else {
             // 이미 사용자가 장바구니를 가지고 있다면 추가를 막고 예외를 발생시킵니다.
             throw new UserAlreadyHasCartException(USER_ALREADY_HAS_CART);
