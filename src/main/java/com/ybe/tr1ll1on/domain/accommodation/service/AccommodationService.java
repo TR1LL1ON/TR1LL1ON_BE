@@ -1,7 +1,7 @@
 package com.ybe.tr1ll1on.domain.accommodation.service;
 
-import com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationRequestDTO;
-import com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationResponseDTO;
+import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequestDTO;
+import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponseDTO;
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;

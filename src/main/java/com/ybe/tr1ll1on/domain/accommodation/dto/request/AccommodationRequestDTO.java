@@ -1,4 +1,4 @@
-package com.ybe.tr1ll1on.domain.accommodation.dto;
+package com.ybe.tr1ll1on.domain.accommodation.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

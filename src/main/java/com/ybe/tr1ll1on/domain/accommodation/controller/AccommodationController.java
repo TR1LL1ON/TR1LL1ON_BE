@@ -1,7 +1,7 @@
 package com.ybe.tr1ll1on.domain.accommodation.controller;
 
-import com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationRequestDTO;
-import com.ybe.tr1ll1on.domain.accommodation.dto.AccommodationResponseDTO;
+import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequestDTO;
+import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponseDTO;
 import com.ybe.tr1ll1on.domain.accommodation.error.InvalidDateException;
 import com.ybe.tr1ll1on.domain.accommodation.service.AccommodationService;
 import jakarta.validation.Valid;

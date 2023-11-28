@@ -1,4 +1,4 @@
-package com.ybe.tr1ll1on.domain.accommodation.dto;
+package com.ybe.tr1ll1on.domain.accommodation.dto.response;
 
 import com.ybe.tr1ll1on.domain.accommodation.model.AccommodationImage;
 import lombok.*;

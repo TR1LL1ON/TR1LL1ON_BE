@@ -1,6 +1,5 @@
-package com.ybe.tr1ll1on.domain.product.request;
+package com.ybe.tr1ll1on.domain.product.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDate;

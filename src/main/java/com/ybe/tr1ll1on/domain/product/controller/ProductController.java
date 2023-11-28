@@ -1,9 +1,9 @@
 package com.ybe.tr1ll1on.domain.product.controller;
 
 
-import com.ybe.tr1ll1on.domain.product.response.AccommodationDetailResponse;
-import com.ybe.tr1ll1on.domain.product.request.AccommodationRequest;
-import com.ybe.tr1ll1on.domain.product.response.ProductResponse;
+import com.ybe.tr1ll1on.domain.product.dto.response.AccommodationDetailResponse;
+import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
+import com.ybe.tr1ll1on.domain.product.dto.response.ProductResponse;
 import com.ybe.tr1ll1on.domain.product.service.ProductService;
 import com.ybe.tr1ll1on.global.date.utill.DateUtil;
 import lombok.RequiredArgsConstructor;
