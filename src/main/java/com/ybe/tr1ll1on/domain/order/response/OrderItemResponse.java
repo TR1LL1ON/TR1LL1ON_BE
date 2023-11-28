@@ -15,7 +15,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class OrderItemResponse {
     private Long orderItemId; // 주문
 
@@ -24,7 +23,7 @@ public class OrderItemResponse {
     private Integer personNumber; // 인원
     private Integer price; // 가격
 
-    private OrderItemDetailResponse orderItemDetailResponse;
+    private OrderItemDetailResponse orderItemDetail;
 
     private Boolean reviewWritten; // 리뷰 작성 여부
 
@@ -61,7 +60,7 @@ public class OrderItemResponse {
                 .personNumber(orderItem.getPersonNumber())
                 .price(orderItem.getPrice())
 
-                .orderItemDetailResponse(OrderItemDetailResponse.fromEntity(orderItem))
+                .orderItemDetail(OrderItemDetailResponse.fromEntity(orderItem))
 
                 .reviewWritten(orderItem.getReviewWritten())
                 .build();

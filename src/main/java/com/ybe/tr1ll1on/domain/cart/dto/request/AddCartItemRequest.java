@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 @Data
 public class AddCartItemRequest {
-    @NotNull(message = "productId 입력하세요")
     private Long productId;
 
     @NotNull(message = "인원 수를 입력하세요")
