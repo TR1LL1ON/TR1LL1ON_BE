@@ -3,14 +3,16 @@ package com.ybe.tr1ll1on.domain.cart.service;
 import com.ybe.tr1ll1on.domain.cart.dto.request.AddCartItemRequest;
 import com.ybe.tr1ll1on.domain.cart.dto.response.AddCartItemResponse;
 import com.ybe.tr1ll1on.domain.cart.dto.response.CartResponse;
-import com.ybe.tr1ll1on.domain.cart.error.CartIdNotFoundException;
-import com.ybe.tr1ll1on.domain.cart.error.ProductNotExistException;
-import com.ybe.tr1ll1on.domain.cart.error.UserNotFoundException;
+import com.ybe.tr1ll1on.domain.cart.exception.CartIdNotFoundException;
+import com.ybe.tr1ll1on.domain.cart.exception.CartItemIdNotFoundException;
+import com.ybe.tr1ll1on.domain.cart.exception.ProductNotExistException;
+import com.ybe.tr1ll1on.domain.cart.exception.UserNotFoundException;
 import com.ybe.tr1ll1on.domain.cart.model.Cart;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.cart.repository.CartItemRepository;
 import com.ybe.tr1ll1on.domain.cart.repository.CartRepository;
 import com.ybe.tr1ll1on.domain.product.model.Product;
+import com.ybe.tr1ll1on.domain.product.model.ProductImage;
 import com.ybe.tr1ll1on.domain.product.repository.ProductRepository;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
@@ -22,9 +24,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.ybe.tr1ll1on.domain.cart.error.CartIdNotFoundExceptionCode.CARTID_NOT_FOUND;
-import static com.ybe.tr1ll1on.domain.cart.error.ProductNotExsitExceptionCode.PRODUCT_NOT_FOUND;
-import static com.ybe.tr1ll1on.domain.cart.error.UserNotFoundExceptionCode.USER_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.cart.exception.CartIdNotFoundExceptionCode.CARTID_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.cart.exception.CartItemIdNotFoundExceptionCode.CART_ITEM_ID_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.cart.exception.ProductNotExsitExceptionCode.PRODUCT_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.cart.exception.UserNotFoundExceptionCode.USER_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
@@ -49,20 +52,28 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new CartIdNotFoundException(CARTID_NOT_FOUND));
 
         return cart.getCartItem().stream()
-                .map(cartItem -> CartResponse.builder()
-                        .cartItemId(cartItem.getId())
-                        .accommodationId(cartItem.getProduct().getAccommodation().getId())
-                        .productId(cartItem.getProduct().getId())
-                        .accommodationName(cartItem.getProduct().getAccommodation().getName())
-                        .accommodationAddress(cartItem.getProduct().getAccommodation().getAddress())
-                        .accommodationCategory(cartItem.getProduct().getAccommodation().getCategory().getCategoryCode())
-                        .productName(cartItem.getProduct().getName())
-                        .checkIn(cartItem.getStartDate())
-                        .checkOut(cartItem.getEndDate())
-                        .personNumber(cartItem.getPersonNumber())
-                        .price(cartItem.getPrice())
-                        .build()
-                ).toList();
+                .map(cartItem -> {
+                    Product product = cartItem.getProduct();
+                    List<ProductImage> images = product.getProductImageList();
+
+                    String imageUrl = images.isEmpty() ? "" : images.get(0).getImageUrl();
+
+
+                    return CartResponse.builder()
+                            .cartItemId(cartItem.getId())
+                            .accommodationId(product.getAccommodation().getId())
+                            .productId(product.getId())
+                            .accommodationName(product.getAccommodation().getName())
+                            .accommodationAddress(product.getAccommodation().getAddress())
+                            .accommodationCategory(product.getAccommodation().getCategory().getCategoryCode())
+                            .productName(product.getName())
+                            .checkIn(cartItem.getStartDate())
+                            .checkOut(cartItem.getEndDate())
+                            .personNumber(cartItem.getPersonNumber())
+                            .price(cartItem.getPrice())
+                            .imageUrl(imageUrl)
+                            .build();
+                }).toList();
     }
 
 
@@ -109,17 +120,8 @@ public class CartServiceImpl implements CartService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         // 해당 cartItemId에 대한 유효성 검사
-        cartItemRepository.findById(cartItemId).orElseThrow(() -> new CartIdNotFoundException(CARTID_NOT_FOUND));
+        cartItemRepository.findById(cartItemId).orElseThrow(() -> new CartItemIdNotFoundException(CART_ITEM_ID_NOT_FOUND));
         cartItemRepository.deleteById(cartItemId);
-
-        // CartItem 삭제
-//        entityManager.createQuery("DELETE FROM CartItem ci WHERE ci.cart.id = :cartId")
-//                .setParameter("cartId", cartId)
-//                .executeUpdate();
-
-        // Cart 삭제
-//        cartRepository.deleteById(cartId);
     }
-
 
 }
