@@ -1,7 +1,9 @@
 package com.ybe.tr1ll1on.domain.accommodation.service;
 
-import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequestDTO;
-import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponseDTO;
+import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest;
+
+import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponse;
+
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
@@ -25,29 +27,29 @@ public class AccommodationService {
     private final AccommodationMapper mapper;
 
     @Transactional
-    public List<AccommodationResponseDTO> getAll() {
+    public List<AccommodationResponse> getAll() {
 
-        List<AccommodationResponseDTO> accommodationResponseDTOList = new ArrayList<>();
+        List<AccommodationResponse> accommodationResponseList = new ArrayList<>();
 
         List<Accommodation> accommodationList = accommodationRepository.findAll();
         for (Accommodation accommodation : accommodationList) {
-            accommodationResponseDTOList.add(
-                    new AccommodationResponseDTO(accommodation.getId(), accommodation.getName()));
+            accommodationResponseList.add(
+                    new AccommodationResponse(accommodation.getId(), accommodation.getName()));
         }
-        return accommodationResponseDTOList;
+        return accommodationResponseList;
     }
 
     @Transactional
-    public List<AccommodationResponseDTO> findAccommodation(AccommodationRequestDTO accommodationRequestDTO){
+    public List<AccommodationResponse> findAccommodation(AccommodationRequest accommodationRequest){
 
-        LocalDate checkOut = accommodationRequestDTO.getCheckOut();
+
+        LocalDate checkOut = accommodationRequest.getCheckOut();
         LocalDate checkOutYesterday = checkOut.minusDays(1);
+        accommodationRequest.setCheckOut(checkOutYesterday);
 
-        accommodationRequestDTO.setCheckOut(checkOutYesterday);
-
-        return mapper.findAvailableAccommodation(accommodationRequestDTO)
+        return mapper.findAvailableAccommodation(accommodationRequest)
                 .stream()
-                .map(it -> AccommodationResponseDTO.builder()
+                .map(it -> AccommodationResponse.builder()
                         .accommodationId(it.getAccommodationId())
                         .imageUrl(it.getImageUrl())
                         .name(it.getName())

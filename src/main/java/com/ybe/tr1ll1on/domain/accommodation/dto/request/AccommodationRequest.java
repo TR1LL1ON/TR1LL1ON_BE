@@ -8,10 +8,9 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AccommodationRequestDTO {
+public class AccommodationRequest {
     @NotNull
     LocalDate checkIn;
     @NotNull
@@ -21,4 +20,10 @@ public class AccommodationRequestDTO {
     Integer personNumber;
     String category;
     String areaCode;
+
+    public AccommodationRequest() {
+        this.checkIn = LocalDate.now();
+        this.checkOut = checkIn.plusDays(1);
+        this.personNumber = 2;
+    }
 }

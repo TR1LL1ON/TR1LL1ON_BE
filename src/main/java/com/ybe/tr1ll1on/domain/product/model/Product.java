@@ -1,17 +1,15 @@
 package com.ybe.tr1ll1on.domain.product.model;
 
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
-import com.ybe.tr1ll1on.domain.cart.model.CartItem;
-import com.ybe.tr1ll1on.domain.order.model.OrderItem;
 import com.ybe.tr1ll1on.domain.review.model.Review;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Setter;
 
 @Entity
 @Table(name = "product")
@@ -34,12 +32,6 @@ public class Product {
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-//    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private OrderItem orderItem;
-//
-//    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private CartItem cartItem;
-
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Review> reviewList = new ArrayList<>();
 
@@ -59,7 +51,7 @@ public class Product {
 
     @Builder
     public Product(String name, String checkInTime,
-            String checkOutTime, int standardNumber, int maximumNumber, int count) {
+                   String checkOutTime, int standardNumber, int maximumNumber, int count) {
         this.name = name;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;

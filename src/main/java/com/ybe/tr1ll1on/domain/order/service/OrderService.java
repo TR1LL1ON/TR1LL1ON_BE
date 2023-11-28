@@ -1,19 +1,17 @@
 package com.ybe.tr1ll1on.domain.order.service;
 
-import static com.ybe.tr1ll1on.domain.cart.error.CartIdNotFoundExceptionCode.CARTID_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.cart.exception.CartIdNotFoundExceptionCode.CARTID_NOT_FOUND;
 import static com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode.INVALID_ORDER;
 import static com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode.PRODUCT_SOLD_OUT;
 import static com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode.EMPTY_PRODUCT;
 import static com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode.USER_NOT_FOUND;
-import static com.ybe.tr1ll1on.global.date.utill.DateUtil.isValidCheckInBetweenCheckOut;
+import static com.ybe.tr1ll1on.global.date.util.DateUtil.isValidCheckInBetweenCheckOut;
 
-import com.ybe.tr1ll1on.domain.cart.error.CartIdNotFoundException;
-import com.ybe.tr1ll1on.domain.cart.error.CartIdNotFoundExceptionCode;
+
+import com.ybe.tr1ll1on.domain.cart.exception.CartIdNotFoundException;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.cart.repository.CartItemRepository;
-import com.ybe.tr1ll1on.domain.cart.repository.CartRepository;
 import com.ybe.tr1ll1on.domain.order.exception.OrderException;
-import com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode;
 import com.ybe.tr1ll1on.domain.order.model.OrderItem;
 import com.ybe.tr1ll1on.domain.order.model.Orders;
 import com.ybe.tr1ll1on.domain.order.repository.OrderItemRepository;

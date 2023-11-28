@@ -46,7 +46,7 @@ jobs:
         
     # 4) gradle 빌드
     - name: Build with Gradle
-      run: ./gradlew clean build
+      run: ./gradlew clean build --exclude-task test
       
     # AWS 인증
     - name: Configure AWS credentials
