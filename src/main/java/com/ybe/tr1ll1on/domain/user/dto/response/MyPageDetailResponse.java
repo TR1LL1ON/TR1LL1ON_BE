@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class MyPageDetailResponse {
     private Long orderId;
     private List<OrderItemResponse> orderItemList;

@@ -14,9 +14,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class OrderItemResponse {
     private Long orderItemId;
+
+    private Long productId;
 
     private LocalDate startDate;
     private LocalDate endDate;
@@ -28,6 +29,7 @@ public class OrderItemResponse {
     public static OrderItemResponse fromEntity(OrderItem orderItem) {
         return OrderItemResponse.builder()
                 .orderItemId(orderItem.getId())
+                .productId(orderItem.getProduct().getId())
                 .startDate(orderItem.getStartDate())
                 .endDate(orderItem.getEndDate())
                 .personNumber(orderItem.getPersonNumber())
