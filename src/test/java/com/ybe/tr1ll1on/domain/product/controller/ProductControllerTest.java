@@ -1,6 +1,7 @@
 package com.ybe.tr1ll1on.domain.product.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.ybe.tr1ll1on.global.date.exception.InValidDateExceptionCode.CHECKIN_EQUALS_CHECKOUT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -9,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.ybe.tr1ll1on.domain.product.request.AccommodationRequest;
+import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.product.exception.ProductException;
 import com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode;
 import com.ybe.tr1ll1on.domain.product.service.ProductService;
@@ -82,7 +83,7 @@ class ProductControllerTest {
                 .andExpect(result -> {
                     if (result.getResolvedException() instanceof ProductException) {
                         ProductException exception = (ProductException) result.getResolvedException();
-                        assertEquals(ProductExceptionCode.CHECKIN_EQUALS_CHECKOUT.getMsg(), exception.getErrorCode().getMsg());
+                        assertEquals(CHECKIN_EQUALS_CHECKOUT.getMsg(), exception.getErrorCode().getMsg());
                     }
                 });
     }
@@ -120,7 +121,7 @@ class ProductControllerTest {
                 .andExpect(result -> {
                     if (result.getResolvedException() instanceof ProductException) {
                         ProductException exception = (ProductException) result.getResolvedException();
-                        assertEquals(ProductExceptionCode.CHECKIN_EQUALS_CHECKOUT.getMsg(), exception.getErrorCode().getMsg());
+                        assertEquals(CHECKIN_EQUALS_CHECKOUT.getMsg(), exception.getErrorCode().getMsg());
                     }
                 });
     }
