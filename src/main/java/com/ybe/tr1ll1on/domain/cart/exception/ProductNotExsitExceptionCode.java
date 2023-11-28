@@ -1,4 +1,4 @@
-package com.ybe.tr1ll1on.domain.cart.error;
+package com.ybe.tr1ll1on.domain.cart.exception;
 
 import com.ybe.tr1ll1on.global.exception.ExceptionCode;
 import lombok.AllArgsConstructor;

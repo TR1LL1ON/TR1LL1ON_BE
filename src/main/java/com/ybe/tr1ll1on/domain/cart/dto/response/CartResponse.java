@@ -14,6 +14,7 @@ public class CartResponse {
     private String accommodationName;
     private String accommodationAddress;
     private String accommodationCategory;
+    private String imageUrl;
     private String productName;
     private LocalDate checkIn;
     private LocalDate checkOut;

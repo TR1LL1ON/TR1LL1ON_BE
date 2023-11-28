@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AccommodationResponseDTO {
+public class AccommodationResponse {
     private Long accommodationId;
     private String imageUrl;
     private String name;
@@ -18,7 +18,7 @@ public class AccommodationResponseDTO {
     private Integer price;
     private Double score;
 
-    public AccommodationResponseDTO(Long accommodationId, String imageUrl, String name, String address, String areaCode, Integer price) {
+    public AccommodationResponse(Long accommodationId, String imageUrl, String name, String address, String areaCode, Integer price) {
         this.accommodationId = accommodationId;
         this.imageUrl = imageUrl==null ? AccommodationImage.BASIC_ACCOMMODATION_IMG : imageUrl;
         this.name = name;
@@ -27,7 +27,7 @@ public class AccommodationResponseDTO {
         this.price = price;
     }
 
-    public AccommodationResponseDTO(Long accommodationId, String name) {
+    public AccommodationResponse(Long accommodationId, String name) {
         this.accommodationId = accommodationId;
         this.name = name;
     }
