@@ -1,6 +1,6 @@
 package com.ybe.tr1ll1on.domain.accommodation.service;
 
-import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequestDTO;
+import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponseDTO;
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper;
@@ -38,7 +38,8 @@ public class AccommodationService {
     }
 
     @Transactional
-    public List<AccommodationResponseDTO> findAccommodation(AccommodationRequestDTO accommodationRequestDTO){
+    public List<AccommodationResponseDTO> findAccommodation(
+            AccommodationRequest accommodationRequestDTO){
 
         LocalDate checkOut = accommodationRequestDTO.getCheckOut();
         LocalDate checkOutYesterday = checkOut.minusDays(1);
