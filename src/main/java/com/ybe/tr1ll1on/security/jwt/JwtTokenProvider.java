@@ -91,11 +91,10 @@ public class JwtTokenProvider {
     private void storeRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
                 .httpOnly(true)
-                .secure(true)
                 .path("/")
-                .sameSite("None")
+                .domain(".trII1on.site")
                 .build();
-        // Response Header에도 Cookie를 저장한다.
+
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
