@@ -3,7 +3,7 @@
 server:
   port: 8080
 jwt:
-  secret: 68b29a2fd1eebaf194947669b10e3162dd7717bec2294cbcf4271bfd53d17eadbccb10db3e3d23251183c336c68ea364748c53c6c62d93e0e21c3c4acb0d26f3
+  secret: ${JWT_SECRET_KEY}
 
 spring:
   datasource:
