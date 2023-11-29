@@ -8,7 +8,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class AccommodationRequest {
@@ -21,4 +20,10 @@ public class AccommodationRequest {
     Integer personNumber;
     String category;
     String areaCode;
+
+    public AccommodationRequest() {
+        this.checkIn = LocalDate.now();
+        this.checkOut = checkIn.plusDays(1);
+        this.personNumber = 2;
+    }
 }
