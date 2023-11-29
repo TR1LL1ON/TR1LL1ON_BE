@@ -55,7 +55,7 @@ public class SecurityConfig {
                 // 1. CSRF 토큰 비활성화 - RESTful API는 상태를 저장하지 않고, 클라이언트가 토큰과 같은 방식으로 인증을 처리한다.
                 .csrf().disable()
                 // 2. Spring Security의 기본 로그인 폼을 비활성화
-                .formLogin().disable()
+                //.formLogin().disable()
                 // 3. HTTP 기본 인증을 비활성화 - RESTful API는 일반적으로 HTTP 기본 인증이 아닌 토큰 기반의 인증을 사용한다.
                 .httpBasic().disable();
         http
