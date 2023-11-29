@@ -1,17 +1,16 @@
-
-
 server:
   port: 8080
+
 jwt:
-  secret: 68b29a2fd1eebaf194947669b10e3162dd7717bec2294cbcf4271bfd53d17eadbccb10db3e3d23251183c336c68ea364748c53c6c62d93e0e21c3c4acb0d26f3
+  secret: ${JWT_SECRET_KEY}
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://trillion.cv5i1mslgh5q.ap-northeast-2.rds.amazonaws.com:3306/MiniProject?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://${DB.URL}:3306/MiniProject?useSSL=false&serverTimezone=UTC
 
-    username: admin
-    password: xmflffldjs2023^^
+    username: ${DB.ID}
+    password: ${DB.PWD}
 
   jpa:
     hibernate:
@@ -20,6 +19,18 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        show_sql: false
-        format_sql: false
+        show_sql: true
+        format_sql: true
 
+springdoc:
+  api-docs:
+    path: /v1/api-docs
+    groups:
+      enabled: true
+  packages-to-scan: com.ybe.tr1ll1on.domain
+  swagger-ui:
+    tags-sorter: alpha
+    groups-order: asc
+    syntax-highlight:
+      activated: true
+    try-it-out-enabled: false
