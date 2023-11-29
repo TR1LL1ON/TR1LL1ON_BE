@@ -4,8 +4,10 @@ package com.ybe.tr1ll1on.domain.product.controller;
 import com.ybe.tr1ll1on.domain.product.dto.response.AccommodationDetailResponse;
 import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.product.dto.response.ProductResponse;
+import com.ybe.tr1ll1on.domain.product.dto.response.ProductSummaryListResponse;
 import com.ybe.tr1ll1on.domain.product.service.ProductService;
 import com.ybe.tr1ll1on.global.date.util.DateUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,15 @@ import java.time.LocalDate;
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
+
+    @PostMapping("/summary")
+    public ResponseEntity<ProductSummaryListResponse> getProductSummaryList(
+            @RequestBody List<Long> productIdListRequest
+    ) {
+        return ResponseEntity.ok(
+                productService.getProductSummaryList(productIdListRequest)
+        );
+    }
 
     @GetMapping("/{accommodation_id}")
     public ResponseEntity<AccommodationDetailResponse> getAccommodationDetail(
@@ -76,7 +87,7 @@ public class ProductController {
         );
 
         return ResponseEntity.ok(
-                productService.getProduct(accommodationId, product_id, request)
+                productService.getProductDetail(accommodationId, product_id, request)
         );
     }
 }
