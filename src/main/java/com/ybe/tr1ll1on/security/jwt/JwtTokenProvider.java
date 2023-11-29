@@ -90,11 +90,10 @@ public class JwtTokenProvider {
     // Response Cookie를 생성하여 Refresh Token을 저장한다.
     private void storeRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
-                .httpOnly(true)
-                .domain("tr1ll1on.site")
-                .secure(true)
-                .path("/auth")
-                .sameSite("Lax")
+                .httpOnly(true)     // 1. JavaScript에서 쿠키에 접근을 막기 위해 httpOnly 설정
+                .secure(true)       // 2. HTTPS에서만 쿠키 전송을 허용
+                .path("/auth")      // 3. 쿠키가 전송될 수 있는 경로 설정
+                .sameSite("None")    // 4. 동일 사이트와 크로스 사이트에 모두 쿠키 전송이 가능
                 .build();
         // Response Header에도 Cookie를 저장한다.
         response.addHeader("Set-Cookie", cookie.toString());
@@ -130,8 +129,8 @@ public class JwtTokenProvider {
         // 3. claims에서 authorities를 추출한다.
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
 
         // 4. claims에서 추출된 authorities를 사용하여 UserDetails를 생성한다.
         // 5. 생성된 Authentication 객체를 반환한다.

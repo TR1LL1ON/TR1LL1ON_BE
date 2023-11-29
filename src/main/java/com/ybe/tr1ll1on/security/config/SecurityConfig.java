@@ -1,10 +1,7 @@
 package com.ybe.tr1ll1on.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ybe.tr1ll1on.security.jwt.JwtAuthenticationProvider;
-import com.ybe.tr1ll1on.security.jwt.JwtAccessDeniedHandler;
-import com.ybe.tr1ll1on.security.jwt.JwtAuthenticationEntryPoint;
-import com.ybe.tr1ll1on.security.jwt.JwtTokenProvider;
+import com.ybe.tr1ll1on.security.jwt.*;
 import com.ybe.tr1ll1on.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import static com.ybe.tr1ll1on.security.constants.JwtConstants.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -35,6 +31,7 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
+    private final JwtAuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -58,7 +55,7 @@ public class SecurityConfig {
                 // 1. CSRF 토큰 비활성화 - RESTful API는 상태를 저장하지 않고, 클라이언트가 토큰과 같은 방식으로 인증을 처리한다.
                 .csrf().disable()
                 // 2. Spring Security의 기본 로그인 폼을 비활성화
-                .formLogin().disable()
+                //.formLogin().disable()
                 // 3. HTTP 기본 인증을 비활성화 - RESTful API는 일반적으로 HTTP 기본 인증이 아닌 토큰 기반의 인증을 사용한다.
                 .httpBasic().disable();
         http
@@ -89,6 +86,11 @@ public class SecurityConfig {
 
         http
                 .apply(new JwtSecurityConfig(jwtTokenProvider, objectMapper));
+
+        http
+                .formLogin()
+                .loginProcessingUrl("/login")
+                .successHandler(authenticationSuccessHandler);
 
         http
                 .logout()

@@ -58,19 +58,19 @@ public class AuthService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<LoginResponse> login(LoginRequest loginRequest, HttpServletResponse response) {
+    public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response) {
         Authentication authentication = authenticate(loginRequest);
         TokenDto tokenDTO = jwtTokenProvider.generateTokenDto(authentication, response);
-        HttpHeaders responseHeaders = createAuthorizationHeader(tokenDTO.getAccessToken());
 
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new UserNotFoundException(SecurityExceptionCode.USER_NOT_FOUND));
 
-        return new ResponseEntity<>(LoginResponse.builder()
-                .email(user.getEmail())
+        return LoginResponse.builder()
                 .id(user.getId())
+                .email(user.getEmail())
                 .name(user.getName())
-                .build(), responseHeaders, HttpStatus.OK);
+                .accessToken(tokenDTO.getAccessToken())
+                .build();
     }
 
     @Transactional
