@@ -93,9 +93,7 @@ public class JwtTokenProvider {
                 .domain(".tr1ll1on.site")
                 .httpOnly(true)
                 .path("/")
-                .domain(".trII1on.site")
                 .build();
-        response.addCookie(cookie);
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
