@@ -6,7 +6,6 @@ import com.ybe.tr1ll1on.domain.cart.dto.response.CartResponse;
 import com.ybe.tr1ll1on.domain.cart.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -42,6 +41,8 @@ public class CartController {
     @Operation(summary = "장바구니에 상품 추가 API", description = "장바구니에 상품 추가 API 입니다.")
     @ApiResponse(responseCode = "201", description = "추가 성공시",
             content = @Content(schema = @Schema(implementation = AddCartItemResponse.class)))
+    @SecurityRequirement(name = "jwt")
+
     @PostMapping("/{productId}")
     public ResponseEntity<AddCartItemResponse> addCartItem(
             @PathVariable Long productId,
