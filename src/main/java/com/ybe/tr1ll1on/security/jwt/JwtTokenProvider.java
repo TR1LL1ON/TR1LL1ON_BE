@@ -38,7 +38,7 @@ public class JwtTokenProvider {
     private final Key key;
     private final CustomUserDetailsService customUserDetailsService;
 
-    public JwtTokenProvider(@Value("${JWT_SECRET_KEY}") String secretKey, CustomUserDetailsService customUserDetailsService) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, CustomUserDetailsService customUserDetailsService) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.customUserDetailsService = customUserDetailsService;
@@ -90,11 +90,12 @@ public class JwtTokenProvider {
     // Response Cookie를 생성하여 Refresh Token을 저장한다.
     private void storeRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
-                .httpOnly(true)
-                .path("/")
-                .domain(".trII1on.site")
+                .httpOnly(true)     // 1. JavaScript에서 쿠키에 접근을 막기 위해 httpOnly 설정
+                .secure(true)       // 2. HTTPS에서만 쿠키 전송을 허용
+                .path("/auth")      // 3. 쿠키가 전송될 수 있는 경로 설정
+                .sameSite("None")    // 4. 동일 사이트와 크로스 사이트에 모두 쿠키 전송이 가능
                 .build();
-
+        // Response Header에도 Cookie를 저장한다.
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
