@@ -1,12 +1,13 @@
 package com.ybe.tr1ll1on.domain.cart.dto.response;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class CartResponse {
     private Long cartItemId;
     private Long accommodationId;
