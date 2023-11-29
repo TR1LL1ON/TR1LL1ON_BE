@@ -1,5 +1,6 @@
 package com.ybe.tr1ll1on.domain.cart.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 
 @Data
 public class AddCartItemRequest {
+    @Schema(hidden = true)
     private Long productId;
 
     @NotNull(message = "인원 수를 입력하세요")
