@@ -11,6 +11,8 @@ import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.product.dto.response.ProductFacilityResponse;
 import com.ybe.tr1ll1on.domain.product.dto.response.ProductImageResponse;
 import com.ybe.tr1ll1on.domain.product.dto.response.ProductResponse;
+import com.ybe.tr1ll1on.domain.product.dto.response.ProductSummaryListResponse;
+import com.ybe.tr1ll1on.domain.product.dto.response.ProductSummaryListResponse.ProductSummaryResponse;
 import com.ybe.tr1ll1on.domain.product.exception.ProductException;
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.model.ProductInfoPerNight;
@@ -46,8 +48,7 @@ public class ProductService {
     ) {
         List<ProductResponse> productResponseList = new ArrayList<>();
 
-        Accommodation accommodation = accommodationRepository.findById(accommodationId)
-                .orElseThrow(() -> new ProductException(EMPTY_PRODUCT));
+        Accommodation accommodation = getAccommodation(accommodationId);
         List<Product> productList = productRepository
                 .findByAccommodationIdAndMaximumNumberIsGreaterThanEqual(
                         accommodationId, request.getPersonNumber());
@@ -78,7 +79,7 @@ public class ProductService {
                 .rooms(productResponseList)
                 .image(
                         accommodation.getImages().stream().map(
-                                it -> AccommodationImageResponse.of(it)
+                                AccommodationImageResponse::of
                         ).collect(Collectors.toList())
                 )
                 .facility(
@@ -134,7 +135,7 @@ public class ProductService {
                 .totalPrice(totalPrice)
                 .image(
                         p.getProductImageList().stream().map(
-                                it -> ProductImageResponse.of(it)
+                                ProductImageResponse::of
                         ).collect(Collectors.toList())
                 )
                 .facility(
@@ -143,12 +144,33 @@ public class ProductService {
                 .build();
     }
 
-    public ProductResponse getProduct(
+    public ProductResponse getProductDetail(
             Long accommodationId, Long productId, AccommodationRequest request
     ) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ProductException(EMPTY_PRODUCT));
+        return getProductDetail(getProduct(productId), request);
+    }
 
-        return getProductDetail(product, request);
+    public ProductSummaryListResponse getProductSummaryList(
+            List<Long> productIdListRequest
+    ) {
+        List<ProductSummaryResponse> products = new ArrayList<>();
+        for (Long id : productIdListRequest) {
+            products.add(
+                    ProductSummaryResponse.of(getProduct(id))
+            );
+        }
+        return ProductSummaryListResponse.builder()
+                .products(products)
+                .build();
+    }
+
+    private Product getProduct(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new ProductException(EMPTY_PRODUCT));
+    }
+
+    private Accommodation getAccommodation(Long accommodationId) {
+        return accommodationRepository.findById(accommodationId)
+                .orElseThrow(() -> new ProductException(EMPTY_PRODUCT));
     }
 }

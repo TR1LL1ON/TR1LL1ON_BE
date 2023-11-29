@@ -4,8 +4,10 @@ package com.ybe.tr1ll1on.domain.product.controller;
 import com.ybe.tr1ll1on.domain.product.dto.response.AccommodationDetailResponse;
 import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.product.dto.response.ProductResponse;
+import com.ybe.tr1ll1on.domain.product.dto.response.ProductSummaryListResponse;
 import com.ybe.tr1ll1on.domain.product.service.ProductService;
 import com.ybe.tr1ll1on.global.date.util.DateUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,15 @@ import java.time.LocalDate;
 public class ProductController {
     private final ProductService productService;
 
+    @PostMapping("/summary")
+    public ResponseEntity<ProductSummaryListResponse> getProductSummaryList(
+            @RequestBody List<Long> productIdListRequest
+    ) {
+        return ResponseEntity.ok(
+                productService.getProductSummaryList(productIdListRequest)
+        );
+    }
+
     @GetMapping("/{accommodation_id}")
     public ResponseEntity<AccommodationDetailResponse> getAccommodationDetail(
         @PathVariable("accommodation_id") final Long accommodationId,
@@ -27,25 +38,10 @@ public class ProductController {
         @RequestParam(required = false) LocalDate checkOut,
         @RequestParam(required = false) Integer personNumber
     ) {
-        AccommodationRequest request = new AccommodationRequest();
-        if (checkIn != null) {
-            request.setCheckIn(checkIn);
-        }
-
-        if (checkOut != null) {
-            request.setCheckOut(checkOut);
-        }
-
-        if (personNumber != null) {
-            request.setPersonNumber(personNumber);
-        }
-//        TODO checkIn 과 checkOut은 같은 날짜이면 안됨!!
-        DateUtil.isValidCheckInBetweenCheckOut(
-                request.getCheckIn(), request.getCheckOut()
-        );
-
         return ResponseEntity.ok(
-                productService.getAccommodationDetail(accommodationId, request)
+                productService.getAccommodationDetail(accommodationId,
+                        new AccommodationRequest(checkIn, checkOut, personNumber)
+                )
         );
     }
 
@@ -57,26 +53,11 @@ public class ProductController {
             @RequestParam(required = false) LocalDate checkOut,
             @RequestParam(required = false) Integer personNumber
     ) {
-        AccommodationRequest request = new AccommodationRequest();
-        if (checkIn != null) {
-            request.setCheckIn(checkIn);
-        }
-
-        if (checkOut != null) {
-            request.setCheckOut(checkOut);
-        }
-
-        if (personNumber != null) {
-            request.setPersonNumber(personNumber);
-        }
-
-        //TODO checkIn 과 checkOut은 같은 날짜이면 안됨!!
-        DateUtil.isValidCheckInBetweenCheckOut(
-                request.getCheckIn(), request.getCheckOut()
-        );
-
         return ResponseEntity.ok(
-                productService.getProduct(accommodationId, product_id, request)
+                productService.getProductDetail(
+                        accommodationId, product_id,
+                        new AccommodationRequest(checkIn, checkOut, personNumber)
+                )
         );
     }
 }

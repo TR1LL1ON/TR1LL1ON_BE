@@ -26,9 +26,6 @@ public class OrderItemRequest {
     @NotNull(message = "인원 수를 채워주세요")
     private Integer personNumber;
 
-    @NotNull(message = "가격을 채워주세요")
-    private Integer price;
-
     @NotNull(message = "주문 상품의 id를 채워주세요")
     private Long productId;
 
