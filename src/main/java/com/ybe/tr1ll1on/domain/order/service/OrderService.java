@@ -53,7 +53,7 @@ public class OrderService {
         /* TODO 주문 처리 로직 */
 
         //1. 일단 해당 날짜에 주문이 가능한지 확인. -> 안되면? 예외 발생
-        List<ProductInfoPerNight> allProductInfoList = isPossibleToOrder(orderRequest);
+        List<ProductInfoPerNight>[] allProductInfoList = isPossibleToOrder(orderRequest);
 
         //2. 모든 주문이 유효하다면, productInfoPerNight -> 해당 날짜에 관한것들 전부 count - 1
         processOrder(allProductInfoList);
@@ -61,11 +61,9 @@ public class OrderService {
         //3. 카트 아이템 제거
         deleteCartItem(orderRequest);
 
-
-        //4. 주문 내역 생성 // TODO user 아직 안 넣음.
+        //4. 주문 내역 생성
         Orders orderHistory = Orders.builder()
                 .user(getUser())
-                .totalPrice(orderRequest.getTotalPrice())
                 .payment(orderRequest.getPayment())
                 .orderCreateDate(LocalDateTime.now())
                 .orderItemList(new ArrayList<>())
@@ -73,12 +71,19 @@ public class OrderService {
 
 
         //5. 상품들 모두 주문 상품 레코드에 추가.
-        for (OrderItemRequest oir : orderRequest.getOrders()) {
+        int totalPrice = 0;
+        for (int i = 0; i < orderRequest.getOrders().size(); i++) {
+            OrderItemRequest oir = orderRequest.getOrders().get(i);
+
+            // 각 요청마다 가격 계산
+            int price = calculatePrice(allProductInfoList[i]);
+            totalPrice += price; //총 가격
+
             orderHistory.getOrderItemList().add(
                 OrderItem.builder()
                     .orders(orderHistory)
                     .personNumber(oir.getPersonNumber())
-                    .price(oir.getPrice())
+                    .price(price)
                     .startDate(oir.getCheckIn())
                     .endDate(oir.getCheckOut())
                     .product(getProduct(oir.getProductId()))
@@ -87,16 +92,35 @@ public class OrderService {
             );
         }
 
+        orderHistory.setTotalPrice(totalPrice); //총 가격 설정.
         Orders saveOrder = orderRepository.save(orderHistory);
         List<OrderItem> saveOrderItemList = orderItemRepository.saveAll(
                 orderHistory.getOrderItemList()
         );
+
         if (saveOrder == null || saveOrderItemList == null) {
             throw new OrderException(INVALID_ORDER);
         }
+
+        log.info("OrderService : {}", saveOrder);
         return OrderResponse.of(saveOrder);
     }
 
+    /**
+     * 각 요청마다 가격을 계산합니다.
+     * @param pir
+     * @return
+     */
+    private int calculatePrice(List<ProductInfoPerNight> pir) {
+        return pir.stream()
+                .mapToInt(ProductInfoPerNight::getPrice)
+                .sum();
+    }
+
+    /**
+     * 만약 장바구니에서 들어온 요청일 경우, 카트에서 해당 장바구니 아이템을 삭제합니다.
+     * @param orderRequest
+     */
     private void deleteCartItem(OrderRequest orderRequest) {
         for (OrderItemRequest or : orderRequest.getOrders()) {
             if (or.getCartId() == null) continue;
@@ -110,10 +134,12 @@ public class OrderService {
      * 하나라도 틀린게 있다면 모든 주문은 취소됩니다.
      * @param orderRequest
      */
-    private List<ProductInfoPerNight> isPossibleToOrder(OrderRequest orderRequest) {
-        List<ProductInfoPerNight> allProductInfoList = new ArrayList<>();
+    private List<ProductInfoPerNight>[] isPossibleToOrder(OrderRequest orderRequest) {
 
-        for (OrderItemRequest oir : orderRequest.getOrders()) {
+        List<ProductInfoPerNight>[] allProductInfoList = new List[orderRequest.getOrders().size()];
+
+        for (int i = 0; i < orderRequest.getOrders().size(); i++) {
+            OrderItemRequest oir = orderRequest.getOrders().get(i);
             isValidCheckInBetweenCheckOut(oir.getCheckIn(), oir.getCheckOut());
 
             List<ProductInfoPerNight> productInfoPerNightList =
@@ -121,12 +147,13 @@ public class OrderService {
                             oir.getCheckIn(), oir.getCheckOut().minusDays(1), oir.getProductId()
                     );
 
+            allProductInfoList[i] = new ArrayList<>();
             for (ProductInfoPerNight pi : productInfoPerNightList) {
                 if (pi.getCount() <= 0) {
                     //단 하루라도, 품절인 객실이 있다면 주문 전부 취소.
                     throw new OrderException(PRODUCT_SOLD_OUT);
                 }
-                allProductInfoList.add(pi);
+                allProductInfoList[i].add(pi);
             }
         }
         return allProductInfoList;
@@ -136,9 +163,11 @@ public class OrderService {
      * 각 날짜마다 방의 갯수를 하나씩 줄입니다.
      * @param allProductInfoList
      */
-    private void processOrder(List<ProductInfoPerNight> allProductInfoList) {
-        for (ProductInfoPerNight pi : allProductInfoList) {
-            pi.decreaseCountByOne();
+    private void processOrder(List<ProductInfoPerNight>[] allProductInfoList) {
+        for (List<ProductInfoPerNight> pil : allProductInfoList) {
+            for (ProductInfoPerNight pi : pil) {
+                pi.decreaseCountByOne();
+            }
         }
     }
 

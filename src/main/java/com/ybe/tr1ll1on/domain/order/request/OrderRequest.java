@@ -21,7 +21,4 @@ public class OrderRequest {
 
     @NotNull(message = "결제 수단을 입력하세요")
     private Payment payment;
-
-    @NotNull(message = "총 가격을 입력하세요")
-    private Integer totalPrice;
 }
