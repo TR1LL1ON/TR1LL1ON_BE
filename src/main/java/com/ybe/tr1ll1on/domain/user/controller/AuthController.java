@@ -28,9 +28,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-        ResponseEntity<LoginResponse> loginResponse = authService.login(loginRequest, response);
-        HttpHeaders headers = loginResponse.getHeaders();
-        return ResponseEntity.status(loginResponse.getStatusCode()).headers(headers).body(loginResponse.getBody());
+        return ResponseEntity.ok(authService.login(loginRequest, response));
     }
 
     @PostMapping("/logout")

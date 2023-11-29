@@ -10,5 +10,4 @@ public class Tr1ll1onApplication {
 		SpringApplication.run(Tr1ll1onApplication.class, args);
 	}
 	//테스트
-
 }

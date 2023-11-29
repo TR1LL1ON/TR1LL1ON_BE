@@ -130,8 +130,8 @@ public class JwtTokenProvider {
         // 3. claims에서 authorities를 추출한다.
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
 
         // 4. claims에서 추출된 authorities를 사용하여 UserDetails를 생성한다.
         // 5. 생성된 Authentication 객체를 반환한다.
