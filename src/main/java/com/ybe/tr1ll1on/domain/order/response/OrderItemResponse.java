@@ -18,9 +18,14 @@ import lombok.Setter;
 public class OrderItemResponse {
     private Long orderItemId; // 주문
 
+    private Long productId; //상품 아이디
+
     private LocalDate checkIn; // 체크인
+
     private LocalDate checkOut; // 체크아웃
+
     private Integer personNumber; // 인원
+
     private Integer price; // 가격
 
     private OrderItemDetailResponse orderItemDetail;
@@ -54,14 +59,12 @@ public class OrderItemResponse {
     public static OrderItemResponse fromEntity(OrderItem orderItem) {
         return OrderItemResponse.builder()
                 .orderItemId(orderItem.getId())
-
+                .productId(orderItem.getProduct().getId())
                 .checkIn(orderItem.getStartDate())
                 .checkOut(orderItem.getEndDate())
                 .personNumber(orderItem.getPersonNumber())
                 .price(orderItem.getPrice())
-
                 .orderItemDetail(OrderItemDetailResponse.fromEntity(orderItem))
-
                 .reviewWritten(orderItem.getReviewWritten())
                 .build();
     }

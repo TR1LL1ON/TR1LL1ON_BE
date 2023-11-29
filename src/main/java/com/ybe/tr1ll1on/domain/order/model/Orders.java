@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -32,6 +33,7 @@ public class Orders {
 
     private Payment payment;
 
+    @Setter
     private Integer totalPrice;
 
     @OneToMany(mappedBy = "orders",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
