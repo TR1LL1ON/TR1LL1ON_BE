@@ -20,7 +20,7 @@ import java.time.LocalDate;
 public class ProductController {
     private final ProductService productService;
 
-    @PostMapping("/{accommodation_id}")
+    @GetMapping("/{accommodation_id}")
     public ResponseEntity<AccommodationDetailResponse> getAccommodationDetail(
         @PathVariable("accommodation_id") final Long accommodationId,
         @RequestParam(required = false) LocalDate checkIn,
