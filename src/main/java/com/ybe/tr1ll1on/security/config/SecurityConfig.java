@@ -90,7 +90,7 @@ public class SecurityConfig {
         http
                 .formLogin()
                 .loginProcessingUrl("/login")
-                .successHandler(authenticationSuccessHandler);
+                .successHandler(new JwtAuthenticationSuccessHandler(jwtTokenProvider));
 
         http
                 .logout()
