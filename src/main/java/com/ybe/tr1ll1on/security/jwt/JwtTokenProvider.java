@@ -89,12 +89,14 @@ public class JwtTokenProvider {
 
     // Response Cookie를 생성하여 Refresh Token을 저장한다.
     private void storeRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
-        ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
-                .domain(".tr1ll1on.site")
-                .httpOnly(true)
-                .path("/")
-                .build();
-        response.addHeader("Set-Cookie", cookie.toString());
+        Cookie cookie = new Cookie("refreshToken", refreshToken);
+        
+        cookie.setMaxAge(7 * 24 * 60 * 60);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setDomain(".tr1ll1on.site");
+
+        response.addCookie(cookie);
     }
 
     /**
