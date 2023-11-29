@@ -94,7 +94,7 @@ public class JwtTokenProvider {
         cookie.setMaxAge(7 * 24 * 60 * 60);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
-        cookie.setDomain(".tr1ll1on.site");
+//        cookie.setDomain(".tr1ll1on.site");
 
         response.addCookie(cookie);
     }
