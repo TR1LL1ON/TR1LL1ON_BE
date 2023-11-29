@@ -28,11 +28,13 @@ import com.ybe.tr1ll1on.domain.user.exception.InValidUserException;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
+import jakarta.persistence.LockModeType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,59 +53,57 @@ public class OrderService {
     public OrderResponse order(OrderRequest orderRequest) {
 
         /* TODO 주문 처리 로직 */
+            //1. 일단 해당 날짜에 주문이 가능한지 확인. -> 안되면? 예외 발생
+            List<ProductInfoPerNight>[] allProductInfoList = isPossibleToOrder(orderRequest);
 
-        //1. 일단 해당 날짜에 주문이 가능한지 확인. -> 안되면? 예외 발생
-        List<ProductInfoPerNight>[] allProductInfoList = isPossibleToOrder(orderRequest);
+            //2. 모든 주문이 유효하다면, productInfoPerNight -> 해당 날짜에 관한것들 전부 count - 1
+            processOrder(allProductInfoList);
 
-        //2. 모든 주문이 유효하다면, productInfoPerNight -> 해당 날짜에 관한것들 전부 count - 1
-        processOrder(allProductInfoList);
+            //3. 카트 아이템 제거
+            deleteCartItem(orderRequest);
 
-        //3. 카트 아이템 제거
-        deleteCartItem(orderRequest);
+            //4. 주문 내역 생성
+            Orders orderHistory = Orders.builder()
+                    .user(getUser())
+                    .payment(orderRequest.getPayment())
+                    .orderCreateDate(LocalDateTime.now())
+                    .orderItemList(new ArrayList<>())
+                    .build();
 
-        //4. 주문 내역 생성
-        Orders orderHistory = Orders.builder()
-                .user(getUser())
-                .payment(orderRequest.getPayment())
-                .orderCreateDate(LocalDateTime.now())
-                .orderItemList(new ArrayList<>())
-                .build();
+            //5. 상품들 모두 주문 상품 레코드에 추가.
+            int totalPrice = 0;
+            for (int i = 0; i < orderRequest.getOrders().size(); i++) {
+                OrderItemRequest oir = orderRequest.getOrders().get(i);
 
+                // 각 요청마다 가격 계산
+                int price = calculatePrice(allProductInfoList[i]);
+                totalPrice += price; //총 가격
 
-        //5. 상품들 모두 주문 상품 레코드에 추가.
-        int totalPrice = 0;
-        for (int i = 0; i < orderRequest.getOrders().size(); i++) {
-            OrderItemRequest oir = orderRequest.getOrders().get(i);
+                orderHistory.getOrderItemList().add(
+                        OrderItem.builder()
+                                .orders(orderHistory)
+                                .personNumber(oir.getPersonNumber())
+                                .price(price)
+                                .startDate(oir.getCheckIn())
+                                .endDate(oir.getCheckOut())
+                                .product(getProduct(oir.getProductId()))
+                                .reviewWritten(false)
+                                .build()
+                );
+            }
 
-            // 각 요청마다 가격 계산
-            int price = calculatePrice(allProductInfoList[i]);
-            totalPrice += price; //총 가격
-
-            orderHistory.getOrderItemList().add(
-                OrderItem.builder()
-                    .orders(orderHistory)
-                    .personNumber(oir.getPersonNumber())
-                    .price(price)
-                    .startDate(oir.getCheckIn())
-                    .endDate(oir.getCheckOut())
-                    .product(getProduct(oir.getProductId()))
-                    .reviewWritten(false)
-                    .build()
+            orderHistory.setTotalPrice(totalPrice); //총 가격 설정.
+            Orders saveOrder = orderRepository.save(orderHistory);
+            List<OrderItem> saveOrderItemList = orderItemRepository.saveAll(
+                    orderHistory.getOrderItemList()
             );
-        }
 
-        orderHistory.setTotalPrice(totalPrice); //총 가격 설정.
-        Orders saveOrder = orderRepository.save(orderHistory);
-        List<OrderItem> saveOrderItemList = orderItemRepository.saveAll(
-                orderHistory.getOrderItemList()
-        );
+            if (saveOrder == null || saveOrderItemList == null) {
+                throw new OrderException(INVALID_ORDER);
+            }
 
-        if (saveOrder == null || saveOrderItemList == null) {
-            throw new OrderException(INVALID_ORDER);
-        }
-
-        log.info("OrderService : {}", saveOrder);
-        return OrderResponse.of(saveOrder);
+            log.info("OrderService : {}", saveOrder.getOrderCreateDate());
+            return OrderResponse.of(saveOrder);
     }
 
     /**
@@ -143,8 +143,9 @@ public class OrderService {
             isValidCheckInBetweenCheckOut(oir.getCheckIn(), oir.getCheckOut());
 
             List<ProductInfoPerNight> productInfoPerNightList =
-                    productInfoPerNightRepository.findByDateBetweenAndProductId(
-                            oir.getCheckIn(), oir.getCheckOut().minusDays(1), oir.getProductId()
+                    productInfoPerNightRepository.findByDateBetweenAndProductIdLock(
+                            oir.getCheckIn(), oir.getCheckOut().minusDays(1),
+                            getProduct(oir.getProductId())
                     );
 
             allProductInfoList[i] = new ArrayList<>();
