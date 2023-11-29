@@ -10,8 +10,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://trillion.cv5i1mslgh5q.ap-northeast-2.rds.amazonaws.com:3306/MiniProject?useSSL=false&serverTimezone=UTC
 
-    username: admin
-    password: xmflffldjs2023^^
+    username: ${DB.ID}
+    password: ${DB.PWD}
 
   jpa:
     hibernate:
@@ -20,6 +20,6 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        show_sql: false
-        format_sql: false
+        show_sql: true
+        format_sql: true
 
