@@ -38,25 +38,10 @@ public class ProductController {
         @RequestParam(required = false) LocalDate checkOut,
         @RequestParam(required = false) Integer personNumber
     ) {
-        AccommodationRequest request = new AccommodationRequest();
-        if (checkIn != null) {
-            request.setCheckIn(checkIn);
-        }
-
-        if (checkOut != null) {
-            request.setCheckOut(checkOut);
-        }
-
-        if (personNumber != null) {
-            request.setPersonNumber(personNumber);
-        }
-//        TODO checkIn 과 checkOut은 같은 날짜이면 안됨!!
-        DateUtil.isValidCheckInBetweenCheckOut(
-                request.getCheckIn(), request.getCheckOut()
-        );
-
         return ResponseEntity.ok(
-                productService.getAccommodationDetail(accommodationId, request)
+                productService.getAccommodationDetail(accommodationId,
+                        new AccommodationRequest(checkIn, checkOut, personNumber)
+                )
         );
     }
 
@@ -68,26 +53,11 @@ public class ProductController {
             @RequestParam(required = false) LocalDate checkOut,
             @RequestParam(required = false) Integer personNumber
     ) {
-        AccommodationRequest request = new AccommodationRequest();
-        if (checkIn != null) {
-            request.setCheckIn(checkIn);
-        }
-
-        if (checkOut != null) {
-            request.setCheckOut(checkOut);
-        }
-
-        if (personNumber != null) {
-            request.setPersonNumber(personNumber);
-        }
-
-        //TODO checkIn 과 checkOut은 같은 날짜이면 안됨!!
-        DateUtil.isValidCheckInBetweenCheckOut(
-                request.getCheckIn(), request.getCheckOut()
-        );
-
         return ResponseEntity.ok(
-                productService.getProductDetail(accommodationId, product_id, request)
+                productService.getProductDetail(
+                        accommodationId, product_id,
+                        new AccommodationRequest(checkIn, checkOut, personNumber)
+                )
         );
     }
 }
