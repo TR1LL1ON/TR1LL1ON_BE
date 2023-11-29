@@ -90,7 +90,7 @@ public class JwtTokenProvider {
     // Response Cookie를 생성하여 Refresh Token을 저장한다.
     private void storeRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
-                .domian(".tr1ll1on.site")
+                .domain(".tr1ll1on.site")
                 .httpOnly(true)
                 .path("/")
                 .domain(".trII1on.site")
