@@ -2,6 +2,7 @@ package com.ybe.tr1ll1on.domain.order.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -18,15 +19,19 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 public class OrderItemRequest {
 
     @NotNull(message = "체크인 날짜를 채워주세요")
+    @Schema(example = "2023-11-24")
     private LocalDate checkIn;
 
     @NotNull(message = "체크아웃 날짜를 채워주세요")
+    @Schema(example = "2023-11-26")
     private LocalDate checkOut;
 
     @NotNull(message = "인원 수를 채워주세요")
+    @Schema(example = "2")
     private Integer personNumber;
 
     @NotNull(message = "주문 상품의 id를 채워주세요")
+    @Schema(example = "5")
     private Long productId;
 
     private Long cartId;
