@@ -1,10 +1,7 @@
 package com.ybe.tr1ll1on.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ybe.tr1ll1on.security.jwt.JwtAuthenticationProvider;
-import com.ybe.tr1ll1on.security.jwt.JwtAccessDeniedHandler;
-import com.ybe.tr1ll1on.security.jwt.JwtAuthenticationEntryPoint;
-import com.ybe.tr1ll1on.security.jwt.JwtTokenProvider;
+import com.ybe.tr1ll1on.security.jwt.*;
 import com.ybe.tr1ll1on.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import static com.ybe.tr1ll1on.security.constants.JwtConstants.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -35,6 +31,7 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
+    private final JwtAuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -89,6 +86,11 @@ public class SecurityConfig {
 
         http
                 .apply(new JwtSecurityConfig(jwtTokenProvider, objectMapper));
+
+        http
+                .formLogin()
+                .loginProcessingUrl("/login")
+                .successHandler(authenticationSuccessHandler);
 
         http
                 .logout()
