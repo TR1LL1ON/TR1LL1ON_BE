@@ -6,7 +6,7 @@ import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.product.dto.response.ProductResponse;
 import com.ybe.tr1ll1on.domain.product.dto.response.ProductSummaryListResponse;
 import com.ybe.tr1ll1on.domain.product.service.ProductService;
-import com.ybe.tr1ll1on.global.date.util.DateUtil;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
