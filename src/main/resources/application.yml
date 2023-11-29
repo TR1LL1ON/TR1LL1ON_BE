@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB.URL}:3306/MiniProject?useSSL=false&serverTimezone=UTC
+
+    username: ${DB.ID}
+    password: ${DB.PWD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    show-sql: true
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+springdoc:
+  api-docs:
+    path: /v1/api-docs
+    groups:
+      enabled: true
+  packages-to-scan: com.ybe.tr1ll1on.domain
+  swagger-ui:
+    tags-sorter: alpha
+    groups-order: asc
+    syntax-highlight:
+      activated: true
+    try-it-out-enabled: false
