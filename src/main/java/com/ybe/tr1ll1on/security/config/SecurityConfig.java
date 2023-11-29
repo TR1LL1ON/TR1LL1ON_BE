@@ -81,6 +81,8 @@ public class SecurityConfig {
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/products/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/v1/api-docs/**").permitAll()
                 .anyRequest().authenticated()
         );
 
@@ -90,7 +92,7 @@ public class SecurityConfig {
         http
                 .formLogin()
                 .loginProcessingUrl("/login")
-                .successHandler(authenticationSuccessHandler);
+                .successHandler(new JwtAuthenticationSuccessHandler(jwtTokenProvider));
 
         http
                 .logout()
