@@ -37,13 +37,31 @@
 
 # 구현 환경
 
-- Java 17
-- Spring Boot
-- Spring Data JPA
-- Spring security
-- gradle
-- aws
-- MySQL
+
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
+<img src="https://img.shields.io/badge/gradle-007396?style=for-the-badge&logo=gradle&logoColor=#02303A"> 
+
+<br/>
+
+
+![Spring](https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![springboot](https://img.shields.io/badge/springboot-6DB33F.svg?style=for-the-badge&logo=springboot&logoColor=white)
+![springsecurity](https://img.shields.io/badge/springsecurity-6DB33F.svg?style=for-the-badge&logo=springsecurity&logoColor=white)
+
+
+<br/>
+
+![mysql](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
+
+<br/>
+
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/d6259d55-5688-4b38-a2cc-ba6234cfd052)
+
+<br/>
+
+
+
+
 
 # 패키지 구조
 
