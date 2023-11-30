@@ -49,4 +49,12 @@ public class OrderItem {
     public boolean getReviewWritten() {
         return reviewWritten;
     }
+
+    public void setId(Long orderItemId) {
+        this.id = orderItemId;
+    }
+
+    public void setProduct(Product testProduct) {
+        this.product = testProduct;
+    }
 }
