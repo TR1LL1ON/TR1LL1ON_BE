@@ -30,7 +30,8 @@
 
 # 아키텍처
 
-![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/3dc95173-fdab-49cc-b27d-bdfcfbfc0d6f)
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/8c1c0e5a-f315-4feb-8363-ad5ffbd78be1)
+
 
 <br/>
 
