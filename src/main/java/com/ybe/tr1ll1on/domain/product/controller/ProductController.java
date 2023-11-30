@@ -1,7 +1,6 @@
 package com.ybe.tr1ll1on.domain.product.controller;
 
 
-import com.ybe.tr1ll1on.domain.cart.dto.response.AddCartItemResponse;
 import com.ybe.tr1ll1on.domain.product.dto.response.AccommodationDetailResponse;
 import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.product.dto.response.ProductResponse;
