@@ -55,7 +55,7 @@ public class SecurityConfig {
                 // 1. CSRF 토큰 비활성화 - RESTful API는 상태를 저장하지 않고, 클라이언트가 토큰과 같은 방식으로 인증을 처리한다.
                 .csrf().disable()
                 // 2. Spring Security의 기본 로그인 폼을 비활성화
-                //.formLogin().disable()
+                .formLogin().disable()
                 // 3. HTTP 기본 인증을 비활성화 - RESTful API는 일반적으로 HTTP 기본 인증이 아닌 토큰 기반의 인증을 사용한다.
                 .httpBasic().disable();
         http
@@ -76,11 +76,12 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(STATELESS);
 
-        // 상품 조회(전체, 개별), 회원 가입은 로그인 없이 사용 가능하다.
+        // 상품 조회(전체, 개별), 숙소 전체 리뷰 조회, 회원 가입은 로그인 없이 사용 가능하다.
         http.authorizeHttpRequests(request -> request
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/products/**").permitAll()
+                .requestMatchers("/reviews/{accommodationId}").permitAll()                   
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v1/api-docs/**").permitAll()
                 .anyRequest().authenticated()
@@ -88,12 +89,7 @@ public class SecurityConfig {
 
         http
                 .apply(new JwtSecurityConfig(jwtTokenProvider, objectMapper));
-
-        http
-                .formLogin()
-                .loginProcessingUrl("/login")
-                .successHandler(new JwtAuthenticationSuccessHandler(jwtTokenProvider));
-
+        
         http
                 .logout()
                 .logoutUrl("/logout")
