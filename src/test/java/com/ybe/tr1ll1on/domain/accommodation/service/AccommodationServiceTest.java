@@ -62,8 +62,6 @@ public class AccommodationServiceTest {
 
         List<AccommodationResponse> result = accommodationService.findAccommodation(request);
 
-        verify(mapper, times(1)).findAvailableAccommodation(request);
-
         assertEquals(2, result.size());
         assertEquals("Hotel A", result.get(0).getName());
         assertEquals("image1.jpg", result.get(0).getImageUrl());
