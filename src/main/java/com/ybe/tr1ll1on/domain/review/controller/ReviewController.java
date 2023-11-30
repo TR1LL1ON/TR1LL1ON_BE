@@ -24,6 +24,10 @@ public class ReviewController {
     private final ReviewService reviewService;
 
 
+    @Operation(summary = "숙소 리뷰 조회 API", description = "숙소 리뷰 조회 API 입니다.")
+    @ApiResponse(responseCode = "200", description = "조회 성공시",
+            content = @Content(schema = @Schema(implementation = ProductReviewListResponse.class)))
+    @SecurityRequirement(name = "jwt")
     @GetMapping("/{accommodationId}")
     public ResponseEntity<List<ProductReviewListResponse>> getProductReviews(@PathVariable Long accommodationId) {
         List<ProductReviewListResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId);
