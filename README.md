@@ -290,6 +290,9 @@
 # Git
 
 - Git-Flow 사용
+  
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/7ab6a8d8-5bad-41f3-9ecf-e6391c80f3f5)
+
 
 <br/>
 
@@ -311,7 +314,11 @@ Remove : 파일 삭제
 <br/>
 
 # Branch Naming
+
 feature/#이슈번호_간단 설명(주제)
+
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/945cc061-b6e6-4d98-8dac-33c8be0e70f3)
+
 
 <br/>
 
