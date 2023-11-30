@@ -63,7 +63,7 @@ public class ProductController {
         );
     }
 
-    @Operation(summary = "상품 요약 조회 API", description = "상품 요약 조회 API 입니다.")
+    @Operation(summary = "개별 상품 상세페이지 조회 API", description = "개별 상품 상세페이지 조회 API 입니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공시",
             content = @Content(schema = @Schema(implementation = ProductResponse.class)))
     @GetMapping("/{accommodation_id}/{product_id}")

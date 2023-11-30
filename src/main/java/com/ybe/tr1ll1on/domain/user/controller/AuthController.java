@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -48,15 +49,18 @@ public class AuthController {
     @PostMapping("/logout")
     @Operation(summary = "로그아웃 API", description = "로그아웃 API 입니다.")
     @ApiResponse(responseCode = "201", description = "로그아웃 성공시")
+    @SecurityRequirement(name = "jwt")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         ResponseEntity<String> logoutResponse = authService.logout(request, response);
         HttpHeaders headers = logoutResponse.getHeaders();
         return ResponseEntity.status(logoutResponse.getStatusCode()).headers(headers).body(logoutResponse.getBody());
     }
 
+
+    @PostMapping("/refreshAccessToken")
     @Operation(summary = "리프레쉬 토큰 API", description = "리프레쉬 API 입니다.")
     @ApiResponse(responseCode = "201", description = "리프레쉬 성공시")
-    @PostMapping("/refreshAccessToken")
+    @SecurityRequirement(name = "jwt")
     public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
         ResponseEntity<String> result = authService.refreshAccessToken(request);
         return new ResponseEntity<>(result.getBody(), result.getHeaders(), result.getStatusCode());
