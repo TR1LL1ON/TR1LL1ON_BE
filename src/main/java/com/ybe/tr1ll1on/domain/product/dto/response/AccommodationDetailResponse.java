@@ -1,5 +1,7 @@
 package com.ybe.tr1ll1on.domain.product.dto.response;
 
+import com.ybe.tr1ll1on.domain.review.dto.response.ProductReviewListResponse;
+import com.ybe.tr1ll1on.domain.review.dto.response.ReviewCreateResponse.ReviewDetails;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -37,6 +39,8 @@ public class AccommodationDetailResponse {
     private List<ProductResponse> rooms;
 
     private AccommodationFacilityResponse facility;
+
+    private List<ProductReviewListResponse> reviews;
 
     private String latitude;
 
