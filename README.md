@@ -73,30 +73,40 @@ feature/#이슈번호_간단 설명(주제)
 ```
 http://localhost:8080/auth/signup
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/6bb88b5f-8630-4a32-8426-5bf813522d41)
 
 - 로그인
 
 ```
 http://localhost:8080/auth/login
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/5d4cea18-4741-4683-a3c2-ef4156865ffc)
+
+
 
 - 로그아웃
 
 ```
 http://localhost:8080/auth/logout
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/ecc77fa0-09de-449e-a3e2-f25b2ce2d8b6)
+
 
 - 마이페이지
 
 ```
 http://localhost:8080/user
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/67f89bf8-11da-474b-b276-b9928bc5f0d8)
+
 
 - 마이페이지 - 주문내역 상세
 
 ```
 http://localhost:8080/user/details/{orderId}
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/117db384-4fdf-4500-979a-1456c70cc2c9)
+
 
 ■ 숙소
 
@@ -105,6 +115,7 @@ http://localhost:8080/user/details/{orderId}
 ```
 http://localhost:8080/products
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/c98325ac-7e16-4175-b8a3-cf4dbced9712)
 
 - 개인화 용 숙소 조회
 
@@ -137,18 +148,24 @@ http://localhost:8080/products?category={카테고리 코드}&region={지역코�
 ```
 http://localhost:8080/products/{accommodation_id}
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/297880c3-9cfa-4730-afe8-fc299c189d3a)
+
 
 - 개별 상품 상세페이지 조회
 
 ```
 http://localhost:8080/products/{accommodation_id}/{product_id}
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/c0e183e4-dd37-402d-a399-4188af091ff1)
+
 
 - 상품 주문하기
 
 ```
 http://localhost:8080/orders
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/7ff05fec-2cb9-4293-b5a9-e49597f416bb)
+
 
 ■ 장바구니
 
@@ -157,18 +174,23 @@ http://localhost:8080/orders
 ```
 http://localhost:8080/carts
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/e2c9ca0e-0a91-49ba-ae17-f1bf126f2d9e)
+
 
 - 장바구니에 상품 추가
 
 ```
 http://localhost:8080/carts/{product_id}
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/b97e04bf-d13a-4007-ac1e-4db7dd801960)
 
 - 장바구니에 상품 삭제
 
 ```
 http://localhost:8080/carts/{cartItem_id}
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/17e3e9d6-fb23-4e2e-8824-417c83841a38)
+
 
 ■ 리뷰
 
@@ -177,24 +199,30 @@ http://localhost:8080/carts/{cartItem_id}
 ```
 http://localhost:8080/reviews
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/bbcd616e-04b0-44fb-aac8-b2b064ca5713)
+
 
 - 리뷰 작성
 
 ```
 http://localhost:8080/reviews
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/302030e2-1d7a-4655-bba0-57e85ac33c60)
 
 - 리뷰 수정
 
 ```
 http://localhost:8080/reviews/{review_id}
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/aaa09328-e1d2-4cb2-b516-980d93cefb46)
+
 
 - 리뷰 삭제
 
 ```
 http://localhost:8080/reviews/{review_id}
 ```
+![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/34dce937-20d3-4967-be47-3c28f29a19d1)
 
 
 
