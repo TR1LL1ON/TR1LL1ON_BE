@@ -1,14 +1,11 @@
 package com.ybe.tr1ll1on.domain.order.response;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.ybe.tr1ll1on.domain.order.model.OrderItem;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
 import java.time.LocalDate;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Setter
@@ -16,20 +13,32 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class OrderItemResponse {
+
+    @Schema(example = "3")
     private Long orderItemId; // 주문
 
+
+    @Schema(example = "10")
     private Long productId; //상품 아이디
 
+    @Schema(example = "2023-12-01")
     private LocalDate checkIn; // 체크인
 
+    @Schema(example = "2023-12-02")
     private LocalDate checkOut; // 체크아웃
 
+    @Schema(example = "2")
     private Integer personNumber; // 인원
 
+    @Schema(example = "50000")
     private Integer price; // 가격
 
+
+    @ArraySchema(schema = @Schema(implementation = OrderItemDetailResponse.class))
     private OrderItemDetailResponse orderItemDetail;
 
+
+    @Schema(example = "false")
     private Boolean reviewWritten; // 리뷰 작성 여부
 
     @Getter
@@ -38,9 +47,17 @@ public class OrderItemResponse {
     @NoArgsConstructor
     @Builder
     public static class OrderItemDetailResponse {
+
+        @Schema(example = "자연닮은 치유농장")
         private String accommodationName; // 숙소 이름
+
+        @Schema(example = "대구광역시 군위군 삼국유사면 화산산성길 65-1")
         private String accommodationAddress; // 숙소 주소
+
+        @Schema(example = "http://tong.visitkorea.or.kr/cms/resource/37/3048137_image2_1.jpg")
         private String productImage; // 객실 이미지
+
+        @Schema(example = "하늘채")
         private String productName; // 객실 이름
 
         public static OrderItemDetailResponse fromEntity(OrderItem orderItem) {

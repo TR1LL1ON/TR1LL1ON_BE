@@ -2,6 +2,8 @@ package com.ybe.tr1ll1on.domain.user.dto.response;
 
 import com.ybe.tr1ll1on.domain.order.model.Orders;
 import com.ybe.tr1ll1on.domain.order.response.OrderItemResponse;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +17,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class MyPageDetailResponse {
+    @Schema(example = "2")
     private Long orderId;
+
+    @ArraySchema(schema = @Schema(implementation = OrderItemResponse.class))
     private List<OrderItemResponse> orderItemList;
 
     public static MyPageDetailResponse fromEntity(Orders order) {

@@ -1,6 +1,5 @@
 package com.ybe.tr1ll1on.domain.review.controller;
 
-import com.ybe.tr1ll1on.domain.cart.dto.response.CartResponse;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.response.*;

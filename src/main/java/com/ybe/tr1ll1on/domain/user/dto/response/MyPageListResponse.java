@@ -4,6 +4,8 @@ import com.ybe.tr1ll1on.domain.order.model.OrderItem;
 import com.ybe.tr1ll1on.domain.order.model.Orders;
 import com.ybe.tr1ll1on.global.common.Payment;
 import java.time.LocalDateTime;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,13 +19,26 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class MyPageListResponse {
+    @Schema(example = "1")
     private Long orderId;
+
+    @Schema(example = "2023-11-28T11:17:38.000+00:00")
     private LocalDateTime orderCreateDate;
+
+
+    @Schema(example = "KAKAOPAY")
     private Payment payment;
+
+    @Schema(example = "100000")
     private Integer totalPrice;
 
+    @Schema(example = "http://tong.visitkorea.or.kr/cms/resource/37/3048137_image2_1.jpg")
     private List<String> accommodationImages;
+
+    @Schema(example = "자연닮은 치유농장")
     private List<String> accommodationNames;
+
+    @Schema(example = "하늘채")
     private List<String> productNames;
 
     public static MyPageListResponse fromEntity(Orders order) {
