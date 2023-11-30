@@ -56,6 +56,8 @@ public class AccommodationService {
                         .price(it.getPrice())
                         .address(it.getAddress())
                         .areaCode(it.getAreaCode())
+                        .latitude(it.getLatitude())
+                        .longitude(it.getLongitude())
                         .score(randomScore())
                         .build())
                 .collect(Collectors.toList());

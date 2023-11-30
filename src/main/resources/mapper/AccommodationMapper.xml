@@ -13,15 +13,19 @@
                main.address         as address,
                main.areaCode        as areaCode,
                main.name            as name,
+               main.latitude        as latitude,
+               main.longitude       as longitude,
                min(main.total)      as price
-        from (select accommodationId, imageUrl, address, areaCode, name, sum(price) as total
+        from (select accommodationId, imageUrl, address, areaCode, name, latitude, longitude, sum(price) as total
               from (select a.accommodation_id as accommodationId,
                            image_url          as imageUrl,
                            address            as address,
                            area_code          as areaCode,
                            a.name             as name,
                            price              as price,
-                           p.product_id       as productId
+                           p.product_id       as productId,
+                           latitude           as latitude,
+                           longitude          as longitude
                     from accommodation a
                              left join (select image_url, accommodation_id
                                         from accommodation_image
@@ -42,7 +46,7 @@
                             and a.area_code = #{areaCode}
                         </if>
                     ) as sub
-              group by sub.accommodationId, sub.imageUrl, sub.address, sub.areaCode, sub.name, sub.productId) as main
-        group by main.accommodationId, main.imageUrl, main.address, main.areaCode, main.name
+              group by sub.accommodationId, sub.imageUrl, sub.address, sub.areaCode, sub.name, sub.productId, sub.latitude, sub.longitude) as main
+        group by main.accommodationId, main.imageUrl, main.address, main.areaCode, main.name, main.latitude, main.longitude
     </select>
 </mapper>
