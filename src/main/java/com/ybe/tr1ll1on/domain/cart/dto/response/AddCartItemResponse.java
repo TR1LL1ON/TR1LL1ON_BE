@@ -5,11 +5,13 @@ import lombok.Data;
 
 @Data
 public class AddCartItemResponse {
-    @Schema(type = "Long", example = "20")
-    private Long cartItemId;
-    @Schema(type = "Long", example = "55")
-    private Long productId;
-    @Schema(type = "Integer", example = "2")
 
+    @Schema(example = "20")
+    private Long cartItemId;
+
+    @Schema(example = "55")
+    private Long productId;
+
+    @Schema(example = "2")
     private Integer personNumber;
 }

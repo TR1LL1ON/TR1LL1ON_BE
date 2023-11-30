@@ -22,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/carts")
-
 public class CartController {
 
     private final CartService cartService;
@@ -54,12 +53,9 @@ public class CartController {
     }
 
 
-
     @Operation(summary = "장바구니에 상품 삭제 API", description = "장바구니에 상품 삭제 API 입니다.")
-    @ApiResponse(responseCode = "200", description = "삭제 성공시",
-            content = @Content(schema = @Schema(implementation = AddCartItemResponse.class)))
+    @ApiResponse(responseCode = "200", description = "삭제 성공시")
     @SecurityRequirement(name = "jwt")
-
     @DeleteMapping("/{cartItemId}")
     public void removeCartItem(@PathVariable Long cartItemId) {
         cartService.removeCartItem(cartItemId);
