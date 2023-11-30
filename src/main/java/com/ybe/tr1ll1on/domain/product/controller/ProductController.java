@@ -38,6 +38,8 @@ public class ProductController {
         @RequestParam(required = false) LocalDate checkOut,
         @RequestParam(required = false) Integer personNumber
     ) {
+        log.info("ProductController : checkIn = {}, checkOut = {}, personNumber = {}",
+                checkIn, checkOut, personNumber);
         return ResponseEntity.ok(
                 productService.getAccommodationDetail(accommodationId,
                         new AccommodationRequest(checkIn, checkOut, personNumber)

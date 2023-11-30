@@ -18,6 +18,7 @@ import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.model.ProductInfoPerNight;
 import com.ybe.tr1ll1on.domain.product.repository.ProductInfoPerNightRepository;
 import com.ybe.tr1ll1on.domain.product.repository.ProductRepository;
+import com.ybe.tr1ll1on.domain.review.service.ReviewService;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class ProductService {
     private final AccommodationRepository accommodationRepository;
     private final ProductRepository productRepository;
     private final ProductInfoPerNightRepository productInfoPerNightRepository;
+    private final ReviewService reviewService;
 
     /**
      * 숙박 상세 정보를 얻음.
@@ -49,9 +51,10 @@ public class ProductService {
         List<ProductResponse> productResponseList = new ArrayList<>();
 
         Accommodation accommodation = getAccommodation(accommodationId);
+
         List<Product> productList = productRepository
-                .findByAccommodationIdAndMaximumNumberIsGreaterThanEqual(
-                        accommodationId, request.getPersonNumber());
+                .findByAccommodationAndMaximumNumberIsGreaterThanEqual(
+                        accommodation, request.getPersonNumber());
         
         if (productList == null) {
             throw new ProductException(EMPTY_PRODUCT);
@@ -86,6 +89,9 @@ public class ProductService {
                         AccommodationFacilityResponse.of(
                             accommodation.getFacility()
                         )
+                )
+                .reviews(
+                        reviewService.getProductReviews(accommodationId)
                 )
                 .build();
     }
@@ -150,13 +156,18 @@ public class ProductService {
         return getProductDetail(getProduct(productId), request);
     }
 
+    /**
+     * 숙소 요약 정보 가져오는 메소드 (숙소 이름, 객실 정보, 이미지, 카테고리)
+     * @param productIdListRequest
+     * @return
+     */
     public ProductSummaryListResponse getProductSummaryList(
             List<Long> productIdListRequest
     ) {
         List<ProductSummaryResponse> products = new ArrayList<>();
         for (Long id : productIdListRequest) {
             products.add(
-                    ProductSummaryResponse.of(getProduct(id))
+                    ProductSummaryResponse.of(getProductSummary(id))
             );
         }
         return ProductSummaryListResponse.builder()
@@ -167,6 +178,13 @@ public class ProductService {
     private Product getProduct(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductException(EMPTY_PRODUCT));
+    }
+
+    private Product getProductSummary(Long productId) {
+        Product product =  productRepository.findByIdSummary(productId)
+                .orElseThrow(() -> new ProductException(EMPTY_PRODUCT));
+        log.info("ProductSummary ! ");
+        return product;
     }
 
     private Accommodation getAccommodation(Long accommodationId) {
