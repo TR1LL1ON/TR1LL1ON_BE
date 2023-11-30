@@ -2,7 +2,10 @@ package com.ybe.tr1ll1on.domain.review.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.ybe.tr1ll1on.domain.order.request.OrderItemRequest;
 import com.ybe.tr1ll1on.domain.review.model.Review;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +19,10 @@ import java.time.LocalDate;
 @Builder
 public class ReviewDeleteResponse {
 
+    @Schema(example = "리뷰가 성공적으로 삭제되었습니다.")
     String message;
+
+    @ArraySchema(schema = @Schema(implementation = ReviewDetails.class))
     ReviewDetails review;
 
     @Getter
@@ -25,7 +31,10 @@ public class ReviewDeleteResponse {
     @Builder
     public static class ReviewDetails {
 
+        @Schema(example = "12")
         private Long reviewId;
+
+        @Schema(example = "2023-11-27")
         private LocalDate deleteDate;
         // ... 추가 가능
 
