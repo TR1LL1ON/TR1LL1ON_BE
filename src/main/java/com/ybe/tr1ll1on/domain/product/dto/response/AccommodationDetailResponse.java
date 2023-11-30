@@ -1,8 +1,12 @@
 package com.ybe.tr1ll1on.domain.product.dto.response;
 
 import com.ybe.tr1ll1on.domain.review.dto.response.ProductReviewListResponse;
+
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import com.ybe.tr1ll1on.domain.review.dto.response.ReviewCreateResponse.ReviewDetails;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
