@@ -19,17 +19,16 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class MyPageListResponse {
-    @Schema(example = "1")
+    @Schema(description = "주문 id", defaultValue = "1")
     private Long orderId;
 
-    @Schema(example = "2023-11-28T11:17:38.000+00:00")
+    @Schema(description = "주문 생성 시각", defaultValue = "2023-11-28T11:17:38.000+00:00")
     private LocalDateTime orderCreateDate;
 
-
-    @Schema(example = "KAKAOPAY")
+    @Schema(description = "결제 수단", defaultValue = "KAKAOPAY")
     private Payment payment;
 
-    @Schema(example = "100000")
+    @Schema(description = "총 결제 금액", defaultValue = "100000")
     private Integer totalPrice;
 
     @Schema(example = "http://tong.visitkorea.or.kr/cms/resource/37/3048137_image2_1.jpg")

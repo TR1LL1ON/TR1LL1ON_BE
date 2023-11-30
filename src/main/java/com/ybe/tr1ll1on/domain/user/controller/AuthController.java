@@ -39,7 +39,8 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = "로그인 API 입니다.")
-    @ApiResponse(responseCode = "201", description = "로그인 성공시")
+    @ApiResponse(responseCode = "201", description = "로그인 성공시",
+            content = @Content(schema = @Schema(implementation = LoginResponse.class)))
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         return ResponseEntity.ok(authService.login(loginRequest, response));
     }
