@@ -1,5 +1,6 @@
 package com.ybe.tr1ll1on.domain.product.dto.response;
 
+import com.ybe.tr1ll1on.domain.review.dto.response.ProductReviewListResponse;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,9 @@ public class AccommodationDetailResponse {
 
     @Schema(example = "숙소 편의시설")
     private AccommodationFacilityResponse facility;
+
+    @ArraySchema(schema = @Schema(implementation = ProductReviewListResponse.class))
+    private List<ProductReviewListResponse> reviews;
 
     @Schema(example = "37.65908725483671")
     private String latitude;
