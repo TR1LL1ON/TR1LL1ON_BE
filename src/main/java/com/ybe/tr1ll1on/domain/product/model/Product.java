@@ -59,4 +59,8 @@ public class Product {
         this.maximumNumber = maximumNumber;
         this.count = count;
     }
+
+    public void setId(Long productId) {
+        this.id = productId;
+    }
 }
