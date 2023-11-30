@@ -1,4 +1,4 @@
-package com.ybe.tr1ll1on.domain.order.response;
+package com.ybe.tr1ll1on.domain.order.dto.response;
 
 import com.ybe.tr1ll1on.domain.order.model.OrderItem;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

@@ -1,13 +1,14 @@
 package com.ybe.tr1ll1on.domain.product.dto.response;
 
-import java.time.LocalDate;
-import java.util.List;
-
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 @Getter
@@ -15,49 +16,49 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AccommodationDetailResponse {
 
-    @Schema(description = "숙소 id", defaultValue = "1")
+    @Schema(example = "1")
     private long accommodationId;
 
-    @Schema(description = "숙소 이름", defaultValue = "숙소 이름")
+    @Schema(example = "플로팅웨일 설악도적폭포스테이")
     private String name;
 
-    @Schema(description = "숙소 주소", defaultValue = "숙소 주소")
+    @Schema(example = "강원특별자치도 인제군 북면 미시령옛길 140")
     private String address;
 
-    @Schema(description = "지역코드", defaultValue = "1")
+    @Schema(example = "1")
     private String areaCode;
 
-    @Schema(description = "숙소 전화번호", defaultValue = "000-0000-0000")
+    @Schema(example = "000-0000-0000")
     private String phone;
 
-    @Schema(description = "숙소 카테고리", defaultValue = "B02010100")
+    @Schema(example = "B02010100")
     private String category;
 
-    @Schema(description = "체크인 날짜", defaultValue = "2023-11-25")
+    @Schema(example = "2023-11-25")
     private LocalDate checkIn;
 
-    @Schema(description = "체크아웃 날짜", defaultValue = "2023-11-26")
+    @Schema(example = "2023-11-26")
     private LocalDate checkOut;
 
-    @Schema(description = "인원수", defaultValue = "2")
+    @Schema(example = "2")
     private int personNumber;
 
-    @Schema(description = "평점", defaultValue = "5.0")
+    @Schema(example = "5.0")
     private double score;
 
-    @Schema(description = "숙소 이미지 주소 리스트", defaultValue = "숙소 이미지 주소 리스트")
+    @ArraySchema(schema = @Schema(implementation = AccommodationImageResponse.class))
     private List<AccommodationImageResponse> image;
 
-    @Schema(description = "숙소 객실 리스트", defaultValue = "숙소 객실 리스트")
+    @ArraySchema(schema = @Schema(implementation = ProductResponse.class))
     private List<ProductResponse> rooms;
 
-    @Schema(description = "숙소 편의시설", defaultValue = "숙소 편의시설")
+    @Schema(example = "숙소 편의시설")
     private AccommodationFacilityResponse facility;
 
-    @Schema(description = "숙소 위치 위도", defaultValue = "숙소 위치 위도")
+    @Schema(example = "37.65908725483671")
     private String latitude;
 
-    @Schema(description = "숙소 위치 경도", defaultValue = "숙소 위치 경도")
+    @Schema(example = "127.00565519177638")
     private String longitude;
 
 }

@@ -1,6 +1,5 @@
 package com.ybe.tr1ll1on.domain.user.controller;
 
-import com.ybe.tr1ll1on.domain.product.dto.response.ProductSummaryListResponse;
 import com.ybe.tr1ll1on.domain.user.dto.request.LoginRequest;
 import com.ybe.tr1ll1on.domain.user.dto.request.SignUpRequest;
 import com.ybe.tr1ll1on.domain.user.dto.response.LoginResponse;

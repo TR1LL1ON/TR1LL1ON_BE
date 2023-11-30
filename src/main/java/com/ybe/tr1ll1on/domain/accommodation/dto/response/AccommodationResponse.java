@@ -11,7 +11,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class AccommodationResponse {
+
+    @Schema(example = "1")
     private Long accommodationId;
+
     @Schema(example = "http://tong.visitkorea.or.kr/cms/resource/50/2705650_image2_1.jpg")
     private String imageUrl;
 

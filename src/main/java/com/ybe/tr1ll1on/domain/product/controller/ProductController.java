@@ -22,12 +22,10 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 
 @Tag(name = "상품 API", description = "상품 관련 API 모음입니다.")
-
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/products")
-
 public class ProductController {
     private final ProductService productService;
 

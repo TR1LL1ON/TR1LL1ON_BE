@@ -1,7 +1,7 @@
 package com.ybe.tr1ll1on.domain.user.dto.response;
 
 import com.ybe.tr1ll1on.domain.order.model.Orders;
-import com.ybe.tr1ll1on.domain.order.response.OrderItemResponse;
+import com.ybe.tr1ll1on.domain.order.dto.response.OrderItemResponse;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

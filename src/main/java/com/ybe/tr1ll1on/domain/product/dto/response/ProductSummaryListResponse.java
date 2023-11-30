@@ -1,6 +1,7 @@
 package com.ybe.tr1ll1on.domain.product.dto.response;
 
 import com.ybe.tr1ll1on.domain.product.model.Product;
+
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -25,13 +26,16 @@ public class ProductSummaryListResponse {
     @Setter
     public static class ProductSummaryResponse {
 
-        @Schema(description = "숙소 이름", defaultValue = "숙소 이름")
+        @Schema(example = "플로팅웨일 설악도적폭포스테이")
         private String accommodationName;
-        @Schema(description = "객실 이름", defaultValue = "객실 이름")
+
+        @Schema(example = "디럭스 룸")
         private String roomName;
-        @Schema(description = "객실 이미지 주소", defaultValue = "객실 이미지 주소")
+
+        @Schema(example = "http://tong.visitkorea.or.kr/cms/resource/50/2705650_image2_1.jpg")
         private String imageUrl;
-        @Schema(description = "숙소 카테고리", defaultValue = "B02010100")
+
+        @Schema(example = "B02010100")
         private String category;
 
         public static ProductSummaryResponse of(Product product) {

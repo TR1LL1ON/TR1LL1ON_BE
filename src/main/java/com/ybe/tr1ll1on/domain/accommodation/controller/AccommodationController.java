@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-
-
+@Tag(name = "숙소 API", description = "숙소 관련 API 모음입니다.")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "숙소 API", description = "숙소 관련 API 모음입니다.")
 @RequestMapping("/products")
 public class AccommodationController {
     private final AccommodationService accommodationService;
@@ -65,3 +63,5 @@ public class AccommodationController {
 
 
 }
+
+

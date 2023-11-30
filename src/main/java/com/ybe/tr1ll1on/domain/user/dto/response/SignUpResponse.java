@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SignUpResponse {
 
-    @Schema(description = "유저 id", defaultValue = "1")
+    @Schema(example = "1")
     private Long id;
 
-    @Schema(description = "유저 이메일", defaultValue = "유저 이메일")
+    @Schema(example = "유저 이메일")
     private String email;
 
-    @Schema(description = "유저 이름", defaultValue = "유저 이름")
+    @Schema(example = "유저 이름")
     private String name;
 }

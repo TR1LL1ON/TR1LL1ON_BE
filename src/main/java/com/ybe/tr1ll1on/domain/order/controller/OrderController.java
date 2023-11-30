@@ -1,8 +1,7 @@
 package com.ybe.tr1ll1on.domain.order.controller;
 
-import com.ybe.tr1ll1on.domain.cart.dto.response.AddCartItemResponse;
-import com.ybe.tr1ll1on.domain.order.request.OrderRequest;
-import com.ybe.tr1ll1on.domain.order.response.OrderResponse;
+import com.ybe.tr1ll1on.domain.order.dto.request.OrderRequest;
+import com.ybe.tr1ll1on.domain.order.dto.response.OrderResponse;
 import com.ybe.tr1ll1on.domain.order.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

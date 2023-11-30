@@ -1,4 +1,4 @@
-package com.ybe.tr1ll1on.domain.order.request;
+package com.ybe.tr1ll1on.domain.order.dto.request;
 
 import com.ybe.tr1ll1on.global.common.Payment;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

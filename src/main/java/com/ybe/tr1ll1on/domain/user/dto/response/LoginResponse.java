@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginResponse {
 
-    @Schema(description = "유저 id", defaultValue = "1")
+    @Schema(example = "1")
     private Long id;
 
-    @Schema(description = "유저 email", defaultValue = "유저 email")
+    @Schema(example = "test@mail.com")
     private String email;
 
-    @Schema(description = "유저 이름", defaultValue = "유저 이름")
+    @Schema(example = "test1")
     private String name;
 
-    @Schema(description = "accessToken", defaultValue = "accessToken")
+    @Schema(example = "a12345679123456789")
     private String accessToken;
 }

@@ -1,8 +1,5 @@
 package com.ybe.tr1ll1on.domain.review.dto.response;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.ybe.tr1ll1on.domain.order.request.OrderItemRequest;
 import com.ybe.tr1ll1on.domain.review.model.Review;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
