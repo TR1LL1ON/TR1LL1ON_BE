@@ -11,23 +11,17 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
     private final JwtTokenProvider jwtTokenProvider;
 
-    public JwtAuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    public JwtAuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider) { this.jwtTokenProvider = jwtTokenProvider; }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         String token = jwtTokenProvider.generateAccessToken(authentication);
 
-
         Cookie cookie = new Cookie("jwt-token", token);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(3600);
-        cookie.setPath("/");
+        cookie.setHttpOnly(false);
 
         response.addCookie(cookie);
 
