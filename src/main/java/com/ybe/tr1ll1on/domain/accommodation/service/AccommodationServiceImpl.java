@@ -1,10 +1,8 @@
 package com.ybe.tr1ll1on.domain.accommodation.service;
 
 import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest;
-
 import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponse;
-
-import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
+import com.ybe.tr1ll1on.domain.accommodation.model.AccommodationImage;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +24,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationMapper mapper;
 
     @Transactional
-    public List<AccommodationResponse> findAccommodation(AccommodationRequest accommodationRequest){
+    public List<AccommodationResponse> findAccommodation(AccommodationRequest accommodationRequest) {
 
         LocalDate checkOut = accommodationRequest.getCheckOut();
         LocalDate checkOutYesterday = checkOut.minusDays(1);
@@ -37,7 +34,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .stream()
                 .map(it -> AccommodationResponse.builder()
                         .accommodationId(it.getAccommodationId())
-                        .imageUrl(it.getImageUrl())
+                        .imageUrl(it.getImageUrl() == null ? AccommodationImage.BASIC_ACCOMMODATION_IMG : it.getImageUrl())
                         .name(it.getName())
                         .price(it.getPrice())
                         .address(it.getAddress())
