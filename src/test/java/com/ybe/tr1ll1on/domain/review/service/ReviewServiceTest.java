@@ -46,7 +46,7 @@ public class ReviewServiceTest {
     private UserRepository userRepository;
 
     @InjectMocks
-    private ReviewServiceImpl reviewService;
+    private ReviewService reviewService;
 
     private Long userId;
     private Long productId;

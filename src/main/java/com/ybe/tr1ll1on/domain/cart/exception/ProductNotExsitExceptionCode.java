@@ -1,17 +1,15 @@
-package com.ybe.tr1ll1on.domain.accommodation.exception;
+package com.ybe.tr1ll1on.domain.cart.exception;
 
 import com.ybe.tr1ll1on.global.exception.ExceptionCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-@Getter
 @AllArgsConstructor
-public enum AccommodationExceptionCode implements ExceptionCode {
+@Getter
+public enum ProductNotExsitExceptionCode implements ExceptionCode {
 
-    // 숙소 관련 예외
-    ACCOMMODATION_NOT_FOUND(HttpStatus.NOT_FOUND, "404 Not Found", "해당 숙소를 찾을 수 없습니다")
-    ;
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT_NOT_FOUND", "상품을 찾을 수 없습니다");
 
     private final HttpStatus status;
     private final String code;

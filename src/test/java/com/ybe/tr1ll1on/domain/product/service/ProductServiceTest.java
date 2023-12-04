@@ -4,12 +4,12 @@
  import static org.mockito.ArgumentMatchers.any;
  import static org.mockito.Mockito.when;
 
- import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest;
  import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
  import com.ybe.tr1ll1on.domain.accommodation.model.AccommodationFacility;
  import com.ybe.tr1ll1on.domain.accommodation.model.Category;
  import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
  import com.ybe.tr1ll1on.domain.product.dto.response.AccommodationDetailResponse;
+ import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
  import com.ybe.tr1ll1on.domain.product.dto.response.ProductFacilityResponse;
  import com.ybe.tr1ll1on.domain.product.dto.response.ProductResponse;
  import com.ybe.tr1ll1on.domain.product.model.Product;
@@ -38,7 +38,7 @@
      private ProductInfoPerNightRepository productInfoPerNightRepository;
 
      @InjectMocks
-     private ProductServiceImpl productService;
+     private ProductService productService;
 
      Accommodation accommodation1, accommodation2;
      Product product1, product2;

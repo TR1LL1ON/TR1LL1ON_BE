@@ -1,8 +1,8 @@
 package com.ybe.tr1ll1on.domain.product.controller;
 
 
-import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.product.dto.response.AccommodationDetailResponse;
+import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.product.dto.response.ProductResponse;
 import com.ybe.tr1ll1on.domain.product.dto.response.ProductSummaryListResponse;
 import com.ybe.tr1ll1on.domain.product.service.ProductService;
@@ -54,10 +54,8 @@ public class ProductController {
         @RequestParam(required = false) LocalDate checkOut,
         @RequestParam(required = false) Integer personNumber
     ) {
-
         log.info("ProductController : checkIn = {}, checkOut = {}, personNumber = {}",
                 checkIn, checkOut, personNumber);
-
         return ResponseEntity.ok(
                 productService.getAccommodationDetail(accommodationId,
                         new AccommodationRequest(checkIn, checkOut, personNumber)

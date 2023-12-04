@@ -1,18 +1,14 @@
 package com.ybe.tr1ll1on.domain.user.service;
 
-import static com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode.EMAIL_ALREADY_EXISTS;
-
 import com.ybe.tr1ll1on.domain.cart.model.Cart;
 import com.ybe.tr1ll1on.domain.cart.repository.CartRepository;
 import com.ybe.tr1ll1on.domain.user.dto.request.LoginRequest;
 import com.ybe.tr1ll1on.domain.user.dto.request.SignUpRequest;
 import com.ybe.tr1ll1on.domain.user.dto.response.LoginResponse;
 import com.ybe.tr1ll1on.domain.user.dto.response.SignUpResponse;
-import com.ybe.tr1ll1on.domain.user.exception.InValidUserException;
-import com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode;
+import com.ybe.tr1ll1on.domain.user.exception.EmailAlreadyExistsException;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
-import com.ybe.tr1ll1on.global.date.exception.InValidDateException;
 import com.ybe.tr1ll1on.security.dto.TokenDto;
 import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import com.ybe.tr1ll1on.security.exception.UserNotFoundException;
@@ -44,7 +40,7 @@ public class AuthService {
     @Transactional
     public SignUpResponse signUp(SignUpRequest signUpRequest) {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new InValidUserException(EMAIL_ALREADY_EXISTS);
+            throw new EmailAlreadyExistsException(SecurityExceptionCode.CONFLICT);
         }
 
         User user = signUpRequest.toEntity(passwordEncoder);

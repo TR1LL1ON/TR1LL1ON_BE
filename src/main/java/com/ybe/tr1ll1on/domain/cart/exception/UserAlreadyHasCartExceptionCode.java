@@ -7,12 +7,8 @@ import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @Getter
-public enum CartExceptionCode implements ExceptionCode {
-
-    CARTID_NOT_FOUND(HttpStatus.NOT_FOUND, "CARTID_NOT_FOUND", "장바구니ID를 찾을 수 없습니다"),
-    CART_ITEM_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "CART_ITEM_ID_NOT_FOUND", "장바구니상품ID를 찾을 수 없습니다")
-    ;
-
+public enum UserAlreadyHasCartExceptionCode implements ExceptionCode {
+    USER_ALREADY_HAS_CART(HttpStatus.CONFLICT, "USER_ALREADY_HAS_CART", "사용자가 이미 장바구니가 있습니다");
     private final HttpStatus status;
     private final String code;
     private final String msg;

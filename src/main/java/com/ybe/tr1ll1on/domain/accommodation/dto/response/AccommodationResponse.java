@@ -39,4 +39,17 @@ public class AccommodationResponse {
     @Schema(example = "127.00565519177638")
     private String longitude;
 
+    public AccommodationResponse(Long accommodationId, String imageUrl, String name, String address, String areaCode, Integer price) {
+        this.accommodationId = accommodationId;
+        this.imageUrl = imageUrl==null ? AccommodationImage.BASIC_ACCOMMODATION_IMG : imageUrl;
+        this.name = name;
+        this.address = address;
+        this.areaCode = areaCode;
+        this.price = price;
+    }
+
+    public AccommodationResponse(Long accommodationId, String name) {
+        this.accommodationId = accommodationId;
+        this.name = name;
+    }
 }
