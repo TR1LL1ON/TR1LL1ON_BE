@@ -1,6 +1,7 @@
 package com.ybe.tr1ll1on.domain.accommodation.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "category")
 public class Category {
 

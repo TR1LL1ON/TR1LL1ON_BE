@@ -2,7 +2,7 @@ package com.ybe.tr1ll1on.domain.accommodation.controller;
 
 import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponse;
-import com.ybe.tr1ll1on.domain.accommodation.service.AccommodationService;
+import com.ybe.tr1ll1on.domain.accommodation.service.AccommodationServiceImpl;
 import com.ybe.tr1ll1on.global.date.util.DateUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class AccommodationController {
-    private final AccommodationService accommodationService;
+    private final AccommodationServiceImpl accommodationService;
 
     @GetMapping
     @Operation(summary = "숙소 전체 조회 API", description = "숙소 전체 조회 API 입니다.")
@@ -34,31 +34,9 @@ public class AccommodationController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String region
     ) {
-        AccommodationRequest request = new AccommodationRequest();
-
-        if (checkIn != null) {
-            request.setCheckIn(checkIn);
-        }
-
-        if (checkOut != null) {
-            request.setCheckOut(checkOut);
-        }
-
-        if (personNumber != null) {
-            request.setPersonNumber(personNumber);
-        }
-
-        if (category != null) {
-            request.setCategory(category);
-        }
-
-        if (region != null) {
-            request.setAreaCode(region);
-        }
-
-        DateUtil.isValidCheckInBetweenCheckOut(request.getCheckIn(), request.getCheckOut());
-
-        return ResponseEntity.ok(accommodationService.findAccommodation(request));
+        return ResponseEntity.ok(accommodationService.findAccommodation(
+                new AccommodationRequest(checkIn, checkOut, personNumber, category, region)
+        ));
     }
 
 

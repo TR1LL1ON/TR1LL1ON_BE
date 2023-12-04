@@ -2,9 +2,8 @@ package com.ybe.tr1ll1on.domain.user.service;
 
 import static com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode.USER_NOT_FOUND;
 
+import com.ybe.tr1ll1on.domain.order.exception.OrderException;
 import com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode;
-import com.ybe.tr1ll1on.domain.order.exception.OrderNotFoundException;
-import com.ybe.tr1ll1on.domain.order.model.OrderItem;
 import com.ybe.tr1ll1on.domain.order.model.Orders;
 import com.ybe.tr1ll1on.domain.order.repository.OrderRepository;
 import com.ybe.tr1ll1on.domain.user.dto.response.MyPageDetailResponse;
@@ -63,7 +62,7 @@ public class UserService {
         // 주문 정보를 가져오면서 주문 아이템 목록을 패치 조인을 통해 미리 로딩.
         // 패치 조인은 주문과 연관된 주문 아이템들을 함께 로딩하여 N+1 쿼리 문제를 방지.
         Orders order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException(OrderExceptionCode.ORDER_NOT_FOUND));
+                .orElseThrow(() -> new OrderException(OrderExceptionCode.ORDER_NOT_FOUND));
 
         return MyPageDetailResponse.fromEntity(order);
     }
