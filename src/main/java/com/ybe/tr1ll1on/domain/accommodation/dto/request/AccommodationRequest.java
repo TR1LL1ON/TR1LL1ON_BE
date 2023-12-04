@@ -12,19 +12,19 @@ import java.time.LocalDate;
 @Setter
 public class AccommodationRequest {
 
-    LocalDate checkIn;
+    private final LocalDate checkIn;
 
-    LocalDate checkOut;
+    private final LocalDate checkOut;
 
-    Integer personNumber;
+    private final Integer personNumber;
 
-    String category;
+    private final String category;
 
-    String areaCode;
+    private final String areaCode;
 
-    Integer pageSize;
+    private final Integer pageSize;
 
-    Integer maxId;
+    private final Integer maxId;
 
     public AccommodationRequest() {
         this(null, null, null);
