@@ -3,10 +3,7 @@ package com.ybe.tr1ll1on.domain.cart.service;
 import com.ybe.tr1ll1on.domain.cart.dto.request.AddCartItemRequest;
 import com.ybe.tr1ll1on.domain.cart.dto.response.AddCartItemResponse;
 import com.ybe.tr1ll1on.domain.cart.dto.response.CartResponse;
-import com.ybe.tr1ll1on.domain.cart.exception.CartIdNotFoundException;
-import com.ybe.tr1ll1on.domain.cart.exception.CartItemIdNotFoundException;
-import com.ybe.tr1ll1on.domain.cart.exception.ProductNotExistException;
-import com.ybe.tr1ll1on.domain.cart.exception.UserNotFoundException;
+import com.ybe.tr1ll1on.domain.cart.exception.CartException;
 import com.ybe.tr1ll1on.domain.cart.model.Cart;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.cart.repository.CartItemRepository;
@@ -26,10 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.ybe.tr1ll1on.domain.cart.exception.CartIdNotFoundExceptionCode.CARTID_NOT_FOUND;
-import static com.ybe.tr1ll1on.domain.cart.exception.CartItemIdNotFoundExceptionCode.CART_ITEM_ID_NOT_FOUND;
-import static com.ybe.tr1ll1on.domain.cart.exception.ProductNotExsitExceptionCode.PRODUCT_NOT_FOUND;
-import static com.ybe.tr1ll1on.domain.cart.exception.UserNotFoundExceptionCode.USER_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.cart.exception.CartExceptionCode.CARTID_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.cart.exception.CartExceptionCode.CART_ITEM_ID_NOT_FOUND;
 import static com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode.EMPTY_PRODUCT;
 
 @Service
@@ -124,13 +119,13 @@ public class CartServiceImpl implements CartService {
 
     private Cart getCart(User user) {
         Cart cart = cartRepository.findById(user.getCart().getId())
-                .orElseThrow(() -> new CartIdNotFoundException(CARTID_NOT_FOUND));
+                .orElseThrow(() -> new CartException(CARTID_NOT_FOUND));
         return cart;
     }
 
     private CartItem getCartItem(Long cartItemId) {
         return cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new CartItemIdNotFoundException(CART_ITEM_ID_NOT_FOUND));
+                .orElseThrow(() -> new CartException(CART_ITEM_ID_NOT_FOUND));
     }
 
 }

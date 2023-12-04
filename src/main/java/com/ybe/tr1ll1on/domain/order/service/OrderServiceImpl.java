@@ -1,6 +1,6 @@
 package com.ybe.tr1ll1on.domain.order.service;
 
-import static com.ybe.tr1ll1on.domain.cart.exception.CartIdNotFoundExceptionCode.CARTID_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.cart.exception.CartExceptionCode.CARTID_NOT_FOUND;
 import static com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode.INVALID_ORDER;
 import static com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode.PRODUCT_SOLD_OUT;
 import static com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode.EMPTY_PRODUCT;
@@ -8,7 +8,7 @@ import static com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode.US
 import static com.ybe.tr1ll1on.global.date.util.DateUtil.isValidCheckInBetweenCheckOut;
 
 
-import com.ybe.tr1ll1on.domain.cart.exception.CartIdNotFoundException;
+import com.ybe.tr1ll1on.domain.cart.exception.CartException;
 import com.ybe.tr1ll1on.domain.cart.model.CartItem;
 import com.ybe.tr1ll1on.domain.cart.repository.CartItemRepository;
 import com.ybe.tr1ll1on.domain.order.exception.OrderException;
@@ -182,7 +182,7 @@ public class OrderServiceImpl implements OrderService {
 
     private CartItem getCartItem(Long cartId) {
         return cartItemRepository.findById(cartId)
-                .orElseThrow(() -> new CartIdNotFoundException(CARTID_NOT_FOUND));
+                .orElseThrow(() -> new CartException(CARTID_NOT_FOUND));
     }
 
 

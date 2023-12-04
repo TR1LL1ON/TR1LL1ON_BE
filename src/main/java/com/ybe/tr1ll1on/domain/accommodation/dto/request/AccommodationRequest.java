@@ -9,7 +9,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @Builder
 public class AccommodationRequest {
     @NotNull
