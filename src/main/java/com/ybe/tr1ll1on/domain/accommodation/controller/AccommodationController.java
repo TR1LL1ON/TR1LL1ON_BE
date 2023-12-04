@@ -3,12 +3,12 @@ package com.ybe.tr1ll1on.domain.accommodation.controller;
 import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest;
 import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponse;
 import com.ybe.tr1ll1on.domain.accommodation.service.AccommodationServiceImpl;
-import com.ybe.tr1ll1on.global.date.util.DateUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +32,16 @@ public class AccommodationController {
             @RequestParam(required = false) LocalDate checkOut,
             @RequestParam(required = false) Integer personNumber,
             @RequestParam(required = false) String category,
-            @RequestParam(required = false) String region
+            @RequestParam(required = false) String region,
+            @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Integer maxId
     ) {
         return ResponseEntity.ok(accommodationService.findAccommodation(
-                new AccommodationRequest(checkIn, checkOut, personNumber, category, region)
+                new AccommodationRequest(checkIn, checkOut, personNumber, category, region, pageSize, maxId)
         ));
     }
+
+
 
 
 }

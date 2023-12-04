@@ -45,8 +45,12 @@
                         <if test="areaCode != null">
                             and a.area_code = #{areaCode}
                         </if>
+                        <if test="maxAccommodationId != null">
+                            and a.accommodation_id > #{maxAccommodationId}
+                        </if>
                     ) as sub
               group by sub.accommodationId, sub.imageUrl, sub.address, sub.areaCode, sub.name, sub.productId, sub.latitude, sub.longitude) as main
         group by main.accommodationId, main.imageUrl, main.address, main.areaCode, main.name, main.latitude, main.longitude
+        limit #{pageSize}
     </select>
 </mapper>
