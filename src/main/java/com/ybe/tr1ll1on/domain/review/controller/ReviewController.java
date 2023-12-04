@@ -4,6 +4,7 @@ import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.response.*;
 import com.ybe.tr1ll1on.domain.review.service.ReviewService;
+import com.ybe.tr1ll1on.domain.review.service.ReviewServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,11 +30,12 @@ public class ReviewController {
             content = @Content(schema = @Schema(implementation = ProductReviewListResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping("/{accommodationId}")
-    public ResponseEntity<List<ProductReviewListResponse>> getProductReviews(@PathVariable Long accommodationId) {
+    public ResponseEntity<List<ProductReviewListResponse>> getProductReviews(
+            @PathVariable Long accommodationId
+    ) {
         List<ProductReviewListResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId);
         return ResponseEntity.ok(productReviewListResponse);
     }
-
 
     @Operation(summary = "내 리뷰 조회 API", description = "내 리뷰 조회 API 입니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공시",
@@ -50,10 +52,13 @@ public class ReviewController {
             content = @Content(schema = @Schema(implementation = ReviewCreateResponse.class)))
     @SecurityRequirement(name = "jwt")
     @PostMapping
-    public ResponseEntity<ReviewCreateResponse> createReview(@Valid @RequestBody ReviewCreateRequest reviewCreateRequest) {
+    public ResponseEntity<ReviewCreateResponse> createReview(
+            @Valid @RequestBody ReviewCreateRequest reviewCreateRequest
+    ) {
         ReviewCreateResponse reviewCreateResponse = reviewService.createReview(reviewCreateRequest);
         return ResponseEntity.ok(reviewCreateResponse);
     }
+
     @Operation(summary = "리뷰 수정 API", description = "리뷰 수정 API 입니다.")
     @ApiResponse(responseCode = "201", description = "수정 성공시",
             content = @Content(schema = @Schema(implementation = ReviewUpdateResponse.class)))
@@ -61,16 +66,20 @@ public class ReviewController {
     @PutMapping("/{reviewId}")
     public ResponseEntity<ReviewUpdateResponse> updateReview(
             @PathVariable Long reviewId,
-            @Valid @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
+            @Valid @RequestBody ReviewUpdateRequest reviewUpdateRequest
+    ) {
         ReviewUpdateResponse reviewUpdateResponse = reviewService.updateReview(reviewId, reviewUpdateRequest);
         return ResponseEntity.ok(reviewUpdateResponse);
     }
+
     @Operation(summary = "리뷰 삭제 API", description = "리뷰 삭제 API 입니다.")
     @ApiResponse(responseCode = "200", description = "삭제 성공시",
             content = @Content(schema = @Schema(implementation = ReviewDeleteResponse.class)))
     @SecurityRequirement(name = "jwt")
     @DeleteMapping("/{reviewId}")
-    public ResponseEntity<ReviewDeleteResponse> deleteReview(@PathVariable Long reviewId) {
+    public ResponseEntity<ReviewDeleteResponse> deleteReview(
+            @PathVariable Long reviewId
+    ) {
         ReviewDeleteResponse reviewDeleteResponse = reviewService.deleteReview(reviewId);
         return ResponseEntity.ok(reviewDeleteResponse);
     }
