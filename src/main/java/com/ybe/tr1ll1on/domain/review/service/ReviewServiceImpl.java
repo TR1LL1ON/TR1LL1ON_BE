@@ -47,21 +47,35 @@ public class ReviewServiceImpl implements ReviewService{
      * @return 상품에 대한 리뷰 목록
      */
     @Transactional
-    public List<ProductReviewListResponse> getProductReviews(Long accommodationId) {
+    public List<ProductReviewResponse> getProductReviews(Long accommodationId) {
+        // 1. 특정 숙소에 대한 정보를 가져오면서 관련된 데이터를 패치 조인을 통해 즉시 로딩한다.
+        // 2. 관련된 데이터엔 상품 목록이 포함되어 있다.
+        // 3. ※ 주의 - 즉시 로딩 대상인 엔티티와 연관관계인 엔티티가 eager type 일 경우 함께 즉시 로딩된다.
         Accommodation accommodation = getAccommodation(accommodationId);
 
-        List<Product> Products = accommodation.getProductList();
-        List<ProductReviewListResponse> productReviewListResponse = new ArrayList<>();
+        // 1. 특정 숙소에 대한 정보는 위에서 즉시 로딩된 상태다.
+        // 2. 영속성 컨텍스트에서 이미 해당 데이터를 가지고 있어 추가로 데이터베이스에 접근하지 않는다.
+        // 3. 그렇기 때문에 accommodation 엔티티 접근 시 추가 쿼리가 발생하지 않는다.
+        List<Product> products = accommodation.getProductList();
+        List<ProductReviewResponse> productReviewResponseList = new ArrayList<>();
 
-        for (Product product : Products) {
-            List<Review> allReviews = product.getReviewList();
-            productReviewListResponse.addAll(allReviews.stream()
-                    .map(ProductReviewListResponse::fromEntity)
+        // 특정 숙소에 대한 상품 목록도 마찬가지로 영속성 컨텍스트에 이미 저장된 상태이다.
+        for (Product product : products) {
+            List<Review> reviews = product.getReviewList();
+
+            // 1. 특정 상품의 리뷰 리스트에 대한 batch size = 100 으로 설정한 상태이다.
+            //    - 이후 리뷰 엔티티 접근 시 지정한 개수만큼 상품 아이디에 해당하는 리뷰 즉시 로딩
+            // 2. 특정 상품의 이미지 리스트에 대한 batch size = 100 으로 설정한 상태이다.
+            //    - 이후 상품 이미지 엔티티 접근 시 지정한 개수만큼 상품 아이디에 해당하는 이미지 즉시 로딩
+            // 3. 리뷰와 관련된 상품 정보는 이미 로딩된 상태이므로 추가 쿼리가 발생하지 않는다.
+            productReviewResponseList.addAll(reviews.stream()
+                    .map(ProductReviewResponse::fromEntity)
                     .collect(Collectors.toList()));
         }
 
-        return productReviewListResponse;
+        return productReviewResponseList;
     }
+
 
     /**
      * 현재 사용자의 리뷰 목록을 조회
@@ -69,14 +83,16 @@ public class ReviewServiceImpl implements ReviewService{
      * @return 현재 사용자의 리뷰 목록
      */
     @Transactional
-    public List<UserReviewListResponse> getUserReviews() {
+    public List<UserReviewResponse> getUserReviews() {
         User user = getUser();
 
-        List<Review> reviews = reviewRepository.findReviewsByUser(user);
+        List<Review> reviews = reviewRepository.getReviewsByUserWithDetails(user);
 
-        return reviews.stream()
-                .map(UserReviewListResponse::fromEntity)
+        List<UserReviewResponse> userReviewResponseList = reviews.stream()
+                .map(UserReviewResponse::fromEntity)
                 .collect(Collectors.toList());
+
+        return userReviewResponseList;
     }
 
     /**
@@ -159,11 +175,10 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     private Accommodation getAccommodation(Long accommodationId) {
-        Accommodation accommodation = accommodationRepository.findById(accommodationId)
+        Accommodation accommodation = accommodationRepository.getAccommodationWithProductsById(accommodationId)
                 .orElseThrow(() -> new AccommodationException(ACCOMMODATION_NOT_FOUND));
         return accommodation;
     }
-
 
     private User getUser() {
         return userRepository.findById(SecurityUtil.getCurrentUserId())
