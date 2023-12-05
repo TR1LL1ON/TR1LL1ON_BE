@@ -90,7 +90,6 @@ public class JwtTokenProvider {
     // Response Cookie를 생성하여 Refresh Token을 저장한다.
     private void storeRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
-                .domain("tr1ll1on.site")
                 .httpOnly(true)     // 1. JavaScript에서 쿠키에 접근을 막기 위해 httpOnly 설정
                 .secure(true)       // 2. HTTPS에서만 쿠키 전송을 허용
                 .path("/")      // 3. 쿠키가 전송될 수 있는 경로 설정

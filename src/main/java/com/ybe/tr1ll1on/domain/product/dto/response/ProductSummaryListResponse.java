@@ -42,7 +42,7 @@ public class ProductSummaryListResponse {
             return ProductSummaryResponse.builder()
                     .accommodationName(product.getAccommodation().getName())
                     .roomName(product.getName())
-                    .imageUrl(product.getAccommodation().getImages().get(0).getImageUrl())
+                    .imageUrl(product.getAccommodation().getAccommodationImageList().get(0).getImageUrl())
                     .category(product.getAccommodation().getCategory().getCategoryCode())
                     .build();
         }

@@ -24,7 +24,6 @@ public class MyPageDetailResponse {
     private List<OrderItemResponse> orderItemList;
 
     public static MyPageDetailResponse fromEntity(Orders order) {
-        // 패치 조인을 통해 미리 가져온 주문 아이템 목록을 orderItemResponses 로 변환.
         List<OrderItemResponse> orderItemResponses = order.getOrderItemList().stream()
                 .map(OrderItemResponse::fromEntity)
                 .collect(Collectors.toList());

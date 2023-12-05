@@ -82,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
                 .score(5.0)
                 .rooms(productResponseList)
                 .image(
-                        accommodation.getImages().stream().map(
+                        accommodation.getAccommodationImageList().stream().map(
                                 AccommodationImageResponse::of
                         ).collect(Collectors.toList())
                 )

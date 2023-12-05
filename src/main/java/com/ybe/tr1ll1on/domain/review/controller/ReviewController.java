@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @Tag(name = "리뷰 API", description = "리뷰 관련 API 모음입니다.")
 @RestController
 @RequiredArgsConstructor
@@ -24,26 +25,25 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
-
     @Operation(summary = "숙소 리뷰 조회 API", description = "숙소 리뷰 조회 API 입니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공시",
-            content = @Content(schema = @Schema(implementation = ProductReviewListResponse.class)))
+            content = @Content(schema = @Schema(implementation = ProductReviewResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping("/{accommodationId}")
-    public ResponseEntity<List<ProductReviewListResponse>> getProductReviews(
+    public ResponseEntity<List<ProductReviewResponse>> getProductReviews(
             @PathVariable Long accommodationId
     ) {
-        List<ProductReviewListResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId);
+        List<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId);
         return ResponseEntity.ok(productReviewListResponse);
     }
 
     @Operation(summary = "내 리뷰 조회 API", description = "내 리뷰 조회 API 입니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공시",
-            content = @Content(schema = @Schema(implementation = UserReviewListResponse.class)))
+            content = @Content(schema = @Schema(implementation = UserReviewResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping
-    public ResponseEntity<List<UserReviewListResponse>> getUserReviews() {
-        List<UserReviewListResponse> userReviewListResponse = reviewService.getUserReviews();
+    public ResponseEntity<List<UserReviewResponse>> getUserReviews() {
+        List<UserReviewResponse> userReviewListResponse = reviewService.getUserReviews();
         return ResponseEntity.ok(userReviewListResponse);
     }
 
