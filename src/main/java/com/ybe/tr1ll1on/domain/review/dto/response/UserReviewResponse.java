@@ -24,6 +24,9 @@ public class UserReviewResponse {
     @Schema(example = "매우 만족합니다. 청결하네요!")
     private String content;
 
+    @Schema(example = "56")
+    private Long orderItemId;
+
     @ArraySchema(schema = @Schema(implementation = AccommodationDetailsResponse.class))
     private AccommodationDetailsResponse accommodationDetails;
     @ArraySchema(schema = @Schema(implementation = ProductDetailsResponse.class))
@@ -38,6 +41,7 @@ public class UserReviewResponse {
         private String accommodationName;
 
         public static AccommodationDetailsResponse fromEntity(Review review) {
+
             return AccommodationDetailsResponse.builder()
                     .accommodationId(review.getProduct().getAccommodation().getId())
                     .accommodationName(review.getProduct().getAccommodation().getName())
@@ -55,6 +59,7 @@ public class UserReviewResponse {
         private String productName;
 
         public static ProductDetailsResponse fromEntity(Review review) {
+
             return ProductDetailsResponse.builder()
                     .productId(review.getProduct().getId())
                     .productImage(review.getProduct().getProductImageList().get(0).getImageUrl())
@@ -64,13 +69,15 @@ public class UserReviewResponse {
     }
 
     public static UserReviewResponse fromEntity(Review review) {
+
         return UserReviewResponse.builder()
                 .reviewId(review.getId())
-                .accommodationDetails(AccommodationDetailsResponse.fromEntity(review))
-                .productDetails(ProductDetailsResponse.fromEntity(review))
                 .reviewDate(review.getReviewDate())
                 .score(review.getScore())
                 .content(review.getContent())
+                .orderItemId(review.getOrderItem().getId())
+                .accommodationDetails(AccommodationDetailsResponse.fromEntity(review))
+                .productDetails(ProductDetailsResponse.fromEntity(review))
                 .build();
     }
 }
