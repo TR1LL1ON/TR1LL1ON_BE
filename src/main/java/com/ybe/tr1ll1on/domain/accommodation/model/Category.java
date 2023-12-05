@@ -28,4 +28,7 @@ public class Category {
     @OneToMany(mappedBy = "category",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Accommodation> accommodationList = new ArrayList<>();
 
+    public Category(String categoryCode) {
+        this.categoryCode = categoryCode;
+    }
 }
