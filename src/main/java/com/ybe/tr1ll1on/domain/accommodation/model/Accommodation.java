@@ -59,4 +59,8 @@ public class Accommodation {
     public void setId(Long accommodationId) {
         this.id = accommodationId;
     }
+
+    public void setFacility(AccommodationFacility facility) {
+        this.facility = facility;
+    }
 }

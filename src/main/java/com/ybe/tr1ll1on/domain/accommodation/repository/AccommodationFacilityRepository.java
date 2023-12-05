@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccommodationFacilityRepository extends JpaRepository<AccommodationFacility, Long> {
+
+    AccommodationFacility findByAccommodationId(Long id);
 }

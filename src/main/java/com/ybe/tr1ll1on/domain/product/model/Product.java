@@ -53,4 +53,8 @@ public class Product {
     public void setAccommodation(Accommodation accommodation) {
         this.accommodation = accommodation;
     }
+
+    public void setProductFacility(ProductFacility productFacility) {
+        this.productFacility = productFacility;
+    }
 }
