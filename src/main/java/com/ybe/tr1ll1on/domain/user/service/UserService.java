@@ -7,7 +7,7 @@ import com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode;
 import com.ybe.tr1ll1on.domain.order.model.Orders;
 import com.ybe.tr1ll1on.domain.order.repository.OrderRepository;
 import com.ybe.tr1ll1on.domain.user.dto.response.MyPageDetailResponse;
-import com.ybe.tr1ll1on.domain.user.dto.response.MyPageListResponse;
+import com.ybe.tr1ll1on.domain.user.dto.response.MyPageResponse;
 import com.ybe.tr1ll1on.domain.user.exception.InValidUserException;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
@@ -27,49 +27,42 @@ public class UserService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
-    /**
-     * 사용자의 마이페이지 정보 ( 주문 정보가 담김 ) 를 가져오는 메서드.
-     *
-     * @return 현재 사용자의 주문 목록을 MyPageListResponse 로 변환한 리스트
-     */
-    @Transactional
-    public List<MyPageListResponse> getMyPage() {
-
-        // 사용자 정보를 가져오면서 주문 목록을 패치 조인을 통해 미리 로딩.
-        // 패치 조인은 사용자와 연관된 주문들을 함께 로딩하여 N+1 쿼리 문제를 방지.
+    public List<MyPageResponse> getMyPage() {
+        // 1. 현재 로그인한 사용자의 정보를 가져온다.
         User user = getUser();
 
-        // 패치 조인을 통해 미리 가져온 주문 목록을 MyPageListResponse 로 변환.
-        List<MyPageListResponse> myPageListResponse = user.getOrderList().stream()
-                .map(MyPageListResponse::fromEntity)
+        // 2. 해당 사용자의 주문 목록을 가져오면서 관련된 데이터들을 패치 조인을 통해 즉시 로딩한다.
+        // 3. 관련된 데이터엔 상품 및 숙소에 대한 정보가 포함되어 있다.
+        // 4. 숙소 이미지에 대한 정보는 배치 사이즈 설정을 통해 해당 개수만큼 즉시 로딩한다.
+        List<Orders> orders = orderRepository.getUserOrdersWithDetails(user);
+
+        // 5. 패치 조인을 통해 미리 가져온 주문 목록에 대한 정보를 MyPageListResponse 로 변환.
+        List<MyPageResponse> myPageResponseList = orders.stream()
+                .map(MyPageResponse::fromEntity)
                 .collect(Collectors.toList());
 
-        return myPageListResponse;
+        return myPageResponseList;
     }
 
-
-    /**
-     * 사용자의 특정 주문에 대한 주문 아이템을 가져오는 메서드. ( 예약한 객실 정보 )
-     *
-     * @param orderId 조회할 주문의 ID
-     * @return 주문에 포함된 상품 목록을 MyPageDetailResponse 로 변환한 객체
-     */
     @Transactional
     public MyPageDetailResponse getMyPageDetails(Long orderId) {
-        Long userId = SecurityUtil.getCurrentUserId();
-        User user = userRepository.getUserById(userId);
+        // 1. 현재 로그인한 사용자의 정보를 가져온다.
+        User user = getUser();
 
-        // 주문 정보를 가져오면서 주문 아이템 목록을 패치 조인을 통해 미리 로딩.
-        // 패치 조인은 주문과 연관된 주문 아이템들을 함께 로딩하여 N+1 쿼리 문제를 방지.
+        // 2. 해당 사용자의 특정 주문을 가져오면서 관련된 데이터들을 패치 조인을 통해 즉시 로딩한다.
+        // 3. 관련된 데이터엔 상품 및 숙소에 대한 정보가 포함되어 있다.
+        // 4. 상품 이미지에 대한 정보는 배치 사이즈 설정을 통해 해당 개수만큼 즉시 로딩한다.
         Orders order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderException(OrderExceptionCode.ORDER_NOT_FOUND));
 
-        return MyPageDetailResponse.fromEntity(order);
+        // 5. 패치 조인을 통해 미리 가져온 주문에 대한 정보를 MyPageDetailResponse 로 변환.
+        MyPageDetailResponse myPageDetailResponse = MyPageDetailResponse.fromEntity(order);
+
+        return myPageDetailResponse;
     }
 
     private User getUser() {
         return userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new InValidUserException(USER_NOT_FOUND));
     }
-
 }
