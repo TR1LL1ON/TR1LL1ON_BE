@@ -10,11 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import lombok.Setter;
 
 @Entity
+@Table(name = "orders")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,17 +24,18 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    private LocalDateTime orderCreateDate;
+    private Payment payment;
+    private Integer totalPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    private LocalDateTime orderCreateDate;
-
-    private Payment payment;
-
-    @Setter
-    private Integer totalPrice;
-
-    @OneToMany(mappedBy = "orders",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "orders", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<OrderItem> orderItemList = new ArrayList<>();
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 }
