@@ -104,7 +104,7 @@
 //    }
 //
 //    private Accommodation createAccommodation(Map<String, Object> item) {
-//        String name = (String) item.get("title");
+//        String name = getAccommodationName((String) item.get("title"));
 //        String address = (String) item.get("addr1");
 //        String phone = (String) item.get("tel");
 //        String longitude = (String) item.get("mapx");
@@ -119,6 +119,12 @@
 //                .latitude(latitude)
 //                .areaCode(areaCode)
 //                .build();
+//    }
+//
+//    private static String getAccommodationName(String title) {
+//        // 주어진 title 문자열에 "[" 문자가 포함되어 있는지 확인
+//        // "[" 문자가 있으면 문자열을 "["를 기준으로 분리하고, 앞 부분만 반환. 없으면 title 그대로 반환.
+//        return title.contains("[") ? title.split("\\[")[0] : title;
 //    }
 //
 //    private AccommodationFacility createAccommodationFacility(Map<String, Object> item) throws URISyntaxException, JsonProcessingException {
