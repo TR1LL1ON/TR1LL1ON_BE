@@ -15,8 +15,9 @@
         main.name            as name,
         main.latitude        as latitude,
         main.longitude       as longitude,
-        min(main.total)      as price
-        from (select accommodationId, imageUrl, address, areaCode, name, latitude, longitude, sum(price) as total
+        min(main.total)      as price,
+        coalesce(avg(score), 0)           as score
+        from (select accommodationId, imageUrl, address, areaCode, name, latitude, longitude, sum(price) as total, avg(score) as score
         from (select a.accommodation_id as accommodationId,
         image_url          as imageUrl,
         address            as address,
@@ -25,7 +26,8 @@
         price              as price,
         p.product_id       as productId,
         latitude           as latitude,
-        longitude          as longitude
+        longitude          as longitude,
+        score              as score
         from accommodation a
         left join (select image_url, accommodation_id
         from accommodation_image
@@ -37,6 +39,7 @@
         left join product p on a.accommodation_id = p.accommodation_id
         left join product_info_per_night pipn
         on pipn.product_id = p.product_id and date between #{checkIn} and #{checkOut}
+        left join review r on r.product_id = p.product_id
         where p.maximum_number <![CDATA[>=]]>
         #{personNumber}
         <if test="category != null">
