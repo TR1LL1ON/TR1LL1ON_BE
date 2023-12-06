@@ -46,7 +46,7 @@ public class AccommodationRequest {
         this.personNumber = personNumber == null ? 2 : personNumber;
         this.category = category;
         this.areaCode = areaCode;
-        this.pageSize = pageSize == null ? 10 : pageSize;
+        this.pageSize = pageSize == null ? 20 : pageSize;
         this.maxId = maxId;
         DateUtil.isValidCheckInBetweenCheckOut(this.checkIn, this.checkOut);
         if (this.personNumber < 1) {
