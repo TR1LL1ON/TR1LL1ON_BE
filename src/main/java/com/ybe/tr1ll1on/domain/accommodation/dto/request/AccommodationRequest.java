@@ -1,56 +1,56 @@
 package com.ybe.tr1ll1on.domain.accommodation.dto.request;
 
+import com.ybe.tr1ll1on.domain.accommodation.exception.AccommodationException;
+import com.ybe.tr1ll1on.domain.accommodation.exception.AccommodationExceptionCode;
 import com.ybe.tr1ll1on.global.date.util.DateUtil;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
 public class AccommodationRequest {
-    @NotNull
-    LocalDate checkIn;
 
-    @NotNull
-    LocalDate checkOut;
+    private final LocalDate checkIn;
 
-    @NotNull
-    @Min(message = "인원 수는 1명 이상이어야 합니다", value = 1L)
-    Integer personNumber;
+    private final LocalDate checkOut;
 
-    String category;
+    private final Integer personNumber;
 
-    String areaCode;
+    private final String category;
+
+    private final String areaCode;
+
+    private final Integer pageSize;
+
+    private final Integer maxId;
 
     public AccommodationRequest() {
-        this.checkIn = LocalDate.now();
-        this.checkOut = checkIn.plusDays(1);
-        this.personNumber = 2;
+        this(null, null, null);
     }
-    public AccommodationRequest(LocalDate checkIn, LocalDate checkOut, Integer personNumber) {
-        this.checkIn = checkIn == null ? LocalDate.now() : checkIn;
-        this.checkOut = checkOut == null ? LocalDate.now().plusDays(1) : checkOut;
-        this.personNumber = personNumber == null ? 2 : personNumber;
 
-        DateUtil.isValidCheckInBetweenCheckOut(
-                this.checkIn, this.checkOut
-        );
+    public AccommodationRequest(LocalDate checkIn, LocalDate checkOut, Integer personNumber) {
+        this(checkIn, checkOut, personNumber, null, null);
     }
 
     public AccommodationRequest(
-            LocalDate checkIn, LocalDate checkOut, Integer personNumber,
-            String category, String areaCode
+            LocalDate checkIn, LocalDate checkOut, Integer personNumber, String category, String areaCode
     ) {
+        this(checkIn, checkOut, personNumber, category, areaCode, null, null);
+    }
+
+    public AccommodationRequest(LocalDate checkIn, LocalDate checkOut, Integer personNumber, String category, String areaCode, Integer pageSize, Integer maxId) {
         this.checkIn = checkIn == null ? LocalDate.now() : checkIn;
         this.checkOut = checkOut == null ? LocalDate.now().plusDays(1) : checkOut;
         this.personNumber = personNumber == null ? 2 : personNumber;
         this.category = category;
         this.areaCode = areaCode;
-
-        DateUtil.isValidCheckInBetweenCheckOut(
-                this.checkIn, this.checkOut
-        );
+        this.pageSize = pageSize == null ? 10 : pageSize;
+        this.maxId = maxId;
+        DateUtil.isValidCheckInBetweenCheckOut(this.checkIn, this.checkOut);
+        if (this.personNumber < 1) {
+            throw new AccommodationException(AccommodationExceptionCode.INVALID_PERSON_NUMBER);
+        }
     }
 }
