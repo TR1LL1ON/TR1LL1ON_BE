@@ -12,10 +12,10 @@
 
  import com.fasterxml.jackson.databind.ObjectMapper;
  import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
- import com.ybe.tr1ll1on.domain.product.dto.request.AccommodationRequest;
+ import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest;
  import com.ybe.tr1ll1on.domain.product.exception.ProductException;
- import com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode;
  import com.ybe.tr1ll1on.domain.product.service.ProductService;
+ import com.ybe.tr1ll1on.domain.product.service.ProductServiceImpl;
  import java.nio.charset.StandardCharsets;
  import java.time.LocalDate;
  import org.junit.jupiter.api.BeforeEach;

@@ -6,6 +6,7 @@ import com.ybe.tr1ll1on.domain.order.model.Orders;
 import com.ybe.tr1ll1on.domain.review.model.Review;
 import com.ybe.tr1ll1on.security.common.Authority;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,8 @@ import java.util.List;
 @Table(name = "user")
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +33,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+//    private Cart cart;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -42,18 +49,11 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Review> reviewList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserFacility userFacility;
-
-    @Builder
-    public User(String email, String name, String password, Authority authority) {
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.authority = authority;
-    }
-
     public void setId(Long userId) {
         this.id = userId;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

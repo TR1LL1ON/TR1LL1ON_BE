@@ -3,24 +3,24 @@ package com.ybe.tr1ll1on.domain.product.model;
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.review.model.Review;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "product")
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Product {
-
     @Id
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private Integer count;
     private String checkInTime;
@@ -28,39 +28,38 @@ public class Product {
     private Integer standardNumber;
     private Integer maximumNumber;
 
+//    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+//    private ProductFacility productFacility;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_facility_id")
+    private ProductFacility productFacility;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Review> reviewList = new ArrayList<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    @BatchSize(size = 100)
+    private List<ProductImage> productImageList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ProductInfoPerNight> productInfoPerNightList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<ProductImage> productImageList = new ArrayList<>();
-
-    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @Setter
-    private ProductFacility productFacility;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    @BatchSize(size = 100)
+    private List<Review> reviewList = new ArrayList<>();
 
     public void setAccommodation(Accommodation accommodation) {
         this.accommodation = accommodation;
     }
 
-    @Builder
-    public Product(String name, String checkInTime,
-                   String checkOutTime, int standardNumber, int maximumNumber, int count) {
-        this.name = name;
-        this.checkInTime = checkInTime;
-        this.checkOutTime = checkOutTime;
-        this.standardNumber = standardNumber;
-        this.maximumNumber = maximumNumber;
-        this.count = count;
+    public void setProductFacility(ProductFacility productFacility) {
+        this.productFacility = productFacility;
     }
 
-    public void setId(Long productId) {
-        this.id = productId;
+    public void setProductImageList(
+            List<ProductImage> productImageList) {
+        this.productImageList = productImageList;
     }
 }

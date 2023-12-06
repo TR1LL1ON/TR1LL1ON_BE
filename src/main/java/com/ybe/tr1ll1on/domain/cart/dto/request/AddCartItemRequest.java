@@ -12,7 +12,6 @@ public class AddCartItemRequest {
     private Long productId;
 
     @NotNull(message = "인원 수를 입력하세요")
-
     private Integer personNumber;
 
     @NotNull(message = "체크인 날짜를 입력하세요")

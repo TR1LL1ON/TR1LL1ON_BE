@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductFacilityRepository extends JpaRepository<ProductFacility, Long> {
+
+    ProductFacility findByProductId(Long id);
 }

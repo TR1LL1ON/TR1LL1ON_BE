@@ -1,19 +1,16 @@
 package com.ybe.tr1ll1on.domain.product.dto.response;
 
-import com.ybe.tr1ll1on.domain.review.dto.response.ProductReviewListResponse;
+import com.ybe.tr1ll1on.domain.review.dto.response.ProductReviewResponse;
 
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
-import com.ybe.tr1ll1on.domain.review.dto.response.ReviewCreateResponse.ReviewDetails;
+
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Builder
 @Getter
@@ -60,8 +57,8 @@ public class AccommodationDetailResponse {
     @Schema(example = "숙소 편의시설")
     private AccommodationFacilityResponse facility;
 
-    @ArraySchema(schema = @Schema(implementation = ProductReviewListResponse.class))
-    private List<ProductReviewListResponse> reviews;
+    @ArraySchema(schema = @Schema(implementation = ProductReviewResponse.class))
+    private List<ProductReviewResponse> reviews;
 
     @Schema(example = "37.65908725483671")
     private String latitude;

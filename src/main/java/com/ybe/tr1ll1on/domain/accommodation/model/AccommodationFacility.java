@@ -9,22 +9,22 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "accommodation_facility")
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AccommodationFacility {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "accommodation_facility_id")
     private Long id;
+
     private Boolean hasCooking;
     private Boolean hasParking;
     private Boolean hasSports;
     private Boolean hasSauna;
     private Boolean hasBeauty;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 

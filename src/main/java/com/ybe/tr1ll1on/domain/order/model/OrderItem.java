@@ -11,10 +11,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "order_item")
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,23 +23,16 @@ public class OrderItem {
     private Long id;
 
     private LocalDate startDate;
-
     private LocalDate endDate;
-
     private Integer personNumber;
-
     private Integer price;
-
     private Boolean reviewWritten;
 
-    @OneToOne(mappedBy = "orderItem", cascade = CascadeType.REMOVE)
-    private Review review;
-
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Orders orders;
 

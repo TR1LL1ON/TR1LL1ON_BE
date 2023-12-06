@@ -23,6 +23,7 @@
 //import java.time.LocalDate;
 //import java.util.concurrent.ThreadLocalRandom;
 //import lombok.RequiredArgsConstructor;
+//import lombok.extern.slf4j.Slf4j;
 //import org.springframework.boot.ApplicationArguments;
 //import org.springframework.boot.ApplicationRunner;
 //import org.springframework.stereotype.Component;
@@ -37,6 +38,7 @@
 //
 //@Component
 //@RequiredArgsConstructor
+//@Slf4j
 //public class AppStartupRunner implements ApplicationRunner {
 //
 //    private final CategoryRepository categoryRepository;
@@ -59,7 +61,34 @@
 //
 //    @Override
 //    public void run(ApplicationArguments args) throws Exception {
-//        saveAccommodationData();
+////        saveAccommodationData();
+////        saveProductInfoPerNight();
+////        saveProductImageList();
+//    }
+//
+//    private void saveProductImageList() {
+//        List<Product> productList = productRepository.findAll();
+//        for (Product product : productList) {
+//            if (product.getProductImageList() == null || product.getProductImageList().size() == 0) {
+//                log.info("======== {} NOT IMAGE! =======", product.getId());
+//                List<ProductImage> productImageList = createRandomProductImages();
+//                product.setProductImageList(productImageList);
+//                for (ProductImage productImage : productImageList) {
+//                    productImage.setProduct(product);
+//                }
+//                productImageRepository.saveAll(productImageList);
+//            }
+//        }
+//        productRepository.saveAll(productList);
+//    }
+//
+//    private void saveProductInfoPerNight() {
+//        List<Product> productList = productRepository.findAll();
+//
+//        for (Product product : productList) {
+//            saveProductInfoPerNight(product);
+//        }
+//        productRepository.saveAll(productList);
 //    }
 //
 //    @Transactional
@@ -104,7 +133,7 @@
 //    }
 //
 //    private Accommodation createAccommodation(Map<String, Object> item) {
-//        String name = (String) item.get("title");
+//        String name = extractAccommodationName((String) item.get("title"));
 //        String address = (String) item.get("addr1");
 //        String phone = (String) item.get("tel");
 //        String longitude = (String) item.get("mapx");
@@ -119,6 +148,12 @@
 //                .latitude(latitude)
 //                .areaCode(areaCode)
 //                .build();
+//    }
+//
+//    private String extractAccommodationName(String title) {
+//        // 주어진 title 문자열에 "[" 문자가 포함되어 있는지 확인
+//        // "[" 문자가 있으면 문자열을 "["를 기준으로 분리하고, 앞 부분만 반환. 없으면 title 그대로 반환.
+//        return title.contains("[") ? title.split("\\[")[0] : title;
 //    }
 //
 //    private AccommodationFacility createAccommodationFacility(Map<String, Object> item) throws URISyntaxException, JsonProcessingException {
@@ -173,6 +208,8 @@
 //
 //        accommodationFacility.setAccommodation(savedAccommodation);
 //        accommodationFacilityRepository.save(accommodationFacility);
+//
+//        savedAccommodation.setFacility(accommodationFacility);
 //
 //        return savedAccommodation;
 //    }
@@ -238,7 +275,10 @@
 //                productFacility.setProduct(product);
 //                productFacilityRepository.save(productFacility);
 //
-//                List<ProductImage> productImages = createRandomProductImages(random);
+//                product.setProductFacility(productFacility);
+//
+//                // 10. 데이터베이스 저장을 위한 Random ProductImages Entity 생성
+//                List<ProductImage> productImages = createRandomProductImages();
 //                for (ProductImage productImage : productImages) {
 //                    productImage.setProduct(product);
 //                    productImageRepository.save(productImage);
@@ -259,6 +299,8 @@
 //            productFacility.setProduct(product);
 //            productFacilityRepository.save(productFacility);
 //
+//            product.setProductFacility(productFacility);
+//
 //            // 10. ProductImage Entities 생성 및 데이터베이스 저장
 //            List<ProductImage> productImages = createProductImages(item);
 //            for (ProductImage productImage : productImages) {
@@ -266,7 +308,6 @@
 //                productImageRepository.save(productImage);
 //            }
 //
-//            saveProductInfoPerNight(product);
 //        }
 //    }
 //
@@ -318,14 +359,20 @@
 //
 //    private List<ProductImage> createProductImages(Map<String, Object> item) {
 //        List<ProductImage> productImages = new ArrayList<>();
+//
 //        for (int i = 1; i <= 4; i++) {
 //            String imageUrl = (String) item.get("roomimg" + i);
 //
-//            if (!imageUrl.isEmpty()) {
+//            if (i == 1 && imageUrl.isEmpty()) {
+//                productImages = createRandomProductImages();
+//                break;
+//            } else if (!imageUrl.isEmpty()) {
 //                ProductImage productImage = ProductImage.builder()
 //                        .imageUrl(imageUrl)
 //                        .build();
 //                productImages.add(productImage);
+//            } else {
+//                break;
 //            }
 //        }
 //
@@ -333,7 +380,9 @@
 //    }
 //
 //    private static Product createRandomProduct(Accommodation accommodation, Random random) {
-//        String[] roomTypes = {"슈페리어 룸", "디럭스 룸", "캐릭터 룸", "그랜드 디럭스 룸", "그랜드 디럭스 패밀리 트윈 룸", "프리미어 패밀리 트윈 룸", "주니어 스위트 룸", "디럭스 스위트 룸", "로얄 스위트 룸", "주니어 스위트 룸", "프리미어 스위트 룸"};
+//        String[] roomTypes = {"슈페리어 룸", "디럭스 룸", "캐릭터 룸", "그랜드 디럭스 룸",
+//                "그랜드 디럭스 패밀리 트윈 룸", "프리미어 패밀리 트윈 룸", "주니어 스위트 룸",
+//                "디럭스 스위트 룸", "로얄 스위트 룸", "주니어 스위트 룸", "프리미어 스위트 룸"};
 //        String roomType = roomTypes[random.nextInt(roomTypes.length)];
 //
 //        return Product.builder()
@@ -363,7 +412,7 @@
 //                .build();
 //    }
 //
-//    private static List<ProductImage> createRandomProductImages(Random random) {
+//    private static List<ProductImage> createRandomProductImages() {
 //        List<String> imageUrls = Arrays.asList(
 //                "http://tong.visitkorea.or.kr/cms/resource/50/2705650_image2_1.jpg",
 //                "http://tong.visitkorea.or.kr/cms/resource/51/2705651_image2_1.jpg",
@@ -381,15 +430,17 @@
 //        return productImages;
 //    }
 //
-//    //product의 11월 24일부터 ~ 12월 10일까지의 정보
+////product의 11월 24일부터 ~ 12월 10일까지의 정보
 //    private void saveProductInfoPerNight(Product product) {
-//        LocalDate startDate = LocalDate.of(2023, 11, 24); // 시작일 설정 (11월 24일)
-//        LocalDate endDate = LocalDate.of(2023, 12, 10);   // 종료일 설정 (12월 10일)
+//        LocalDate startDate = LocalDate.of(2023, 12, 05); // 시작일 설정 (12월 05일)
+//        LocalDate endDate = LocalDate.of(2023, 12, 12);   // 종료일 설정 (12월 12일)
 //        LocalDate currDate = startDate;
 //
 //        int randomNum = ThreadLocalRandom.current().nextInt(PRICE_MIN, PRICE_MAX);
-//        int weekend = (randomNum + 2) * 10000; //주말 가격
 //        int weekday = (randomNum) * 10000; //평일 가격
+//        int weekend = (randomNum + 2) * 10000; //주말 가격
+//
+//        List<ProductInfoPerNight> productInfoPerNightList = new ArrayList<>();
 //
 //        while (!currDate.isAfter(endDate)) {
 //            int price = weekday;
@@ -402,10 +453,11 @@
 //                    .price(price)
 //                    .product(product)
 //                    .build();
-//            productInfoPerNightRepository.save(productInfoPerNight);
+//            productInfoPerNightList.add(productInfoPerNight);
 //            currDate = currDate.plusDays(1);
 //        }
 //
+//        productInfoPerNightRepository.saveAll(productInfoPerNightList);
 //
 //    }
 //

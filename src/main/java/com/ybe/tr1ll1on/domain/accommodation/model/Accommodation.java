@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,43 +15,42 @@ import java.util.List;
 @Entity
 @Table(name = "accommodation")
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Accommodation {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "accommodation_id")
     private Long id;
 
     private String name;
-
     private String address;
-
     private String latitude;
-
     private String longitude;
-
     private String areaCode;
-
     private String phone;
 
-    @ManyToOne
+//    @OneToOne(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private AccommodationFacility facility;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accommodation_facility_id")
+    private AccommodationFacility facility;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<AccommodationImage> images = new ArrayList<>();
-
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Product> productList = new ArrayList<>();
-
-    @OneToOne(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private AccommodationFacility facility;
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.REMOVE)
+    @BatchSize(size = 100)
+    private List<AccommodationImage> accommodationImageList = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Likes> likesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Product> productList = new ArrayList<>();
 
     public void setCategory(Category category) {
         this.category = category;
@@ -58,5 +58,9 @@ public class Accommodation {
 
     public void setId(Long accommodationId) {
         this.id = accommodationId;
+    }
+
+    public void setFacility(AccommodationFacility facility) {
+        this.facility = facility;
     }
 }
