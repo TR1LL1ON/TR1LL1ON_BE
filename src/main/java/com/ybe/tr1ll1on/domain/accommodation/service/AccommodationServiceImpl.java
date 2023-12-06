@@ -26,10 +26,6 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Transactional
     public List<AccommodationResponse> findAccommodation(AccommodationRequest accommodationRequest) {
 
-        LocalDate checkOut = accommodationRequest.getCheckOut();
-        LocalDate checkOutYesterday = checkOut.minusDays(1);
-        accommodationRequest.setCheckOut(checkOutYesterday);
-
         return mapper.findAvailableAccommodation(accommodationRequest)
                 .stream()
                 .map(it -> AccommodationResponse.builder()
