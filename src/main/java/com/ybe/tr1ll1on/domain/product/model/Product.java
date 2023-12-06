@@ -57,4 +57,9 @@ public class Product {
     public void setProductFacility(ProductFacility productFacility) {
         this.productFacility = productFacility;
     }
+
+    public void setProductImageList(
+            List<ProductImage> productImageList) {
+        this.productImageList = productImageList;
+    }
 }

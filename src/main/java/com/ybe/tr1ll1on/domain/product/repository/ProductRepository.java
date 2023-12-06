@@ -30,4 +30,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             + "left join fetch p.accommodation "
             + "where p.id = :productId")
     Optional<Product> findByIdSummary(@Param("productId") Long productId);
+
+    @Query("select p from Product p left join fetch p.productImageList")
+    List<Product> findAll();
 }
