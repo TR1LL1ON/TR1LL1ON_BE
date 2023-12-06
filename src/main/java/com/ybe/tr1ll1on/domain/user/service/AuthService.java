@@ -54,6 +54,8 @@ public class AuthService {
         cart.setUser(user);
         cartRepository.save(cart);
 
+        user.setCart(cart);
+
         return SignUpResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())

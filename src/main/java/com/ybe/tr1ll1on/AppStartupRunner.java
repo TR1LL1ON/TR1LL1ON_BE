@@ -39,7 +39,6 @@
 //@RequiredArgsConstructor
 //public class AppStartupRunner implements ApplicationRunner {
 //
-//
 //    private final CategoryRepository categoryRepository;
 //
 //    private final AccommodationRepository accommodationRepository;
@@ -56,15 +55,12 @@
 //
 //    private final ProductInfoPerNightRepository productInfoPerNightRepository;
 //
-//
 //    private final int PRICE_MAX = 10, PRICE_MIN = 5;
 //
 //    @Override
 //    public void run(ApplicationArguments args) throws Exception {
-////        saveAccommodationFacility();
-////        saveProductFacility();
-////        saveAccommodationData();
-//        //saveProductInfoPerNight();
+//        saveAccommodationData();
+//        saveProductInfoPerNight();
 //    }
 //
 //    private void saveProductInfoPerNight() {
@@ -75,31 +71,6 @@
 //        }
 //        productRepository.saveAll(productList);
 //    }
-//
-//    @Transactional
-//    public void saveProductFacility() {
-//        List<Product> productList = productRepository.findAll();
-//
-//        for (Product product : productList) {
-//            ProductFacility pf = productFacilityRepository.findByProductId(product.getId());
-//            product.setProductFacility(pf);
-//        }
-//        productRepository.saveAll(productList);
-//    }
-//
-//    @Transactional
-//    public void saveAccommodationFacility() {
-//        List<Accommodation> accommodationList = accommodationRepository.findAll();
-//
-//        for (Accommodation accommodation : accommodationList) {
-//            AccommodationFacility af = accommodationFacilityRepository.findByAccommodationId(
-//                    accommodation.getId()
-//            );
-//            accommodation.setFacility(af);
-//        }
-//        accommodationRepository.saveAll(accommodationList);
-//    }
-//
 //
 //    @Transactional
 //    public void saveAccommodationData() throws URISyntaxException, JsonProcessingException {
@@ -219,6 +190,8 @@
 //        accommodationFacility.setAccommodation(savedAccommodation);
 //        accommodationFacilityRepository.save(accommodationFacility);
 //
+//        savedAccommodation.setFacility(accommodationFacility);
+//
 //        return savedAccommodation;
 //    }
 //
@@ -282,6 +255,8 @@
 //                ProductFacility productFacility = createRandomProductFacility(random);
 //                productFacility.setProduct(product);
 //                productFacilityRepository.save(productFacility);
+//
+//                product.setProductFacility(productFacility);
 //
 //                List<ProductImage> productImages = createRandomProductImages(random);
 //                for (ProductImage productImage : productImages) {

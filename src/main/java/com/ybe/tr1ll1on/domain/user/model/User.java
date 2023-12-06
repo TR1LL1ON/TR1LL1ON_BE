@@ -52,4 +52,8 @@ public class User {
     public void setId(Long userId) {
         this.id = userId;
     }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 }
