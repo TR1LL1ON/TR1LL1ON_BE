@@ -27,6 +27,7 @@ import com.ybe.tr1ll1on.domain.product.repository.ProductRepository;
 import com.ybe.tr1ll1on.domain.user.exception.InValidUserException;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
+import com.ybe.tr1ll1on.global.common.ReviewStatus;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
                                 .startDate(oir.getCheckIn())
                                 .endDate(oir.getCheckOut())
                                 .product(getProduct(oir.getProductId()))
-                                .reviewWritten(false)
+                                .reviewStatus(ReviewStatus.NOT_WRITTEN)
                                 .build()
                 );
             }
