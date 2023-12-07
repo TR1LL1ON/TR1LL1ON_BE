@@ -1,8 +1,7 @@
 package com.ybe.tr1ll1on.domain.review.service;
 
 import static com.ybe.tr1ll1on.domain.accommodation.exception.AccommodationExceptionCode.ACCOMMODATION_NOT_FOUND;
-import static com.ybe.tr1ll1on.domain.review.exception.ReviewExceptionCode.REVIEW_ALREADY_EXISTS;
-import static com.ybe.tr1ll1on.domain.review.exception.ReviewExceptionCode.REVIEW_NOT_FOUND;
+import static com.ybe.tr1ll1on.domain.review.exception.ReviewExceptionCode.*;
 
 import com.ybe.tr1ll1on.domain.accommodation.exception.AccommodationException;
 import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
@@ -23,6 +22,7 @@ import com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
 import com.ybe.tr1ll1on.domain.review.repository.ReviewRepository;
+import com.ybe.tr1ll1on.global.common.ReviewStatus;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +76,6 @@ public class ReviewServiceImpl implements ReviewService{
         return productReviewResponseList;
     }
 
-
     /**
      * 현재 사용자의 리뷰 목록을 조회
      *
@@ -106,12 +105,11 @@ public class ReviewServiceImpl implements ReviewService{
         // 사용자 정보
         User user = getUser();
 
-        // 상품 정보
+        // 주문 상품 정보 및 리뷰 상태 검증
         OrderItem orderItem = getOrderItem(reviewCreateRequest.getOrderItemId());
-        if (orderItem.getReviewWritten()) {
-            throw new ReviewException(REVIEW_ALREADY_EXISTS);
-        }
+        checkReviewStatus(orderItem);
 
+        // 상품 정보
         Product product = orderItem.getProduct();
 
         // 리뷰 엔티티 생성
@@ -126,12 +124,11 @@ public class ReviewServiceImpl implements ReviewService{
             throw new ReviewException(ReviewExceptionCode.REVIEW_SAVE_FAILED);
         }
 
-        // 리뷰 작성 여부 true
-        orderItem.setReviewWritten(true);
+        // 리뷰 작성 상태 변경
+        orderItem.setReviewStatus(ReviewStatus.WRITTEN);
 
         return ReviewCreateResponse.fromEntity(savedReview);
     }
-
 
     /**
      * 리뷰를 수정합니다.
@@ -144,6 +141,10 @@ public class ReviewServiceImpl implements ReviewService{
     public ReviewUpdateResponse updateReview(Long reviewId, ReviewUpdateRequest reviewUpdateRequest) {
         // 리뷰 정보
         Review review = getReview(reviewId);
+
+        if (review.getOrderItem().getReviewStatus() == ReviewStatus.DELETED) {
+            throw new ReviewException(ReviewExceptionCode.REVIEW_ALREADY_DELETED);
+        }
 
         // 리뷰 수정
         review.update(reviewUpdateRequest);
@@ -168,7 +169,12 @@ public class ReviewServiceImpl implements ReviewService{
         // 리뷰 정보
         Review review = getReview(reviewId);
 
-        // 데이터베이스에서 리뷰 삭제. 재작성 불가. ReviewWritten true 유지.
+        OrderItem orderItem = review.getOrderItem();
+        if (orderItem.getReviewStatus() == ReviewStatus.DELETED) {
+            throw new ReviewException(ReviewExceptionCode.REVIEW_ALREADY_DELETED);
+        }
+        orderItem.setReviewStatus(ReviewStatus.DELETED);
+
         reviewRepository.delete(review);
 
         return ReviewDeleteResponse.fromEntity(review);
@@ -197,4 +203,10 @@ public class ReviewServiceImpl implements ReviewService{
         return orderItem;
     }
 
+    private void checkReviewStatus(OrderItem orderItem) {
+        switch (orderItem.getReviewStatus()) {
+            case WRITTEN -> throw new ReviewException(REVIEW_ALREADY_EXISTS);
+            case DELETED -> throw new ReviewException(REVIEW_ALREADY_DELETED);
+        }
+    }
 }
