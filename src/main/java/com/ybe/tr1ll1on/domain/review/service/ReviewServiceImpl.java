@@ -43,8 +43,8 @@ public class ReviewServiceImpl implements ReviewService{
     /**
      * 상품에 대한 리뷰 목록을 조회
      *
-     * @param accommodationId 상품 ID
-     * @return 상품에 대한 리뷰 목록
+     * @param accommodationId 숙소 ID
+     * @return 특정 숙소의 상품에 대한 리뷰 목록
      */
     @Transactional
     public List<ProductReviewResponse> getProductReviews(Long accommodationId) {
@@ -77,7 +77,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     /**
-     * 현재 사용자의 리뷰 목록을 조회
+     * 현재 사용자의 전체 리뷰 목록을 조회
      *
      * @return 현재 사용자의 리뷰 목록
      */
@@ -85,13 +85,31 @@ public class ReviewServiceImpl implements ReviewService{
     public List<UserReviewResponse> getUserReviews() {
         User user = getUser();
 
+        // 1. 특정 사용자의 리뷰에 대한 정보를 가져오면서 관련된 데이터를 패치 조인을 통해 즉시 로딩한다.
+        // 2. 관련된 데이터엔 숙소, 상품, 주문 상품에 대한 정보가 포함되어 있다.
+        // 3. ※ 주의 - 즉시 로딩 대상인 엔티티와 연관관계인 엔티티가 eager type 일 경우 함께 즉시 로딩된다.
         List<Review> reviews = reviewRepository.getReviewsByUserWithDetails(user);
 
+        //  특정 상품의 이미지 리스트에 대한 batch size = 100 으로 설정한 상태이다.
+        //    - 이후 상품 이미지 엔티티 접근 시 지정한 개수만큼 상품 아이디에 해당하는 상품 이미지 즉시 로딩
         List<UserReviewResponse> userReviewResponseList = reviews.stream()
                 .map(UserReviewResponse::fromEntity)
                 .collect(Collectors.toList());
 
         return userReviewResponseList;
+    }
+
+    /**
+     * 현재 사용자의 특정 리뷰를 조회
+     *
+     * @param reviewId 리뷰 ID
+     * @return
+     */
+    @Transactional
+    public UserReviewResponse getUserReview(Long reviewId) {
+        Review review = getReview(reviewId);
+
+        return UserReviewResponse.fromEntity(review);
     }
 
     /**
@@ -102,33 +120,27 @@ public class ReviewServiceImpl implements ReviewService{
      */
     @Transactional
     public ReviewCreateResponse createReview(ReviewCreateRequest reviewCreateRequest) {
-        // 사용자 정보
         User user = getUser();
-
-        // 주문 상품 정보 및 리뷰 상태 검증
         OrderItem orderItem = getOrderItem(reviewCreateRequest.getOrderItemId());
-        checkReviewStatus(orderItem);
+        validateReviewStatus(orderItem);
 
-        // 상품 정보
         Product product = orderItem.getProduct();
 
-        // 리뷰 엔티티 생성
         Review review = reviewCreateRequest.toEntity();
         review.setOrderItem(orderItem);
         review.setUser(user);
         review.setProduct(product);
 
-        // 리뷰 엔티티 데이터베이스 저장
         Review savedReview = reviewRepository.save(review);
         if (savedReview == null) {
             throw new ReviewException(ReviewExceptionCode.REVIEW_SAVE_FAILED);
         }
 
-        // 리뷰 작성 상태 변경
         orderItem.setReviewStatus(ReviewStatus.WRITTEN);
 
         return ReviewCreateResponse.fromEntity(savedReview);
     }
+
 
     /**
      * 리뷰를 수정합니다.
@@ -139,17 +151,12 @@ public class ReviewServiceImpl implements ReviewService{
      */
     @Transactional
     public ReviewUpdateResponse updateReview(Long reviewId, ReviewUpdateRequest reviewUpdateRequest) {
-        // 리뷰 정보
         Review review = getReview(reviewId);
 
-        if (review.getOrderItem().getReviewStatus() == ReviewStatus.DELETED) {
-            throw new ReviewException(ReviewExceptionCode.REVIEW_ALREADY_DELETED);
-        }
+        OrderItem orderItem = getOrderItem(review.getOrderItem().getId());
 
-        // 리뷰 수정
         review.update(reviewUpdateRequest);
 
-        // 수정된 리뷰 데이터베이스 업데이트
         Review updatedReview = reviewRepository.save(review);
         if (updatedReview == null) {
             throw new ReviewException(ReviewExceptionCode.REVIEW_SAVE_FAILED);
@@ -166,16 +173,13 @@ public class ReviewServiceImpl implements ReviewService{
      */
     @Transactional
     public ReviewDeleteResponse deleteReview(Long reviewId) {
-        // 리뷰 정보
         Review review = getReview(reviewId);
 
-        OrderItem orderItem = review.getOrderItem();
-        if (orderItem.getReviewStatus() == ReviewStatus.DELETED) {
-            throw new ReviewException(ReviewExceptionCode.REVIEW_ALREADY_DELETED);
-        }
-        orderItem.setReviewStatus(ReviewStatus.DELETED);
+        OrderItem orderItem = getOrderItem(review.getOrderItem().getId());
 
         reviewRepository.delete(review);
+
+        orderItem.setReviewStatus(ReviewStatus.DELETED);
 
         return ReviewDeleteResponse.fromEntity(review);
     }
@@ -203,10 +207,20 @@ public class ReviewServiceImpl implements ReviewService{
         return orderItem;
     }
 
-    private void checkReviewStatus(OrderItem orderItem) {
-        switch (orderItem.getReviewStatus()) {
-            case WRITTEN -> throw new ReviewException(REVIEW_ALREADY_EXISTS);
-            case DELETED -> throw new ReviewException(REVIEW_ALREADY_DELETED);
+    private void validateReviewStatus(OrderItem orderItem) {
+        checkReviewAlreadyExists(orderItem);
+        checkReviewAlreadyDeleted(orderItem);
+    }
+
+    private void checkReviewAlreadyExists(OrderItem orderItem) {
+        if (orderItem.getReviewStatus() == ReviewStatus.WRITTEN) {
+            throw new ReviewException(REVIEW_ALREADY_EXISTS);
+        }
+    }
+
+    private void checkReviewAlreadyDeleted(OrderItem orderItem) {
+        if (orderItem.getReviewStatus() == ReviewStatus.DELETED) {
+            throw new ReviewException(REVIEW_ALREADY_DELETED);
         }
     }
 }
