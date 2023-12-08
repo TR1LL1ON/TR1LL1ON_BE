@@ -30,20 +30,24 @@ public class ReviewDeleteResponse {
 
         @Schema(example = "12")
         private Long reviewId;
-
         @Schema(example = "2023-11-27")
         private LocalDate deleteDate;
         // ... 추가 가능
 
+        public static ReviewDetails fromEntity(Review review) {
+
+            return ReviewDetails.builder()
+                    .reviewId(review.getId())
+                    .deleteDate(LocalDate.now())
+                    .build();
+        }
     }
 
     public static ReviewDeleteResponse fromEntity(Review review) {
+
         return ReviewDeleteResponse.builder()
                 .message("리뷰가 성공적으로 삭제되었습니다.")
-                .review(ReviewDeleteResponse.ReviewDetails.builder()
-                        .reviewId(review.getId())
-                        .deleteDate(LocalDate.now())
-                        .build())
+                .review(ReviewDetails.fromEntity(review))
                 .build();
     }
 }
