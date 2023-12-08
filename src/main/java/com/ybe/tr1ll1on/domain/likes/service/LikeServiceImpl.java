@@ -52,7 +52,7 @@ public class LikeServiceImpl implements LikeService {
                 throw new LikeException(LikeExceptionCode.FAILED_LIKE);
             }
 
-            log.info("찜 목록 추가! 숙소 ID : {}, LikeId : {}", accommodationId, savedLike.getId());
+//            log.info("찜 목록 추가! 숙소 ID : {}, LikeId : {}", accommodationId, savedLike.getId());
             return LikeMessageResponse.fromEntity(savedLike, "찜 목록에 추가하였습니다.");
 
         } else {  // 좋아요가 있다 => 좋아요 취소
@@ -60,7 +60,7 @@ public class LikeServiceImpl implements LikeService {
             likes = optionalLikes.get();
             likeRepository.delete(likes);
 
-            log.info("찜 목록 제거! 숙소 ID : {}, LikeId : {}", accommodationId, likes.getId());
+//            log.info("찜 목록 제거! 숙소 ID : {}, LikeId : {}", accommodationId, likes.getId());
             return LikeMessageResponse.fromEntity(likes, "찜 목록에 제거하였습니다.");
         }
 
