@@ -30,43 +30,29 @@ public class ReviewCreateResponse {
 
         @Schema(example = "12")
         private Long reviewId;
-
         @Schema(example = "2023-11-27")
         private LocalDate reviewDate;
-
         @Schema(example = "4.5")
         private double score;
-
-        @Schema(example = "34")
-        private Long userId;
-
-        @Schema(example = "56")
-        private Long orderItemId;
-
-        @Schema(example = "78")
-        private Long accommodationId;
-
-        @Schema(example = "90")
-        private Long productId;
-
         @Schema(example = "대체적으로 만족합니다!")
         private String content;
 
+        public static ReviewDetails fromEntity(Review review) {
+
+            return ReviewDetails.builder()
+                    .reviewId(review.getId())
+                    .reviewDate(review.getReviewDate())
+                    .score(review.getScore())
+                    .content(review.getContent())
+                    .build();
+        }
     }
 
     public static ReviewCreateResponse fromEntity(Review review) {
+
         return ReviewCreateResponse.builder()
                 .message("리뷰가 성공적으로 작성되었습니다.")
-                .review(ReviewCreateResponse.ReviewDetails.builder()
-                        .reviewId(review.getId())
-                        .reviewDate(review.getReviewDate())
-                        .score(review.getScore())
-                        .userId(review.getUser().getId())
-                        .orderItemId(review.getOrderItem().getId())
-                        .accommodationId(review.getOrderItem().getProduct().getAccommodation().getId())
-                        .productId(review.getProduct().getId())
-                        .content(review.getContent())
-                        .build())
+                .review(ReviewDetails.fromEntity(review))
                 .build();
     }
 }

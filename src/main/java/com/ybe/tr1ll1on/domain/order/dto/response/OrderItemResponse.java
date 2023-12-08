@@ -1,6 +1,7 @@
 package com.ybe.tr1ll1on.domain.order.dto.response;
 
 import com.ybe.tr1ll1on.domain.order.model.OrderItem;
+import com.ybe.tr1ll1on.global.common.ReviewStatus;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -28,8 +29,8 @@ public class OrderItemResponse {
     @ArraySchema(schema = @Schema(implementation = OrderItemDetailResponse.class))
     private OrderItemDetailResponse orderItemDetail;
 
-    @Schema(example = "false")
-    private Boolean reviewWritten;
+    @Schema(example = "NO_WRITTEN")
+    private ReviewStatus reviewStatus;
 
     @Getter
     @Setter
@@ -64,7 +65,7 @@ public class OrderItemResponse {
                 .personNumber(orderItem.getPersonNumber())
                 .price(orderItem.getPrice())
                 .orderItemDetail(OrderItemDetailResponse.fromEntity(orderItem))
-                .reviewWritten(orderItem.getReviewWritten())
+                .reviewStatus(orderItem.getReviewStatus())
                 .build();
     }
 }
