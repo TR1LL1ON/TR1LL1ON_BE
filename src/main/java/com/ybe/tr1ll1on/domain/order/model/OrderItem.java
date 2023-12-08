@@ -2,6 +2,7 @@ package com.ybe.tr1ll1on.domain.order.model;
 
 import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.review.model.Review;
+import com.ybe.tr1ll1on.global.common.ReviewStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +27,8 @@ public class OrderItem {
     private LocalDate endDate;
     private Integer personNumber;
     private Integer price;
-    private Boolean reviewWritten;
+
+    private ReviewStatus reviewStatus;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -36,19 +38,15 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Orders orders;
 
-    public void setReviewWritten(boolean reviewWritten) {
-        this.reviewWritten = reviewWritten;
-    }
-
-    public boolean getReviewWritten() {
-        return reviewWritten;
-    }
-
     public void setId(Long orderItemId) {
         this.id = orderItemId;
     }
 
     public void setProduct(Product testProduct) {
         this.product = testProduct;
+    }
+
+    public void setReviewStatus(ReviewStatus reviewStatus) {
+        this.reviewStatus = reviewStatus;
     }
 }

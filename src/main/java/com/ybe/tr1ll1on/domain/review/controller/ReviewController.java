@@ -4,7 +4,6 @@ import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.response.*;
 import com.ybe.tr1ll1on.domain.review.service.ReviewService;
-import com.ybe.tr1ll1on.domain.review.service.ReviewServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,6 +44,15 @@ public class ReviewController {
     public ResponseEntity<List<UserReviewResponse>> getUserReviews() {
         List<UserReviewResponse> userReviewListResponse = reviewService.getUserReviews();
         return ResponseEntity.ok(userReviewListResponse);
+    }
+
+    @GetMapping("/written/{reviewId}")
+    public ResponseEntity<UserReviewResponse> getUserReview(
+            @PathVariable Long reviewId,
+            @Valid @RequestBody ReviewUpdateRequest reviewUpdateRequest
+    ) {
+        UserReviewResponse userReviewResponse = reviewService.getUserReview(reviewId);
+        return ResponseEntity.ok(userReviewResponse);
     }
 
     @Operation(summary = "내 리뷰 작성 API", description = "내 리뷰 작성 API 입니다.")
