@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
                                 .startDate(oir.getCheckIn())
                                 .endDate(oir.getCheckOut())
                                 .product(getProduct(oir.getProductId()))
-                                .reviewStatus(ReviewStatus.NOT_WRITTEN)
+                                .reviewStatus(ReviewStatus.NOT_WRITABLE)
                                 .build()
                 );
             }
