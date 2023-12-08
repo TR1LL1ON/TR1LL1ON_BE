@@ -37,7 +37,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                         .areaCode(it.getAreaCode())
                         .latitude(it.getLatitude())
                         .longitude(it.getLongitude())
-                        .score(randomScore())
+                        .score(it.getScore())
                         .build())
                 .collect(Collectors.toList());
     }

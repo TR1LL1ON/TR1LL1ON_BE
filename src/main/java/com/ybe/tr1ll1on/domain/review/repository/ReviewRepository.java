@@ -11,6 +11,10 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
+
+    @Query("select avg(r.score) from Review r where r.product.accommodation.id = :accommodationId")
+    Double getAvgReviewScore(@Param("accommodationId") Long accommodationId);
+
     @Query("select r " +
             "from Review r " +
             "left join fetch r.product p " +
