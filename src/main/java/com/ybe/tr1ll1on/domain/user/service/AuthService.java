@@ -12,7 +12,10 @@ import com.ybe.tr1ll1on.domain.user.exception.InValidUserException;
 import com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
-import com.ybe.tr1ll1on.security.dto.TokenInfo;
+import com.ybe.tr1ll1on.global.date.exception.InValidDateException;
+import com.ybe.tr1ll1on.security.dto.TokenDto;
+import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
+import com.ybe.tr1ll1on.security.exception.UserNotFoundException;
 import com.ybe.tr1ll1on.security.jwt.JwtTokenProvider;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
 import jakarta.servlet.http.Cookie;
@@ -63,24 +66,17 @@ public class AuthService {
     @Transactional(readOnly = true)
     public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response) {
         Authentication authentication = authenticate(loginRequest);
-        TokenInfo tokenInfo = jwtTokenProvider.generateTokenInfo(authentication, response);
+        TokenDto tokenDTO = jwtTokenProvider.generateTokenDto(authentication, response);
 
-        Long userId = Long.valueOf(authentication.getName());
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new InValidUserException(InValidUserExceptionCode.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new UserNotFoundException(SecurityExceptionCode.USER_NOT_FOUND));
 
-        LoginResponse loginResponse = LoginResponse.builder()
-                .userDetails(
-                        LoginResponse.UserDetailsResponse.builder()
-                                .userId(userId)
-                                .userEmail(user.getEmail())
-                                .userName(user.getName())
-                                .build()
-                )
-                .accessToken(tokenInfo.getAccessToken())
+        return LoginResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .accessToken(tokenDTO.getAccessToken())
                 .build();
-
-        return loginResponse;
     }
 
     @Transactional
