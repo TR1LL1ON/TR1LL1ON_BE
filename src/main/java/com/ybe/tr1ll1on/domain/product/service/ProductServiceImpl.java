@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Transactional
     public AccommodationDetailResponse getAccommodationDetail(
-            Long accommodationId, AccommodationRequest request
+            Long accommodationId, AccommodationRequest request, Pageable pageable
     ) {
         List<ProductResponse> productResponseList = new ArrayList<>();
 
@@ -66,6 +67,7 @@ public class ProductServiceImpl implements ProductService {
                     getProductDetail(p, request)
             );
         }
+
 
         return AccommodationDetailResponse.builder()
                 .accommodationId(accommodationId)
@@ -92,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
                         )
                 )
                 .reviews(
-                        reviewService.getProductReviews(accommodationId)
+                        reviewService.getProductReviews(accommodationId, pageable)
                 )
                 .build();
     }

@@ -16,6 +16,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +55,8 @@ public class ProductController {
         @PathVariable("accommodation_id") final Long accommodationId,
         @RequestParam(required = false) LocalDate checkIn,
         @RequestParam(required = false) LocalDate checkOut,
-        @RequestParam(required = false) Integer personNumber
+        @RequestParam(required = false) Integer personNumber,
+        @PageableDefault(size = 5, sort = "reviewDate", direction = Sort.Direction.DESC) Pageable pageable
     ) {
 
         log.info("ProductController : checkIn = {}, checkOut = {}, personNumber = {}",
@@ -60,7 +64,7 @@ public class ProductController {
 
         return ResponseEntity.ok(
                 productService.getAccommodationDetail(accommodationId,
-                        new AccommodationRequest(checkIn, checkOut, personNumber)
+                        new AccommodationRequest(checkIn, checkOut, personNumber), pageable
                 )
         );
     }
