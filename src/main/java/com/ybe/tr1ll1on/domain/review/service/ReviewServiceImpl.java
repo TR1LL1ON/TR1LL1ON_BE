@@ -26,6 +26,9 @@ import com.ybe.tr1ll1on.global.common.ReviewStatus;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService{
      * @return 특정 숙소의 상품에 대한 리뷰 목록
      */
     @Transactional
-    public List<ProductReviewResponse> getProductReviews(Long accommodationId) {
+    public Page<ProductReviewResponse> getProductReviews(Long accommodationId, Pageable pageable) {
         // 1. 특정 숙소에 대한 정보를 가져오면서 관련된 데이터를 패치 조인을 통해 즉시 로딩한다.
         // 2. 관련된 데이터엔 상품 목록이 포함되어 있다.
         // 3. ※ 주의 - 즉시 로딩 대상인 엔티티와 연관관계인 엔티티가 eager type 일 경우 함께 즉시 로딩된다.
@@ -73,7 +76,11 @@ public class ReviewServiceImpl implements ReviewService{
                     .collect(Collectors.toList()));
         }
 
-        return productReviewResponseList;
+        // 페이징 처리
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), productReviewResponseList.size());
+
+        return new PageImpl<>(productReviewResponseList.subList(start, end), pageable, productReviewResponseList.size());
     }
 
     /**
@@ -82,21 +89,22 @@ public class ReviewServiceImpl implements ReviewService{
      * @return 현재 사용자의 리뷰 목록
      */
     @Transactional
-    public List<UserReviewResponse> getUserReviews() {
+    public Page<UserReviewResponse> getUserReviews(Pageable pageable) {
         User user = getUser();
 
-        // 1. 특정 사용자의 리뷰에 대한 정보를 가져오면서 관련된 데이터를 패치 조인을 통해 즉시 로딩한다.
-        // 2. 관련된 데이터엔 숙소, 상품, 주문 상품에 대한 정보가 포함되어 있다.
-        // 3. ※ 주의 - 즉시 로딩 대상인 엔티티와 연관관계인 엔티티가 eager type 일 경우 함께 즉시 로딩된다.
-        List<Review> reviews = reviewRepository.getReviewsByUserWithDetails(user);
+        // 특정 사용자의 리뷰에 대한 정보를 가져오면서 관련된 데이터를 패치 조인을 통해 즉시 로딩한다.
+        // 관련된 데이터엔 숙소, 상품, 주문 상품에 대한 정보가 포함되어 있다.
+        // ※ 주의 - 즉시 로딩 대상인 엔티티와 연관관계인 엔티티가 eager type 일 경우 함께 즉시 로딩된다.
+        Page<Review> reviewPage = reviewRepository.getReviewsByUserWithDetails(user, pageable);
 
-        //  특정 상품의 이미지 리스트에 대한 batch size = 100 으로 설정한 상태이다.
-        //    - 이후 상품 이미지 엔티티 접근 시 지정한 개수만큼 상품 아이디에 해당하는 상품 이미지 즉시 로딩
-        List<UserReviewResponse> userReviewResponseList = reviews.stream()
+        // 특정 상품의 이미지 리스트에 대한 batch size = 100으로 설정한 상태이다.
+        // 이후 상품 이미지 엔티티 접근 시 지정한 개수만큼 상품 아이디에 해당하는 상품 이미지 즉시 로딩
+        List<UserReviewResponse> userReviewResponseList = reviewPage.getContent().stream()
                 .map(UserReviewResponse::fromEntity)
                 .collect(Collectors.toList());
 
-        return userReviewResponseList;
+        // PageImpl을 사용하여 Page 객체 생성
+        return new PageImpl<>(userReviewResponseList, pageable, reviewPage.getTotalElements());
     }
 
     /**
@@ -152,8 +160,6 @@ public class ReviewServiceImpl implements ReviewService{
     @Transactional
     public ReviewUpdateResponse updateReview(Long reviewId, ReviewUpdateRequest reviewUpdateRequest) {
         Review review = getReview(reviewId);
-
-        OrderItem orderItem = getOrderItem(review.getOrderItem().getId());
 
         review.update(reviewUpdateRequest);
 

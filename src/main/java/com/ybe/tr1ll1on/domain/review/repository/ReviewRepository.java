@@ -2,6 +2,8 @@ package com.ybe.tr1ll1on.domain.review.repository;
 
 import com.ybe.tr1ll1on.domain.review.model.Review;
 import com.ybe.tr1ll1on.domain.user.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,13 +13,14 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    @Query("select r " +
-            "from Review r " +
+    @Query(value = "select r from Review r " +
             "left join fetch r.product p " +
             "left join fetch p.accommodation a " +
             "left join fetch r.orderItem oi " +
-            "where r.user = :user")
-    List<Review> getReviewsByUserWithDetails(@Param("user") User user);
+            "where r.user = :user",
+            countQuery = "select count(r) from Review r where r.user = :user")
+    Page<Review> getReviewsByUserWithDetails(@Param("user") User user, Pageable pageable);
+
 }
 
 /*

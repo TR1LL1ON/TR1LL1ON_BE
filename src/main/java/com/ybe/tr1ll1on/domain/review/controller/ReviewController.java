@@ -12,6 +12,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +33,11 @@ public class ReviewController {
             content = @Content(schema = @Schema(implementation = ProductReviewResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping("/{accommodationId}")
-    public ResponseEntity<List<ProductReviewResponse>> getProductReviews(
-            @PathVariable Long accommodationId
+    public ResponseEntity<Page<ProductReviewResponse>> getProductReviews(
+            @PathVariable Long accommodationId,
+            @PageableDefault(size = 10, sort = "reviewDate", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        List<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId);
+        Page<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId, pageable);
         return ResponseEntity.ok(productReviewListResponse);
     }
 
@@ -41,9 +46,10 @@ public class ReviewController {
             content = @Content(schema = @Schema(implementation = UserReviewResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping
-    public ResponseEntity<List<UserReviewResponse>> getUserReviews() {
-        List<UserReviewResponse> userReviewListResponse = reviewService.getUserReviews();
-        return ResponseEntity.ok(userReviewListResponse);
+    public ResponseEntity<Page<UserReviewResponse>> getUserReviews(
+            @PageableDefault(size = 10, sort = "reviewDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<UserReviewResponse> userReviewResponse = reviewService.getUserReviews(pageable);
+        return ResponseEntity.ok(userReviewResponse);
     }
 
     @GetMapping("/written/{reviewId}")
