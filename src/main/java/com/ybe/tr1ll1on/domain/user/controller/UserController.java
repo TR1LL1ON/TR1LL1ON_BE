@@ -1,5 +1,6 @@
 package com.ybe.tr1ll1on.domain.user.controller;
 
+import com.ybe.tr1ll1on.domain.likes.dto.response.LikeResponse;
 import com.ybe.tr1ll1on.domain.user.dto.response.MyPageDetailResponse;
 import com.ybe.tr1ll1on.domain.user.dto.response.MyPageResponse;
 import com.ybe.tr1ll1on.domain.user.service.UserService;
@@ -44,4 +45,15 @@ public class UserController {
         MyPageDetailResponse myPageDetailResponse = userService.getMyPageDetails(orderId);
         return ResponseEntity.ok(myPageDetailResponse);
     }
+
+    @Operation(summary = "마이페이지 - 숙소 찜 목록", description = "마이페이지에서 찜 목록 API 입니다.")
+    @ApiResponse(responseCode = "200", description = "조회 성공시",
+            content = @Content(schema = @Schema(implementation = LikeResponse.class)))
+    @SecurityRequirement(name = "jwt")
+    @GetMapping("/likes")
+    public ResponseEntity<List<LikeResponse>> getLikeList() {
+        List<LikeResponse> likeResponseList = userService.getMyLikeList();
+        return ResponseEntity.ok(likeResponseList);
+    }
+
 }
