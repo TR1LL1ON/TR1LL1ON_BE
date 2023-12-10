@@ -4,12 +4,14 @@ import com.ybe.tr1ll1on.domain.review.model.Review;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
@@ -21,6 +23,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             countQuery = "select count(r) from Review r where r.user = :user")
     Page<Review> getReviewsByUserWithDetails(@Param("user") User user, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"user"})
+    Optional<List<Review>> getReviewsByProductId(Long productId);
 }
 
 /*
