@@ -22,6 +22,7 @@ import com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
 import com.ybe.tr1ll1on.domain.review.repository.ReviewRepository;
+import com.ybe.tr1ll1on.global.common.ReviewPeriod;
 import com.ybe.tr1ll1on.global.common.ReviewStatus;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
 import jakarta.transaction.Transactional;
@@ -31,6 +32,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,17 +40,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService{
+    private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
     private final OrderItemRepository orderItemRepository;
-    private final UserRepository userRepository;
     private final AccommodationRepository accommodationRepository;
 
-    /**
-     * 상품에 대한 리뷰 목록을 조회
-     *
-     * @param accommodationId 숙소 ID
-     * @return 특정 숙소의 상품에 대한 리뷰 목록
-     */
+    /* 숙소 전체 리뷰 조회 */
     @Transactional
     public Page<ProductReviewResponse> getProductReviews(Long accommodationId, Pageable pageable) {
         // 1. 특정 숙소에 대한 정보를 가져오면서 관련된 데이터를 패치 조인을 통해 즉시 로딩한다.
@@ -83,19 +80,20 @@ public class ReviewServiceImpl implements ReviewService{
         return new PageImpl<>(productReviewResponseList.subList(start, end), pageable, productReviewResponseList.size());
     }
 
-    /**
-     * 현재 사용자의 전체 리뷰 목록을 조회
-     *
-     * @return 현재 사용자의 리뷰 목록
-     */
+    /* 사용자 전체 리뷰 조회 */
     @Transactional
-    public Page<UserReviewResponse> getUserReviews(Pageable pageable) {
+    public Page<UserReviewResponse> getUserReviews(Pageable pageable, ReviewPeriod reviewPeriod) {
+        // 사용자 정보
         User user = getUser();
+
+        // 리뷰 조회 시작 날짜 지정
+        LocalDate startDate = calculateStartDate(reviewPeriod);
 
         // 특정 사용자의 리뷰에 대한 정보를 가져오면서 관련된 데이터를 패치 조인을 통해 즉시 로딩한다.
         // 관련된 데이터엔 숙소, 상품, 주문 상품에 대한 정보가 포함되어 있다.
         // ※ 주의 - 즉시 로딩 대상인 엔티티와 연관관계인 엔티티가 eager type 일 경우 함께 즉시 로딩된다.
-        Page<Review> reviewPage = reviewRepository.getReviewsByUserWithDetails(user, pageable);
+        Page<Review> reviewPage = reviewRepository.getReviewsByUserWithDetailsAndDateRange(
+                user, startDate, pageable);
 
         // 특정 상품의 이미지 리스트에 대한 batch size = 100으로 설정한 상태이다.
         // 이후 상품 이미지 엔티티 접근 시 지정한 개수만큼 상품 아이디에 해당하는 상품 이미지 즉시 로딩
@@ -107,12 +105,7 @@ public class ReviewServiceImpl implements ReviewService{
         return new PageImpl<>(userReviewResponseList, pageable, reviewPage.getTotalElements());
     }
 
-    /**
-     * 현재 사용자의 특정 리뷰를 조회
-     *
-     * @param reviewId 리뷰 ID
-     * @return
-     */
+    /* 사용자 특정 리뷰 조회 */
     @Transactional
     public UserReviewResponse getUserReview(Long reviewId) {
         Review review = getReview(reviewId);
@@ -120,12 +113,7 @@ public class ReviewServiceImpl implements ReviewService{
         return UserReviewResponse.fromEntity(review);
     }
 
-    /**
-     * 리뷰를 생성합니다.
-     *
-     * @param reviewCreateRequest 리뷰 생성 요청 객체
-     * @return 생성된 리뷰의 응답 객체
-     */
+    /* 리뷰 작성 */
     @Transactional
     public ReviewCreateResponse createReview(ReviewCreateRequest reviewCreateRequest) {
         User user = getUser();
@@ -149,14 +137,7 @@ public class ReviewServiceImpl implements ReviewService{
         return ReviewCreateResponse.fromEntity(savedReview);
     }
 
-
-    /**
-     * 리뷰를 수정합니다.
-     *
-     * @param reviewId 리뷰 ID
-     * @param reviewUpdateRequest 리뷰 수정 요청 객체
-     * @return 수정된 리뷰의 응답 객체
-     */
+    /* 리뷰 수정 */
     @Transactional
     public ReviewUpdateResponse updateReview(Long reviewId, ReviewUpdateRequest reviewUpdateRequest) {
         Review review = getReview(reviewId);
@@ -171,12 +152,7 @@ public class ReviewServiceImpl implements ReviewService{
         return ReviewUpdateResponse.fromEntity(updatedReview);
     }
 
-    /**
-     * 리뷰를 삭제합니다.
-     *
-     * @param reviewId 리뷰 ID
-     * @return 삭제된 리뷰의 응답 객체
-     */
+    /* 리뷰 삭제 */
     @Transactional
     public ReviewDeleteResponse deleteReview(Long reviewId) {
         Review review = getReview(reviewId);
@@ -191,9 +167,8 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     private Accommodation getAccommodation(Long accommodationId) {
-        Accommodation accommodation = accommodationRepository.getAccommodationWithProductsById(accommodationId)
+        return accommodationRepository.getAccommodationWithProductsById(accommodationId)
                 .orElseThrow(() -> new AccommodationException(ACCOMMODATION_NOT_FOUND));
-        return accommodation;
     }
 
     private User getUser() {
@@ -201,16 +176,19 @@ public class ReviewServiceImpl implements ReviewService{
                 .orElseThrow(() -> new InValidUserException(InValidUserExceptionCode.USER_NOT_FOUND));
     }
 
+
     private Review getReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
+        return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(REVIEW_NOT_FOUND));
-        return review;
     }
 
     private OrderItem getOrderItem(Long orderItemId) {
-        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+        return orderItemRepository.findById(orderItemId)
                 .orElseThrow(() -> new OrderException(OrderExceptionCode.ORDER_ITEM_NOT_FOUND));
-        return orderItem;
+    }
+
+    private LocalDate calculateStartDate(ReviewPeriod period) {
+        return LocalDate.now().minusMonths(period.getNumOfPeriod());
     }
 
     private void validateReviewStatus(OrderItem orderItem) {

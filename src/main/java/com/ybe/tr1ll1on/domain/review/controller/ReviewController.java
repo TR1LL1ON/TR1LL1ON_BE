@@ -1,9 +1,11 @@
 package com.ybe.tr1ll1on.domain.review.controller;
 
+import com.ybe.tr1ll1on.global.constants.ReviewConstants;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.response.*;
 import com.ybe.tr1ll1on.domain.review.service.ReviewService;
+import com.ybe.tr1ll1on.global.common.ReviewPeriod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,7 +21,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Tag(name = "리뷰 API", description = "리뷰 관련 API 모음입니다.")
 @RestController
@@ -35,7 +36,12 @@ public class ReviewController {
     @GetMapping("/{accommodationId}")
     public ResponseEntity<Page<ProductReviewResponse>> getProductReviews(
             @PathVariable Long accommodationId,
-            @PageableDefault(size = 10, sort = "reviewDate", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(
+                    size = ReviewConstants.DEFAULT_PAGE_SIZE,
+                    sort = ReviewConstants.DEFAULT_SORT_FIELD,
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable
+
     ) {
         Page<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId, pageable);
         return ResponseEntity.ok(productReviewListResponse);
@@ -47,8 +53,16 @@ public class ReviewController {
     @SecurityRequirement(name = "jwt")
     @GetMapping
     public ResponseEntity<Page<UserReviewResponse>> getUserReviews(
-            @PageableDefault(size = 10, sort = "reviewDate", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<UserReviewResponse> userReviewResponse = reviewService.getUserReviews(pageable);
+            @PageableDefault(
+                    size = ReviewConstants.DEFAULT_PAGE_SIZE,
+                    sort = ReviewConstants.DEFAULT_SORT_FIELD,
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable,
+            @RequestParam(required = false) ReviewPeriod period) {
+
+        ReviewPeriod reviewPeriod = (period != null) ? period : ReviewPeriod.THREE_MONTH;
+
+        Page<UserReviewResponse> userReviewResponse = reviewService.getUserReviews(pageable, reviewPeriod);
         return ResponseEntity.ok(userReviewResponse);
     }
 

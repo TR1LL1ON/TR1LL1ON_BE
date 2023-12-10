@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
@@ -17,10 +17,12 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "left join fetch r.product p " +
             "left join fetch p.accommodation a " +
             "left join fetch r.orderItem oi " +
-            "where r.user = :user",
-            countQuery = "select count(r) from Review r where r.user = :user")
-    Page<Review> getReviewsByUserWithDetails(@Param("user") User user, Pageable pageable);
-
+            "where r.user = :user and r.reviewDate between :startDate and CURRENT_DATE",
+            countQuery = "select count(r) from Review r where r.user = :user and r.reviewDate between :startDate and CURRENT_DATE")
+    Page<Review> getReviewsByUserWithDetailsAndDateRange(
+            @Param("user") User user,
+            @Param("startDate") LocalDate startDate,
+            Pageable pageable);
 }
 
 /*
