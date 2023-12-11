@@ -1,3 +1,11 @@
+
+![트릴리언 로그인](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/59862752/7ccf0ded-277d-4465-ae71-c7d4268770f6)
+
+![트릴리언 2](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/59862752/eb4333dc-4b25-434d-81e1-5c95aaa0f6c6)
+
+![트릴리언 3](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/59862752/1ed7b251-cc4a-4ddd-aea1-adc9dd61219a)
+
+
 # 개요
 
 ■ 프로젝트명
@@ -15,7 +23,8 @@
 - 서은
     - 장바구니
 - 성지운
-    - 상품 (주문)
+    - 상품 상세 조회
+    - 주문하기 
     - 배포
 - 전유림
     - 리뷰
