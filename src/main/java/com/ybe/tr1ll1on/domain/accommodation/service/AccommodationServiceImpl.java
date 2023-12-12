@@ -1,7 +1,9 @@
 package com.ybe.tr1ll1on.domain.accommodation.service;
 
 import com.ybe.tr1ll1on.domain.accommodation.dto.request.AccommodationRequest;
+import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationMapResponse;
 import com.ybe.tr1ll1on.domain.accommodation.dto.response.AccommodationResponse;
+import com.ybe.tr1ll1on.domain.accommodation.model.Accommodation;
 import com.ybe.tr1ll1on.domain.accommodation.model.AccommodationImage;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationMapper;
 import com.ybe.tr1ll1on.domain.accommodation.repository.AccommodationRepository;
@@ -37,14 +39,20 @@ public class AccommodationServiceImpl implements AccommodationService {
                         .areaCode(it.getAreaCode())
                         .latitude(it.getLatitude())
                         .longitude(it.getLongitude())
-                        .score(randomScore())
+                        .score(it.getScore())
                         .build())
                 .collect(Collectors.toList());
     }
 
-    private Double randomScore() {
-        double score = Math.random() * 5.0;
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        return Double.parseDouble(decimalFormat.format(score));
+    public List<AccommodationMapResponse> getAllAccommodationMapInfo() {
+        List<Accommodation> all = accommodationRepository.findAll();
+        return all.stream()
+                .map(it -> AccommodationMapResponse.builder()
+                        .accommodationId(it.getId())
+                        .name(it.getName())
+                        .latitude(it.getLatitude())
+                        .longitude(it.getLongitude())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

@@ -13,7 +13,12 @@ import java.time.LocalDate;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    @Query(value = "select r from Review r " +
+
+    @Query("select avg(r.score) from Review r where r.product.accommodation.id = :accommodationId")
+    Double getAvgReviewScore(@Param("accommodationId") Long accommodationId);
+
+    @Query("select r " +
+            "from Review r " +
             "left join fetch r.product p " +
             "left join fetch p.accommodation a " +
             "left join fetch r.orderItem oi " +
