@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 @Builder
 @Getter
@@ -58,7 +59,7 @@ public class AccommodationDetailResponse {
     private AccommodationFacilityResponse facility;
 
     @ArraySchema(schema = @Schema(implementation = ProductReviewResponse.class))
-    private List<ProductReviewResponse> reviews;
+    private Page<ProductReviewResponse> reviews;
 
     @Schema(example = "37.65908725483671")
     private String latitude;
