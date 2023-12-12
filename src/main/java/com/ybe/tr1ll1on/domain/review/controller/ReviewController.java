@@ -21,6 +21,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Tag(name = "리뷰 API", description = "리뷰 관련 API 모음입니다.")
 @RestController
