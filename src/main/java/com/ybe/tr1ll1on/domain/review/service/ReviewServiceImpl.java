@@ -54,11 +54,11 @@ public class ReviewServiceImpl implements ReviewService {
         // 1. 특정 상품의 이미지 리스트에 대한 batch size = 100 으로 설정한 상태이다.
         //    - 이후 상품 이미지 엔티티 접근 시 지정한 개수만큼 상품 아이디에 해당하는 이미지 즉시 로딩
         // 2. 리뷰와 관련된 상품 정보는 이미 로딩된 상태이므로 추가 쿼리가 발생하지 않는다.
-        List<ProductReviewResponse> productReviewResponseList = reviewPage.getContent().stream()
-                .map(ProductReviewResponse::fromEntity)
+        List<ProductAllReviewResponse> productAllReviewResponseList = reviewPage.getContent().stream()
+                .map(ProductAllReviewResponse::fromEntity)
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(productReviewResponseList, pageable, reviewPage.getTotalElements());
+        return new PageImpl<>(productAllReviewResponseList, pageable, reviewPage.getTotalElements());
     }
 
     /**
