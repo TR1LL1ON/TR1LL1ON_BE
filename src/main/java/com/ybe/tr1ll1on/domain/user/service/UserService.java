@@ -31,6 +31,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
+    @Transactional
     public List<MyPageResponse> getMyPage() {
         // 1. 현재 로그인한 사용자의 정보를 가져온다.
         User user = getUser();

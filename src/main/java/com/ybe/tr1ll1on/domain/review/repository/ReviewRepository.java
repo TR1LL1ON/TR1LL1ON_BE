@@ -4,11 +4,14 @@ import com.ybe.tr1ll1on.domain.review.model.Review;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
 import java.time.LocalDate;
 
 @Repository
@@ -17,8 +20,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("select avg(r.score) from Review r where r.product.accommodation.id = :accommodationId")
     Double getAvgReviewScore(@Param("accommodationId") Long accommodationId);
 
-    @Query("select r " +
-            "from Review r " +
+    @EntityGraph(attributePaths = {"user"})
+    Optional<List<Review>> getReviewsByProductId(Long productId);
+
+     @Query(value = "select r from Review r " +
             "left join fetch r.product p " +
             "left join fetch p.accommodation a " +
             "left join fetch r.orderItem oi " +
@@ -29,7 +34,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             @Param("startDate") LocalDate startDate,
             Pageable pageable);
 
-    @Query(value = "select r from Review r "
+     @Query(value = "select r from Review r "
             + "left join fetch r.user u "
             + "left join fetch r.product p "
             + "left join fetch p.accommodation a "

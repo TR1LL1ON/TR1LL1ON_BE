@@ -31,7 +31,7 @@ public class ReviewController {
 
     @Operation(summary = "숙소 리뷰 조회 API", description = "숙소 리뷰 조회 API 입니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공시",
-            content = @Content(schema = @Schema(implementation = ProductReviewResponse.class)))
+            content = @Content(schema = @Schema(implementation = ProductAllReviewResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping("/{accommodationId}")
     public ResponseEntity<Page<ProductReviewResponse>> getProductReviews(
@@ -44,7 +44,16 @@ public class ReviewController {
 
     ) {
         Page<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId, pageable);
+
         return ResponseEntity.ok(productReviewListResponse);
+    }
+
+    @GetMapping("/products/{productId}")
+    public ResponseEntity<List<ProductReviewResponse>> getProductReviews(
+            @PathVariable Long productId
+    ) {
+        List<ProductReviewResponse> productReviewResponse = reviewService.getProductReviews(productId);
+        return ResponseEntity.ok(productReviewResponse);
     }
 
     @Operation(summary = "내 리뷰 조회 API", description = "내 리뷰 조회 API 입니다.")
@@ -63,6 +72,7 @@ public class ReviewController {
         ReviewPeriod reviewPeriod = (period != null) ? period : ReviewPeriod.THREE_MONTH;
 
         Page<UserReviewResponse> userReviewResponse = reviewService.getUserReviews(pageable, reviewPeriod);
+
         return ResponseEntity.ok(userReviewResponse);
     }
 

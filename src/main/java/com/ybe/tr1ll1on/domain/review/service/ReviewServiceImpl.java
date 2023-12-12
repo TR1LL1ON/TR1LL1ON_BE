@@ -4,6 +4,8 @@ import static com.ybe.tr1ll1on.domain.review.exception.ReviewExceptionCode.*;
 
 import com.ybe.tr1ll1on.domain.order.exception.OrderException;
 import com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode;
+import com.ybe.tr1ll1on.domain.product.exception.ProductException;
+import com.ybe.tr1ll1on.domain.product.exception.ProductExceptionCode;
 import com.ybe.tr1ll1on.domain.review.dto.response.*;
 import com.ybe.tr1ll1on.domain.review.exception.ReviewException;
 import com.ybe.tr1ll1on.domain.review.exception.ReviewExceptionCode;
@@ -34,14 +36,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ReviewServiceImpl implements ReviewService{
+public class ReviewServiceImpl implements ReviewService {
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
     private final OrderItemRepository orderItemRepository;
 
     /* 숙소 전체 리뷰 조회 */
     @Transactional
-    public Page<ProductReviewResponse> getProductReviews(Long accommodationId, Pageable pageable) {
+    public Page<ProductAllReviewResponse> getProductAllReviews(Long accommodationId, Pageable pageable) {
         // 특정 숙소의 리뷰에 대한 정보를 가져오면서 관련된 데이터를 패치 조인을 통해 즉시 로딩한다.
         // 관련된 데이터엔 사용자, 상품에 대한 정보가 포함되어 있다.
         // ※ 주의 - 즉시 로딩 대상인 엔티티와 연관관계인 엔티티가 eager type 일 경우 함께 즉시 로딩된다.
@@ -58,6 +60,23 @@ public class ReviewServiceImpl implements ReviewService{
 
         return new PageImpl<>(productReviewResponseList, pageable, reviewPage.getTotalElements());
     }
+
+    /**
+     *
+     * @param productId 상품 ID
+     * @return 특정 상품에 대한 리뷰 목록
+     */
+    @Transactional
+    public List<ProductReviewResponse> getProductReviews(Long productId) {
+        List<Review> reviews = getReviewsByProductId(productId);
+
+        List<ProductReviewResponse> productReviewResponseList = reviews.stream()
+                .map(ProductReviewResponse::fromEntity)
+                .collect(Collectors.toList());
+
+        return productReviewResponseList;
+    }
+
 
     /* 사용자 전체 리뷰 조회 */
     @Transactional
@@ -151,6 +170,10 @@ public class ReviewServiceImpl implements ReviewService{
                 .orElseThrow(() -> new InValidUserException(InValidUserExceptionCode.USER_NOT_FOUND));
     }
 
+    private List<Review> getReviewsByProductId(Long productId) {
+        return reviewRepository.getReviewsByProductId(productId)
+                .orElseThrow(() -> new ProductException(ProductExceptionCode.EMPTY_PRODUCT));
+    }
 
     private Review getReview(Long reviewId) {
         return reviewRepository.findById(reviewId)
