@@ -47,7 +47,6 @@ public class Product {
     private List<ProductInfoPerNight> productInfoPerNightList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    @BatchSize(size = 100)
     private List<Review> reviewList = new ArrayList<>();
 
     public void setAccommodation(Accommodation accommodation) {
