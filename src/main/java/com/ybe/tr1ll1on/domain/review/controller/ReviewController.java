@@ -1,9 +1,11 @@
 package com.ybe.tr1ll1on.domain.review.controller;
 
+import com.ybe.tr1ll1on.global.constants.ReviewConstants;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewCreateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.request.ReviewUpdateRequest;
 import com.ybe.tr1ll1on.domain.review.dto.response.*;
 import com.ybe.tr1ll1on.domain.review.service.ReviewService;
+import com.ybe.tr1ll1on.global.common.ReviewPeriod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,10 +14,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @Tag(name = "리뷰 API", description = "리뷰 관련 API 모음입니다.")
 @RestController
@@ -26,13 +33,28 @@ public class ReviewController {
 
     @Operation(summary = "숙소 리뷰 조회 API", description = "숙소 리뷰 조회 API 입니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공시",
-            content = @Content(schema = @Schema(implementation = ProductReviewResponse.class)))
+            content = @Content(schema = @Schema(implementation = ProductAllReviewResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping("/{accommodationId}")
-    public ResponseEntity<List<ProductReviewResponse>> getProductReviews(
-            @PathVariable Long accommodationId
+    public ResponseEntity<Page<ProductAllReviewResponse>> getProductAllReviews(
+            @PathVariable Long accommodationId,
+            @PageableDefault(
+                    size = ReviewConstants.DEFAULT_PAGE_SIZE,
+                    sort = ReviewConstants.DEFAULT_SORT_FIELD,
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable
+
     ) {
-        List<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId);
+        Page<ProductAllReviewResponse> productAllReviewListResponse = reviewService.getProductAllReviews(accommodationId, pageable);
+
+        return ResponseEntity.ok(productAllReviewListResponse);
+    }
+
+    @GetMapping("/products/{productId}")
+    public ResponseEntity<List<ProductReviewResponse>> getProductReviews(
+            @PathVariable Long productId
+    ) {
+        List<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(productId);
         return ResponseEntity.ok(productReviewListResponse);
     }
 
@@ -41,9 +63,19 @@ public class ReviewController {
             content = @Content(schema = @Schema(implementation = UserReviewResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping
-    public ResponseEntity<List<UserReviewResponse>> getUserReviews() {
-        List<UserReviewResponse> userReviewListResponse = reviewService.getUserReviews();
-        return ResponseEntity.ok(userReviewListResponse);
+    public ResponseEntity<Page<UserReviewResponse>> getUserReviews(
+            @PageableDefault(
+                    size = ReviewConstants.DEFAULT_PAGE_SIZE,
+                    sort = ReviewConstants.DEFAULT_SORT_FIELD,
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable,
+            @RequestParam(required = false) ReviewPeriod period) {
+
+        ReviewPeriod reviewPeriod = (period != null) ? period : ReviewPeriod.THREE_MONTH;
+
+        Page<UserReviewResponse> userReviewResponse = reviewService.getUserReviews(pageable, reviewPeriod);
+
+        return ResponseEntity.ok(userReviewResponse);
     }
 
     @GetMapping("/written/{reviewId}")

@@ -2,6 +2,8 @@ package com.ybe.tr1ll1on.domain.user.service;
 
 import static com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode.USER_NOT_FOUND;
 
+import com.ybe.tr1ll1on.domain.likes.dto.response.LikeResponse;
+import com.ybe.tr1ll1on.domain.likes.model.Likes;
 import com.ybe.tr1ll1on.domain.order.exception.OrderException;
 import com.ybe.tr1ll1on.domain.order.exception.OrderExceptionCode;
 import com.ybe.tr1ll1on.domain.order.model.Orders;
@@ -12,6 +14,8 @@ import com.ybe.tr1ll1on.domain.user.exception.InValidUserException;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
+import java.util.Collections;
+import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
+    @Transactional
     public List<MyPageResponse> getMyPage() {
         // 1. 현재 로그인한 사용자의 정보를 가져온다.
         User user = getUser();
@@ -61,8 +66,25 @@ public class UserService {
         return myPageDetailResponse;
     }
 
+    @Transactional(readOnly = true)
+    public List<LikeResponse> getMyLikeList() {
+        User user = getUser();
+        log.info("마이페이지 찜 목록 조회!");
+
+        List<Likes> likesList = user.getLikesList();
+        // 등록한 날짜 역순으로 정렬 -> 가장 최근에 찜 누른 것부터 확인할 수 있도록 함.
+        Collections.sort(likesList, (o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
+
+        return user.getLikesList()
+                .stream().map(LikeResponse::fromEntity)
+                .collect(Collectors.toList());
+
+    }
+
     private User getUser() {
         return userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new InValidUserException(USER_NOT_FOUND));
     }
+
+
 }

@@ -18,6 +18,7 @@ import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.model.ProductInfoPerNight;
 import com.ybe.tr1ll1on.domain.product.repository.ProductInfoPerNightRepository;
 import com.ybe.tr1ll1on.domain.product.repository.ProductRepository;
+import com.ybe.tr1ll1on.domain.review.repository.ReviewRepository;
 import com.ybe.tr1ll1on.domain.review.service.ReviewService;
 import java.time.LocalDate;
 import java.time.Period;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,7 @@ public class ProductServiceImpl implements ProductService {
     private final AccommodationRepository accommodationRepository;
     private final ProductRepository productRepository;
     private final ProductInfoPerNightRepository productInfoPerNightRepository;
+    private final ReviewRepository reviewRepository;
 
     private final ReviewService reviewService;
 
@@ -47,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Transactional
     public AccommodationDetailResponse getAccommodationDetail(
-            Long accommodationId, AccommodationRequest request
+            Long accommodationId, AccommodationRequest request, Pageable pageable
     ) {
         List<ProductResponse> productResponseList = new ArrayList<>();
 
@@ -67,6 +70,7 @@ public class ProductServiceImpl implements ProductService {
             );
         }
 
+
         return AccommodationDetailResponse.builder()
                 .accommodationId(accommodationId)
                 .name(accommodation.getName())
@@ -79,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
                 .phone(accommodation.getPhone())
                 .latitude(accommodation.getLatitude())
                 .longitude(accommodation.getLongitude())
-                .score(5.0)
+                .score(reviewRepository.getAvgReviewScore(accommodationId) == null? 0: reviewRepository.getAvgReviewScore(accommodationId))
                 .rooms(productResponseList)
                 .image(
                         accommodation.getAccommodationImageList().stream().map(
@@ -88,11 +92,11 @@ public class ProductServiceImpl implements ProductService {
                 )
                 .facility(
                         AccommodationFacilityResponse.of(
-                            accommodation.getFacility()
+                                accommodation.getFacility()
                         )
                 )
                 .reviews(
-                        reviewService.getProductReviews(accommodationId)
+                        reviewService.getProductAllReviews(accommodationId, pageable)
                 )
                 .build();
     }

@@ -1,6 +1,6 @@
 package com.ybe.tr1ll1on.domain.product.dto.response;
 
-import com.ybe.tr1ll1on.domain.review.dto.response.ProductReviewResponse;
+import com.ybe.tr1ll1on.domain.review.dto.response.ProductAllReviewResponse;
 
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 @Builder
 @Getter
@@ -57,8 +58,8 @@ public class AccommodationDetailResponse {
     @Schema(example = "숙소 편의시설")
     private AccommodationFacilityResponse facility;
 
-    @ArraySchema(schema = @Schema(implementation = ProductReviewResponse.class))
-    private List<ProductReviewResponse> reviews;
+    @ArraySchema(schema = @Schema(implementation = ProductAllReviewResponse.class))
+    private Page<ProductAllReviewResponse> reviews;
 
     @Schema(example = "37.65908725483671")
     private String latitude;
