@@ -58,6 +58,15 @@ public class OrderItemResponse {
     }
 
     public static OrderItemResponse fromEntity(OrderItem orderItem) {
+        LocalDate currentDate = LocalDate.now();
+
+        // 리뷰 작성이 가능한 상태가 되기 위한 조건은 다음과 같다.
+        // 현재 날짜가 체크아웃 날짜 이후이며, 리뷰 작성 상태가 NOT_WRITABLE 일 때 ( WRITTEN 일 때 재작성을 막기 위해 )
+        ReviewStatus reviewStatus = (currentDate.isAfter(orderItem.getEndDate())
+                        && orderItem.getReviewStatus() == ReviewStatus.NOT_WRITABLE)
+                ? ReviewStatus.WRITABLE
+                : orderItem.getReviewStatus();
+
         return OrderItemResponse.builder()
                 .orderItemId(orderItem.getId())
                 .checkIn(orderItem.getStartDate())
