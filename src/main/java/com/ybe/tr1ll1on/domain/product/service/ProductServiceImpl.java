@@ -18,6 +18,7 @@ import com.ybe.tr1ll1on.domain.product.model.Product;
 import com.ybe.tr1ll1on.domain.product.model.ProductInfoPerNight;
 import com.ybe.tr1ll1on.domain.product.repository.ProductInfoPerNightRepository;
 import com.ybe.tr1ll1on.domain.product.repository.ProductRepository;
+import com.ybe.tr1ll1on.domain.review.repository.ReviewRepository;
 import com.ybe.tr1ll1on.domain.review.service.ReviewService;
 import java.time.LocalDate;
 import java.time.Period;
@@ -37,6 +38,7 @@ public class ProductServiceImpl implements ProductService {
     private final AccommodationRepository accommodationRepository;
     private final ProductRepository productRepository;
     private final ProductInfoPerNightRepository productInfoPerNightRepository;
+    private final ReviewRepository reviewRepository;
 
     private final ReviewService reviewService;
 
@@ -81,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
                 .phone(accommodation.getPhone())
                 .latitude(accommodation.getLatitude())
                 .longitude(accommodation.getLongitude())
-                .score(5.0)
+                .score(reviewRepository.getAvgReviewScore(accommodationId) == null? 0: reviewRepository.getAvgReviewScore(accommodationId))
                 .rooms(productResponseList)
                 .image(
                         accommodation.getAccommodationImageList().stream().map(
@@ -90,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
                 )
                 .facility(
                         AccommodationFacilityResponse.of(
-                            accommodation.getFacility()
+                                accommodation.getFacility()
                         )
                 )
                 .reviews(
