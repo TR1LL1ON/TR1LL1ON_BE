@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ReviewService {
-    Page<ProductReviewResponse> getProductReviews(Long accommodationId, Pageable pageable);
+    Page<ProductReviewResponse> getProductAllReviews(Long accommodationId, Pageable pageable);
     List<ProductReviewResponse> getProductReviews(Long productId);
     Page<UserReviewResponse> getUserReviews(Pageable pageable, ReviewPeriod reviewPeriod);
     UserReviewResponse getUserReview(Long reviewId);
