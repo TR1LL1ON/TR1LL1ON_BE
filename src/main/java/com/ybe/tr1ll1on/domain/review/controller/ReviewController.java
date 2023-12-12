@@ -34,7 +34,7 @@ public class ReviewController {
             content = @Content(schema = @Schema(implementation = ProductAllReviewResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping("/{accommodationId}")
-    public ResponseEntity<Page<ProductReviewResponse>> getProductReviews(
+    public ResponseEntity<Page<ProductAllReviewResponse>> getProductAllReviews(
             @PathVariable Long accommodationId,
             @PageableDefault(
                     size = ReviewConstants.DEFAULT_PAGE_SIZE,
@@ -43,17 +43,17 @@ public class ReviewController {
             ) Pageable pageable
 
     ) {
-        Page<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(accommodationId, pageable);
+        Page<ProductAllReviewResponse> productAllReviewListResponse = reviewService.getProductAllReviews(accommodationId, pageable);
 
-        return ResponseEntity.ok(productReviewListResponse);
+        return ResponseEntity.ok(productAllReviewListResponse);
     }
 
     @GetMapping("/products/{productId}")
     public ResponseEntity<List<ProductReviewResponse>> getProductReviews(
             @PathVariable Long productId
     ) {
-        List<ProductReviewResponse> productReviewResponse = reviewService.getProductReviews(productId);
-        return ResponseEntity.ok(productReviewResponse);
+        List<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(productId);
+        return ResponseEntity.ok(productReviewListResponse);
     }
 
     @Operation(summary = "내 리뷰 조회 API", description = "내 리뷰 조회 API 입니다.")
