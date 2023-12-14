@@ -65,7 +65,7 @@ public class AuthService {
 
     @Transactional
     public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response) {
-        Authentication authentication = authenticate(loginRequest);
+        Authentication authentication = authenticateUser(loginRequest);
         TokenInfo tokenInfo = jwtTokenProvider.generateTokenInfo(authentication, response);
 
         Long userId = Long.valueOf(authentication.getName());
@@ -103,10 +103,10 @@ public class AuthService {
         return new ResponseEntity<>("토큰 재발급 성공", responseHeaders, HttpStatus.OK);
     }
 
-    private Authentication authenticate(LoginRequest loginRequest) {
-        UsernamePasswordAuthenticationToken token = loginRequest.toAuthentication();
+    private Authentication authenticateUser(LoginRequest loginRequest) {
+        UsernamePasswordAuthenticationToken authenticationToken = loginRequest.toAuthentication();
 
-        return authenticationManagerBuilder.getObject().authenticate(token);
+        return authenticationManagerBuilder.getObject().authenticate(authenticationToken);
     }
 
     private HttpHeaders createAuthorizationHeader(String accessToken) {

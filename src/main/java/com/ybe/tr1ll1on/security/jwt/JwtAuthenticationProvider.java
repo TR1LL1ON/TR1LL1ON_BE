@@ -2,7 +2,7 @@ package com.ybe.tr1ll1on.security.jwt;
 
 import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import com.ybe.tr1ll1on.security.exception.UserNotFoundException;
-import com.ybe.tr1ll1on.security.service.CustomUserDetailsService;
+import com.ybe.tr1ll1on.security.service.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    private final CustomUserDetailsService customUserDetailsService;
+    private final PrincipalDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     @Override

@@ -1,7 +1,7 @@
 package com.ybe.tr1ll1on.security.config;
 
 import com.ybe.tr1ll1on.security.jwt.*;
-import com.ybe.tr1ll1on.security.service.CustomUserDetailsService;
+import com.ybe.tr1ll1on.security.service.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +26,7 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtTokenProvider jwtTokenProvider;
@@ -36,7 +37,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration, CustomUserDetailsService customUserDetailsService, PasswordEncoder passwordEncoder) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration, PrincipalDetailsService customUserDetailsService, PasswordEncoder passwordEncoder) throws Exception {
         ProviderManager authenticationManager = (ProviderManager) authenticationConfiguration.getAuthenticationManager();
         authenticationManager.getProviders().add(new JwtAuthenticationProvider(customUserDetailsService, passwordEncoder));
         return authenticationManager;

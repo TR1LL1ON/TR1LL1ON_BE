@@ -5,7 +5,7 @@ import com.ybe.tr1ll1on.security.dto.TokenInfo;
 import com.ybe.tr1ll1on.security.exception.InvalidTokenException;
 import com.ybe.tr1ll1on.security.exception.NotTokenException;
 import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
-import com.ybe.tr1ll1on.security.service.CustomUserDetailsService;
+import com.ybe.tr1ll1on.security.service.PrincipalDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -17,7 +17,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,11 +32,11 @@ import static com.ybe.tr1ll1on.security.constants.JwtConstants.*;
 @Component
 public class JwtTokenProvider {
     private final Key key;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final PrincipalDetailsService customUserDetailsService;
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secretKey,
-            CustomUserDetailsService customUserDetailsService
+            PrincipalDetailsService customUserDetailsService
     ) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -59,14 +58,12 @@ public class JwtTokenProvider {
         storeRefreshTokenInCookie(response, refreshToken);
 
         // 4. 토큰 정보를 담은 객체 생성
-        TokenInfo tokenInfo = TokenInfo.builder()
+        return TokenInfo.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(currentTimeMillis + ACCESS_TOKEN_EXPIRE_TIME)
                 .refreshToken(refreshToken)
                 .build();
-
-        return tokenInfo;
     }
 
     private String getAuthorities(Authentication authentication) {
@@ -127,11 +124,14 @@ public class JwtTokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        // 4. claims에서 추출된 authorities를 사용하여 UserDetails를 생성한다.
-        // 5. 생성된 Authentication 객체를 반환한다.
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        // 4. claims에서 사용자 아이디를 추출한다,
+        Long userId = Long.parseLong(claims.getSubject());
 
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        // 5. claims에서 추출된 사용자 아이디를 사용하여 UserDetails를 생성한다.
+        // 6. 생성된 Authentication 객체를 반환한다.
+        UserDetails userDetails = customUserDetailsService.loadUserById(userId);
+
+        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
     private Claims parseClaims(String accessToken) {
@@ -160,7 +160,7 @@ public class JwtTokenProvider {
             // 1. Refresh Token에서 claims을 파싱한다.
             Claims claims = parseClaims(refreshToken);
             // 2. claims에서 사용자 아이디를 추출한다.
-            String userId = claims.getSubject();
+            Long userId = Long.parseLong(claims.getSubject());
             // 3. 사용자 ID로부터 UserDetails를 가져온다.
             UserDetails userDetails = customUserDetailsService.loadUserById(userId);
 
