@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @Tag(name = "리뷰 API", description = "리뷰 관련 API 모음입니다.")
 @RestController
 @RequiredArgsConstructor
@@ -45,17 +44,14 @@ public class ReviewController {
             ) Pageable pageable
 
     ) {
-        Page<ProductAllReviewResponse> productAllReviewListResponse = reviewService.getProductAllReviews(accommodationId, pageable);
-
-        return ResponseEntity.ok(productAllReviewListResponse);
+        return ResponseEntity.ok(reviewService.getProductAllReviews(accommodationId, pageable));
     }
 
     @GetMapping("/products/{productId}")
     public ResponseEntity<List<ProductReviewResponse>> getProductReviews(
             @PathVariable Long productId
     ) {
-        List<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(productId);
-        return ResponseEntity.ok(productReviewListResponse);
+        return ResponseEntity.ok(reviewService.getProductReviews(productId));
     }
 
     @Operation(summary = "내 리뷰 조회 API", description = "내 리뷰 조회 API 입니다.")
@@ -63,7 +59,7 @@ public class ReviewController {
             content = @Content(schema = @Schema(implementation = UserReviewResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping
-    public ResponseEntity<Page<UserReviewResponse>> getUserReviews(
+    public ResponseEntity<Page<UserReviewResponse>> getUserAllReviews(
             @PageableDefault(
                     size = ReviewConstants.DEFAULT_PAGE_SIZE,
                     sort = ReviewConstants.DEFAULT_SORT_FIELD,
@@ -73,9 +69,7 @@ public class ReviewController {
 
         ReviewPeriod reviewPeriod = (period != null) ? period : ReviewPeriod.THREE_MONTH;
 
-        Page<UserReviewResponse> userReviewResponse = reviewService.getUserReviews(pageable, reviewPeriod);
-
-        return ResponseEntity.ok(userReviewResponse);
+        return ResponseEntity.ok(reviewService.getUserAllReviews(reviewPeriod, pageable));
     }
 
     @GetMapping("/written/{reviewId}")
@@ -83,8 +77,7 @@ public class ReviewController {
             @PathVariable Long reviewId,
             @Valid @RequestBody ReviewUpdateRequest reviewUpdateRequest
     ) {
-        UserReviewResponse userReviewResponse = reviewService.getUserReview(reviewId);
-        return ResponseEntity.ok(userReviewResponse);
+        return ResponseEntity.ok(reviewService.getUserReview(reviewId));
     }
 
     @Operation(summary = "내 리뷰 작성 API", description = "내 리뷰 작성 API 입니다.")
@@ -95,8 +88,7 @@ public class ReviewController {
     public ResponseEntity<ReviewCreateResponse> createReview(
             @Valid @RequestBody ReviewCreateRequest reviewCreateRequest
     ) {
-        ReviewCreateResponse reviewCreateResponse = reviewService.createReview(reviewCreateRequest);
-        return ResponseEntity.ok(reviewCreateResponse);
+        return ResponseEntity.ok(reviewService.createReview(reviewCreateRequest));
     }
 
     @Operation(summary = "리뷰 수정 API", description = "리뷰 수정 API 입니다.")
@@ -108,8 +100,7 @@ public class ReviewController {
             @PathVariable Long reviewId,
             @Valid @RequestBody ReviewUpdateRequest reviewUpdateRequest
     ) {
-        ReviewUpdateResponse reviewUpdateResponse = reviewService.updateReview(reviewId, reviewUpdateRequest);
-        return ResponseEntity.ok(reviewUpdateResponse);
+        return ResponseEntity.ok(reviewService.updateReview(reviewId, reviewUpdateRequest));
     }
 
     @Operation(summary = "리뷰 삭제 API", description = "리뷰 삭제 API 입니다.")
@@ -120,7 +111,6 @@ public class ReviewController {
     public ResponseEntity<ReviewDeleteResponse> deleteReview(
             @PathVariable Long reviewId
     ) {
-        ReviewDeleteResponse reviewDeleteResponse = reviewService.deleteReview(reviewId);
-        return ResponseEntity.ok(reviewDeleteResponse);
+        return ResponseEntity.ok(reviewService.deleteReview(reviewId));
     }
 }

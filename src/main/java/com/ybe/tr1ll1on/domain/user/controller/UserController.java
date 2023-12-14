@@ -22,7 +22,7 @@ import java.util.List;
 @Tag(name = "마이페이지 API", description = "마이페이지 관련 API 모음입니다.")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
@@ -32,8 +32,7 @@ public class UserController {
     @SecurityRequirement(name = "jwt")
     @GetMapping
     public ResponseEntity<List<MyPageResponse>> getMyPage() {
-        List<MyPageResponse> myPageResponse = userService.getMyPage();
-        return ResponseEntity.ok(myPageResponse);
+        return ResponseEntity.ok(userService.getMyPage());
     }
 
     @Operation(summary = "마이페이지 - 주문내역 상세 API", description = "마이페이지에서 주문내역 상세 API 입니다.")
@@ -42,8 +41,7 @@ public class UserController {
     @SecurityRequirement(name = "jwt")
     @GetMapping("/details/{orderId}")
     public ResponseEntity<MyPageDetailResponse> getMyPageDetails(@PathVariable Long orderId) {
-        MyPageDetailResponse myPageDetailResponse = userService.getMyPageDetails(orderId);
-        return ResponseEntity.ok(myPageDetailResponse);
+        return ResponseEntity.ok(userService.getMyPageDetails(orderId));
     }
 
     @Operation(summary = "마이페이지 - 숙소 찜 목록", description = "마이페이지에서 찜 목록 API 입니다.")
@@ -52,8 +50,6 @@ public class UserController {
     @SecurityRequirement(name = "jwt")
     @GetMapping("/likes")
     public ResponseEntity<List<LikeResponse>> getLikeList() {
-        List<LikeResponse> likeResponseList = userService.getMyLikeList();
-        return ResponseEntity.ok(likeResponseList);
+        return ResponseEntity.ok(userService.getMyLikeList());
     }
-
 }
