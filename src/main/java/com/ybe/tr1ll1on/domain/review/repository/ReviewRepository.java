@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.time.LocalDate;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<Review, Long> {
+public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
 
     @Query("select avg(r.score) from Review r where r.product.accommodation.id = :accommodationId")
     Double getAvgReviewScore(@Param("accommodationId") Long accommodationId);
@@ -23,7 +23,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @EntityGraph(attributePaths = {"user"})
     Optional<List<Review>> getReviewsByProductId(Long productId);
 
-     @Query(value = "select r from Review r " +
+    @Query(value = "select r from Review r " +
             "left join fetch r.product p " +
             "left join fetch p.accommodation a " +
             "left join fetch r.orderItem oi " +
@@ -32,16 +32,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> getReviewsByUserWithDetailsAndDateRange(
             @Param("user") User user,
             @Param("startDate") LocalDate startDate,
-            Pageable pageable);
-
-     @Query(value = "select r from Review r "
-            + "left join fetch r.user u "
-            + "left join fetch r.product p "
-            + "left join fetch p.accommodation a "
-            + "where a.id = :accommodationId ",
-            countQuery = "select count(r) from Review r left join r.product p left join p.accommodation a where a.id = :accommodationId ")
-    Page<Review> getReviewsByAccommodationWithDetails(
-            @Param("accommodationId") Long accommodationId,
             Pageable pageable);
 }
 

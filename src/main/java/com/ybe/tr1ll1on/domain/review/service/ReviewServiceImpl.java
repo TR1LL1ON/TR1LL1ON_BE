@@ -25,9 +25,7 @@ import com.ybe.tr1ll1on.global.common.ReviewStatus;
 import com.ybe.tr1ll1on.security.util.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -43,40 +41,23 @@ public class ReviewServiceImpl implements ReviewService {
 
     /* 숙소 전체 리뷰 조회 */
     @Transactional
-    public Page<ProductAllReviewResponse> getProductAllReviews(Long accommodationId, Pageable pageable) {
-        // 특정 숙소의 리뷰에 대한 정보를 가져오면서 관련된 데이터를 패치 조인을 통해 즉시 로딩한다.
-        // 관련된 데이터엔 사용자, 상품에 대한 정보가 포함되어 있다.
-        // ※ 주의 - 즉시 로딩 대상인 엔티티와 연관관계인 엔티티가 eager type 일 경우 함께 즉시 로딩된다.
-        Page<Review> reviewPage = reviewRepository.getReviewsByAccommodationWithDetails(
-                accommodationId, pageable
-        );
+    public Slice<ProductAllReviewResponse> getProductAllReviews(
+            Long accommodationId, Double cursorScore, LocalDate cursorReviewDate, Long cursorReviewId, Pageable pageable
+    ) {
+        Slice<Review> reviewSlice = reviewRepository.getProductAllReviews(accommodationId, cursorScore, cursorReviewDate, cursorReviewId, pageable);
 
-        // 1. 특정 상품의 이미지 리스트에 대한 batch size = 100 으로 설정한 상태이다.
-        //    - 이후 상품 이미지 엔티티 접근 시 지정한 개수만큼 상품 아이디에 해당하는 이미지 즉시 로딩
-        // 2. 리뷰와 관련된 상품 정보는 이미 로딩된 상태이므로 추가 쿼리가 발생하지 않는다.
-        List<ProductAllReviewResponse> productAllReviewResponseList = reviewPage.getContent().stream()
-                .map(ProductAllReviewResponse::fromEntity)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(productAllReviewResponseList, pageable, reviewPage.getTotalElements());
+        return reviewSlice.map(ProductAllReviewResponse::fromEntity);
     }
 
-    /**
-     *
-     * @param productId 상품 ID
-     * @return 특정 상품에 대한 리뷰 목록
-     */
+    /* 특정 상품 리뷰 조회 */
     @Transactional
     public List<ProductReviewResponse> getProductReviews(Long productId) {
         List<Review> reviews = getReviewsByProductId(productId);
 
-        List<ProductReviewResponse> productReviewResponseList = reviews.stream()
+        return reviews.stream()
                 .map(ProductReviewResponse::fromEntity)
                 .collect(Collectors.toList());
-
-        return productReviewResponseList;
     }
-
 
     /* 사용자 전체 리뷰 조회 */
     @Transactional

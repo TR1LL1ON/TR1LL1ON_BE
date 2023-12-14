@@ -14,13 +14,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -36,26 +35,31 @@ public class ReviewController {
             content = @Content(schema = @Schema(implementation = ProductAllReviewResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping("/{accommodationId}")
-    public ResponseEntity<Page<ProductAllReviewResponse>> getProductAllReviews(
+    public ResponseEntity<Slice<ProductAllReviewResponse>> getProductAllReviews(
             @PathVariable Long accommodationId,
+            @RequestParam(name = "cursorScore", required = false) Double cursorScore,
+            @RequestParam(name = "cursorReviewDate", required = false) LocalDate cursorReviewDate,
+            @RequestParam(name = "cursorReviewId", required = false) Long cursorReviewId,
             @PageableDefault(
-                    size = ReviewConstants.DEFAULT_PAGE_SIZE,
                     sort = ReviewConstants.DEFAULT_SORT_FIELD,
                     direction = Sort.Direction.DESC
             ) Pageable pageable
-
     ) {
-        Page<ProductAllReviewResponse> productAllReviewListResponse = reviewService.getProductAllReviews(accommodationId, pageable);
 
-        return ResponseEntity.ok(productAllReviewListResponse);
+        Pageable customPageable = PageRequest.of(
+                ReviewConstants.DEFAULT_PAGE_NUMBER, ReviewConstants.DEFAULT_PAGE_SIZE, pageable.getSort()
+        );
+
+        return ResponseEntity.ok(reviewService.getProductAllReviews(
+                accommodationId, cursorScore, cursorReviewDate, cursorReviewId, customPageable
+        ));
     }
 
     @GetMapping("/products/{productId}")
     public ResponseEntity<List<ProductReviewResponse>> getProductReviews(
             @PathVariable Long productId
     ) {
-        List<ProductReviewResponse> productReviewListResponse = reviewService.getProductReviews(productId);
-        return ResponseEntity.ok(productReviewListResponse);
+        return ResponseEntity.ok(reviewService.getProductReviews(productId));
     }
 
     @Operation(summary = "내 리뷰 조회 API", description = "내 리뷰 조회 API 입니다.")
@@ -73,9 +77,7 @@ public class ReviewController {
 
         ReviewPeriod reviewPeriod = (period != null) ? period : ReviewPeriod.THREE_MONTH;
 
-        Page<UserReviewResponse> userReviewResponse = reviewService.getUserReviews(pageable, reviewPeriod);
-
-        return ResponseEntity.ok(userReviewResponse);
+        return ResponseEntity.ok(reviewService.getUserReviews(pageable, reviewPeriod));
     }
 
     @GetMapping("/written/{reviewId}")
@@ -83,8 +85,7 @@ public class ReviewController {
             @PathVariable Long reviewId,
             @Valid @RequestBody ReviewUpdateRequest reviewUpdateRequest
     ) {
-        UserReviewResponse userReviewResponse = reviewService.getUserReview(reviewId);
-        return ResponseEntity.ok(userReviewResponse);
+        return ResponseEntity.ok(reviewService.getUserReview(reviewId));
     }
 
     @Operation(summary = "내 리뷰 작성 API", description = "내 리뷰 작성 API 입니다.")
@@ -95,8 +96,7 @@ public class ReviewController {
     public ResponseEntity<ReviewCreateResponse> createReview(
             @Valid @RequestBody ReviewCreateRequest reviewCreateRequest
     ) {
-        ReviewCreateResponse reviewCreateResponse = reviewService.createReview(reviewCreateRequest);
-        return ResponseEntity.ok(reviewCreateResponse);
+        return ResponseEntity.ok(reviewService.createReview(reviewCreateRequest));
     }
 
     @Operation(summary = "리뷰 수정 API", description = "리뷰 수정 API 입니다.")
@@ -108,8 +108,7 @@ public class ReviewController {
             @PathVariable Long reviewId,
             @Valid @RequestBody ReviewUpdateRequest reviewUpdateRequest
     ) {
-        ReviewUpdateResponse reviewUpdateResponse = reviewService.updateReview(reviewId, reviewUpdateRequest);
-        return ResponseEntity.ok(reviewUpdateResponse);
+        return ResponseEntity.ok(reviewService.updateReview(reviewId, reviewUpdateRequest));
     }
 
     @Operation(summary = "리뷰 삭제 API", description = "리뷰 삭제 API 입니다.")
@@ -120,7 +119,6 @@ public class ReviewController {
     public ResponseEntity<ReviewDeleteResponse> deleteReview(
             @PathVariable Long reviewId
     ) {
-        ReviewDeleteResponse reviewDeleteResponse = reviewService.deleteReview(reviewId);
-        return ResponseEntity.ok(reviewDeleteResponse);
+        return ResponseEntity.ok(reviewService.deleteReview(reviewId));
     }
 }

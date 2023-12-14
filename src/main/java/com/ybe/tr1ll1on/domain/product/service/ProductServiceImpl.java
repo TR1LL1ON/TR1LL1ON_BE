@@ -95,9 +95,9 @@ public class ProductServiceImpl implements ProductService {
                                 accommodation.getFacility()
                         )
                 )
-                .reviews(
-                        reviewService.getProductAllReviews(accommodationId, pageable)
-                )
+//                .reviews(
+//                        reviewService.getProductAllReviews(accommodationId, pageable)
+//                )
                 .build();
     }
 

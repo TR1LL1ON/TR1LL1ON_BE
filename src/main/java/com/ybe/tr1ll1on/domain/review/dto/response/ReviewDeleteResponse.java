@@ -32,7 +32,6 @@ public class ReviewDeleteResponse {
         private Long reviewId;
         @Schema(example = "2023-11-27")
         private LocalDate deleteDate;
-        // ... 추가 가능
 
         public static ReviewDetails fromEntity(Review review) {
 

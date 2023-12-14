@@ -41,12 +41,10 @@ public class UserService {
         // 4. 숙소 이미지에 대한 정보는 배치 사이즈 설정을 통해 해당 개수만큼 즉시 로딩한다.
         List<Orders> orders = orderRepository.getUserOrdersWithDetails(user);
 
-        // 5. 패치 조인을 통해 미리 가져온 주문 목록에 대한 정보를 MyPageListResponse 로 변환.
-        List<MyPageResponse> myPageResponseList = orders.stream()
+        // 5. 패치 조인을 통해 미리 가져온 주문 목록에 대한 정보를 MyPageListResponse 로 반환.
+        return orders.stream()
                 .map(MyPageResponse::fromEntity)
                 .collect(Collectors.toList());
-
-        return myPageResponseList;
     }
 
     @Transactional
@@ -60,10 +58,8 @@ public class UserService {
         Orders order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderException(OrderExceptionCode.ORDER_NOT_FOUND));
 
-        // 5. 패치 조인을 통해 미리 가져온 주문에 대한 정보를 MyPageDetailResponse 로 변환.
-        MyPageDetailResponse myPageDetailResponse = MyPageDetailResponse.fromEntity(order);
-
-        return myPageDetailResponse;
+        // 5. 패치 조인을 통해 미리 가져온 주문에 대한 정보를 MyPageDetailResponse 로 반환
+        return MyPageDetailResponse.fromEntity(order);
     }
 
     @Transactional(readOnly = true)
