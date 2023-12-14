@@ -12,12 +12,9 @@ import com.ybe.tr1ll1on.domain.user.exception.InValidUserException;
 import com.ybe.tr1ll1on.domain.user.exception.InValidUserExceptionCode;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
-import com.ybe.tr1ll1on.global.date.exception.InValidDateException;
-import com.ybe.tr1ll1on.security.dto.TokenDto;
-import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
-import com.ybe.tr1ll1on.security.exception.UserNotFoundException;
+import com.ybe.tr1ll1on.global.constants.AuthConstants;
+import com.ybe.tr1ll1on.security.dto.TokenInfo;
 import com.ybe.tr1ll1on.security.jwt.JwtTokenProvider;
-import com.ybe.tr1ll1on.security.util.SecurityUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
+
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
     private final PasswordEncoder passwordEncoder;
@@ -65,29 +63,36 @@ public class AuthService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response) {
         Authentication authentication = authenticate(loginRequest);
-        TokenDto tokenDTO = jwtTokenProvider.generateTokenDto(authentication, response);
+        TokenInfo tokenInfo = jwtTokenProvider.generateTokenInfo(authentication, response);
 
-        User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(SecurityExceptionCode.USER_NOT_FOUND));
+        Long userId = Long.valueOf(authentication.getName());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new InValidUserException(InValidUserExceptionCode.USER_NOT_FOUND));
 
-        return LoginResponse.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .name(user.getName())
-                .accessToken(tokenDTO.getAccessToken())
+        LoginResponse loginResponse = LoginResponse.builder()
+                .userDetails(
+                        LoginResponse.UserDetailsResponse.builder()
+                                .userId(userId)
+                                .userEmail(user.getEmail())
+                                .userName(user.getName())
+                                .build()
+                )
+                .tokenInfo(tokenInfo)
                 .build();
+
+        return loginResponse;
     }
 
     @Transactional
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println(SecurityUtil.getCurrentUserId());
+    public String logout(HttpServletResponse response) {
         deleteCookie(response);
-        return new ResponseEntity<>("로그아웃에 성공하였습니다.", HttpStatus.OK);
+        return AuthConstants.LOGOUT_SUCCESS_MESSAGE;
     }
 
+    @Transactional
     public ResponseEntity<String> refreshAccessToken(HttpServletRequest request) {
         String refreshToken = jwtTokenProvider.getRefreshTokenFromRequest(request);
         Authentication authentication = jwtTokenProvider.getAuthenticationFromRefreshToken(refreshToken);

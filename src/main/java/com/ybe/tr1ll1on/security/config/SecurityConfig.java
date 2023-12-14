@@ -1,6 +1,5 @@
 package com.ybe.tr1ll1on.security.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ybe.tr1ll1on.security.jwt.*;
 import com.ybe.tr1ll1on.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +29,6 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtTokenProvider jwtTokenProvider;
-    private final ObjectMapper objectMapper;
-    private final JwtAuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -89,8 +86,8 @@ public class SecurityConfig {
         );
 
         http
-                .apply(new JwtSecurityConfig(jwtTokenProvider, objectMapper));
-        
+                .apply(new JwtSecurityConfig(jwtTokenProvider));
+
         http
                 .logout()
                 .logoutUrl("/logout")

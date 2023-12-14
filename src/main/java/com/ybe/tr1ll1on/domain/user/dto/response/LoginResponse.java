@@ -1,6 +1,6 @@
 package com.ybe.tr1ll1on.domain.user.dto.response;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.ybe.tr1ll1on.security.dto.TokenInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,15 +12,17 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginResponse {
 
-    @Schema(example = "1")
-    private Long id;
+    private UserDetailsResponse userDetails;
 
-    @Schema(example = "test@mail.com")
-    private String email;
+    private TokenInfo tokenInfo;
 
-    @Schema(example = "test1")
-    private String name;
-
-    @Schema(example = "a12345679123456789")
-    private String accessToken;
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class UserDetailsResponse {
+        private Long userId;
+        private String userEmail;
+        private String userName;
+    }
 }

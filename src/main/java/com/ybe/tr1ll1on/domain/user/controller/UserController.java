@@ -24,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+
     private final UserService userService;
 
     @Operation(summary = "마이페이지 API", description = "마이페이지 API 입니다.")
@@ -40,7 +41,9 @@ public class UserController {
             content = @Content(schema = @Schema(implementation = MyPageDetailResponse.class)))
     @SecurityRequirement(name = "jwt")
     @GetMapping("/details/{orderId}")
-    public ResponseEntity<MyPageDetailResponse> getMyPageDetails(@PathVariable Long orderId) {
+    public ResponseEntity<MyPageDetailResponse> getMyPageDetails(
+            @PathVariable Long orderId
+    ) {
         return ResponseEntity.ok(userService.getMyPageDetails(orderId));
     }
 
