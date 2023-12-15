@@ -29,18 +29,15 @@
 - 11/20(월) ~ 12/01(금)
 
   
-- 김수빈
-    - 숙소 조회
-- 서은
-    - 장바구니
-- 성지운
-    - 상품 상세 조회
-    - 주문하기 
-    - 배포
-- 전유림
-    - 리뷰
-    - 로그인
-    - 배포
+### ✨ 팀 소개
+
+|                                             서은 (BE) <br> 팀장                                             |                                                김수빈 (BE) <br> 팀원                                                 |                     성지운 (BE) <br> 팀원                     |                              전유림 (BE) <br> 팀원                                                           
+| :-----------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------: | :-----------------------------------------------------------------------------: 
+|                            ![WestSilver99](https://avatars.githubusercontent.com/WestSilver99)                            |                             ![Su-daa](https://avatars.githubusercontent.com/Su-daa)                              | ![sungjiwoon](https://avatars.githubusercontent.com/sungjiwoon) |    ![yurim0628](https://avatars.githubusercontent.com/yurim0628)    | 
+|                                      [WestSilver99](https://github.com/WestSilver99)                                      |                                       [Su-daa](https://github.com/Su-daa)                                        |           [sungjiwoon](https://github.com/sungjiwoon)           |              [yurim0628](https://github.com/yurim0628)              |
+| <ul><li>초기설정(깃허브)</li><li>장바구니</li></ul> | <ul><li>초기설정(깃허브)</li><li>숙소전체조회(무한스크롤)</li></ul> | <ul><li>상품 상세 조회</li><li>상품 결제</li><li>CI/CD 서버 배포</li></ul>   | <ul><li>시큐리티</li><li>리뷰</li></ul> |   
+
+<br>
 
 ■ 목적
 
