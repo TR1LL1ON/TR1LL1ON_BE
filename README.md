@@ -21,8 +21,7 @@
 
 ■ 프로젝트명
 
-- TR1ll1on
-- https://www.tr1ll1on.site/
+- TR1ll1on : [사이트 링크](https://www.tr1ll1on.site/)
 
 ■ 기간, 참여인원
 
