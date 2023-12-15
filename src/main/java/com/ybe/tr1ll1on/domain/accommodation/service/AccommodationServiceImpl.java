@@ -25,6 +25,11 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationRepository accommodationRepository;
     private final AccommodationMapper mapper;
 
+    /**
+     * 숙소 전체 조회
+     * @param accommodationRequest
+     * @return
+     */
     @Transactional
     public List<AccommodationResponse> findAccommodation(AccommodationRequest accommodationRequest) {
 
@@ -39,7 +44,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                         .areaCode(it.getAreaCode())
                         .latitude(it.getLatitude())
                         .longitude(it.getLongitude())
-                        .score(it.getScore())
+                        .score(Math.round(it.getScore()*10)/10.0)
                         .build())
                 .collect(Collectors.toList());
     }
