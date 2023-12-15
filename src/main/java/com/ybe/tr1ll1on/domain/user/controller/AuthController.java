@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +32,9 @@ public class AuthController {
     @ApiResponse(responseCode = "201", description = "가입 성공시",
             content = @Content(schema = @Schema(implementation = SignUpResponse.class)))
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<SignUpResponse> signUp(
+            @Valid @RequestBody SignUpRequest signUpRequest
+    ) {
         return ResponseEntity.ok(authService.signUp(signUpRequest));
     }
 
@@ -41,7 +42,9 @@ public class AuthController {
     @Operation(summary = "로그인 API", description = "로그인 API 입니다.")
     @ApiResponse(responseCode = "201", description = "로그인 성공시",
             content = @Content(schema = @Schema(implementation = LoginResponse.class)))
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<LoginResponse> login(
+            @RequestBody LoginRequest loginRequest, HttpServletResponse response
+    ) {
         return ResponseEntity.ok(authService.login(loginRequest, response));
     }
 
@@ -49,10 +52,10 @@ public class AuthController {
     @Operation(summary = "로그아웃 API", description = "로그아웃 API 입니다.")
     @ApiResponse(responseCode = "201", description = "로그아웃 성공시")
     @SecurityRequirement(name = "jwt")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-        ResponseEntity<String> logoutResponse = authService.logout(request, response);
-        HttpHeaders headers = logoutResponse.getHeaders();
-        return ResponseEntity.status(logoutResponse.getStatusCode()).headers(headers).body(logoutResponse.getBody());
+    public ResponseEntity<String> logout(
+            HttpServletResponse response
+    ) {
+        return ResponseEntity.ok(authService.logout(response));
     }
 
 
@@ -60,7 +63,9 @@ public class AuthController {
     @Operation(summary = "리프레쉬 토큰 API", description = "리프레쉬 API 입니다.")
     @ApiResponse(responseCode = "201", description = "리프레쉬 성공시")
     @SecurityRequirement(name = "jwt")
-    public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
+    public ResponseEntity<?> refreshAccessToken(
+            HttpServletRequest request
+    ) {
         ResponseEntity<String> result = authService.refreshAccessToken(request);
         return new ResponseEntity<>(result.getBody(), result.getHeaders(), result.getStatusCode());
     }

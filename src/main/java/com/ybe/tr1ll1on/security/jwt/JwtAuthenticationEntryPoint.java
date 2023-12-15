@@ -2,10 +2,10 @@ package com.ybe.tr1ll1on.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ybe.tr1ll1on.global.exception.ExceptionCode;
-import com.ybe.tr1ll1on.global.exception.TrillionExceptionCode;
 import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -15,14 +15,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * HttpStatus 401 Unauthorized
- * 인증되지 않은 사용자가 인증이 필요한 엔드포인트에 접근하려고 할 때 발생한 예외를 잡아서 JSON 형태의 API 스펙으로 응답하도록 한다.
- */
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
