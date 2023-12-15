@@ -83,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
                 .phone(accommodation.getPhone())
                 .latitude(accommodation.getLatitude())
                 .longitude(accommodation.getLongitude())
-                .score(reviewRepository.getAvgReviewScore(accommodationId) == null? 0: reviewRepository.getAvgReviewScore(accommodationId))
+                .score(reviewRepository.getAvgReviewScore(accommodationId) == null? 0: Math.round(reviewRepository.getAvgReviewScore(accommodationId)*10)/10.0)
                 .rooms(productResponseList)
                 .image(
                         accommodation.getAccommodationImageList().stream().map(
