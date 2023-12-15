@@ -43,6 +43,50 @@
 
 - 숙박 예약 서비스를 완성 및 협업
 
+## 📚 주요 기능
+
+<div align="center">
+  <table>
+    <tr align="center">
+      <th>로그인/회원가입</th>
+      <th>숙소/객실</th>
+    </tr>
+    <tr>      
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/496bb4d4-d79b-4a4f-ba55-cc5037d8aa28"
+height="400"></td>
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/032d7699-af9b-4082-a861-70d5704d7851" height="400"></td>      
+    </tr>    
+        <tr align="center">
+      <th>예약/장바구니</th>
+      <th>결제</th>         
+    </tr>
+    <tr>      
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/6aabc597-ccef-4555-bb57-87f981ec947b"
+height="400"></td>
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/efe32c44-6dc7-43f8-8b8c-e6a56176477a" height="400"></td>      
+    </tr>    
+            <tr align="center">
+      <th>예약내역/리뷰작성</th>
+      <th>주변숙소 검색</th>
+    </tr>
+    <tr>      
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/fd931cda-1bb2-4c1d-b742-bf8e8995a618"
+ alt="chatting/painting" height="400"></td>
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/bea1014c-7ae7-4c71-8043-d43a9e3ab314" height="400"></td>      
+    </tr> 
+                <tr align="center">
+      <th>카테고리</th>    
+    </tr>
+    <tr>      
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/fa80c45c-6170-44b8-a589-eaceb9bcc701"
+ alt="category" height="400"></td>     
+    </tr> 
+  </table>
+</div>
+
+</br>
+</br>
+
 <br/>
 
 # 아키텍처
