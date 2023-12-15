@@ -12,7 +12,7 @@ import java.util.List;
 public interface ReviewService {
     Page<ProductAllReviewResponse> getProductAllReviews(Long accommodationId, Pageable pageable);
     List<ProductReviewResponse> getProductReviews(Long productId);
-    Page<UserReviewResponse> getUserReviews(Pageable pageable, ReviewPeriod reviewPeriod);
+    Page<UserReviewResponse> getUserAllReviews(ReviewPeriod reviewPeriod, Pageable pageable);
     UserReviewResponse getUserReview(Long reviewId);
     ReviewCreateResponse createReview(ReviewCreateRequest reviewCreateRequest);
     ReviewUpdateResponse updateReview(Long reviewId, ReviewUpdateRequest reviewUpdateRequest);
