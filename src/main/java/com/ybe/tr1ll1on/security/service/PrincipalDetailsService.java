@@ -3,7 +3,7 @@ package com.ybe.tr1ll1on.security.service;
 import com.ybe.tr1ll1on.domain.user.model.User;
 import com.ybe.tr1ll1on.domain.user.repository.UserRepository;
 import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
-import com.ybe.tr1ll1on.security.exception.UserNotFoundException;
+import com.ybe.tr1ll1on.security.exception.SecurityException;
 import com.ybe.tr1ll1on.security.model.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,14 +22,14 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(SecurityExceptionCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new SecurityException(SecurityExceptionCode.USER_NOT_FOUND));
 
         return createUserDetails(user);
     }
 
     public UserDetails loadUserById(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(SecurityExceptionCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new SecurityException(SecurityExceptionCode.USER_NOT_FOUND));
 
         return createUserDetails(user);
     }

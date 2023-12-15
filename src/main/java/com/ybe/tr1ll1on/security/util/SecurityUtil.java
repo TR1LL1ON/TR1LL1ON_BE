@@ -1,7 +1,7 @@
 package com.ybe.tr1ll1on.security.util;
 
 import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
-import com.ybe.tr1ll1on.security.exception.UserNotFoundException;
+import com.ybe.tr1ll1on.security.exception.SecurityException;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +12,7 @@ public class SecurityUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getName() == null) {
-            throw new UserNotFoundException(SecurityExceptionCode.USER_NOT_FOUND);
+            throw new SecurityException(SecurityExceptionCode.USER_NOT_FOUND);
         }
 
         return Long.parseLong(authentication.getName());
