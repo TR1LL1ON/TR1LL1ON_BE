@@ -22,12 +22,17 @@
 ■ 프로젝트명
 
 - TR1ll1on : [사이트 링크](https://www.tr1ll1on.site/)
+- organization : [링크](https://github.com/TR1LL1ON)
+
+<br>
 
 ■ 기간, 참여인원
 
 - 11/20(월) ~ 12/01(금)
+- FE 5명 BE 4명
 
-  
+<br>
+
 ### ✨ 팀 소개
 
 |                                             서은 (BE) <br> 팀장                                             |                                                김수빈 (BE) <br> 팀원                                                 |                     성지운 (BE) <br> 팀원                     |                              전유림 (BE) <br> 팀원                                                           
