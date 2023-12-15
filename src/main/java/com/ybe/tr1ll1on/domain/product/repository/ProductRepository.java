@@ -17,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             + "left join fetch p.productImageList "
             + "WHERE p.accommodation = :accommodation AND p.maximumNumber >= :personNumber")
     List<Product> findByAccommodationAndMaximumNumberIsGreaterThanEqual(
-            Accommodation accommodation, Integer personNumber
+            @Param("accommodation") Accommodation accommodation, @Param("personNumber") Integer personNumber
     );
 
     @Query("select p from Product p "
