@@ -1,3 +1,14 @@
+# KPT 기간 보완사항
+
+- 무한 스크롤
+- 찜 기능
+- 마이페이지 조회
+- 리뷰 조회
+  - 성능개선
+- 페이지네이션
+
+
+# 페이지 구현 예시
 
 ![트릴리언 로그인](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/59862752/7ccf0ded-277d-4465-ae71-c7d4268770f6)
 
@@ -10,30 +21,75 @@
 
 ■ 프로젝트명
 
-- TR1ll1on
-- https://www.tr1ll1on.site/
+- TR1ll1on : [사이트 링크](https://www.tr1ll1on.site/)
+- organization : [링크](https://github.com/TR1LL1ON)
+
+<br>
 
 ■ 기간, 참여인원
 
 - 11/20(월) ~ 12/01(금)
+- FE 5명 BE 4명
 
-  
-- 김수빈
-    - 숙소 조회
-- 서은
-    - 장바구니
-- 성지운
-    - 상품 상세 조회
-    - 주문하기 
-    - 배포
-- 전유림
-    - 리뷰
-    - 로그인
-    - 배포
+<br>
+
+### ✨ 팀 소개
+
+|                                             서은 (BE) <br> 팀장                                             |                                                김수빈 (BE) <br> 팀원                                                 |                     성지운 (BE) <br> 팀원                     |                              전유림 (BE) <br> 팀원                                                           
+| :-----------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------: | :-----------------------------------------------------------------------------: 
+|                            ![WestSilver99](https://avatars.githubusercontent.com/WestSilver99)                            |                             ![Su-daa](https://avatars.githubusercontent.com/Su-daa)                              | ![sungjiwoon](https://avatars.githubusercontent.com/sungjiwoon) |    ![yurim0628](https://avatars.githubusercontent.com/yurim0628)    | 
+|                                      [WestSilver99](https://github.com/WestSilver99)                                      |                                       [Su-daa](https://github.com/Su-daa)                                        |           [sungjiwoon](https://github.com/sungjiwoon)           |              [yurim0628](https://github.com/yurim0628)              |
+| <ul><li>초기설정(깃허브)</li><li>장바구니</li></ul> | <ul><li>초기설정(깃허브)</li><li>숙소전체조회(무한스크롤)</li></ul> | <ul><li>상품 상세 조회</li><li>상품 결제</li><li>찜 기능</li><li>CI/CD 서버 배포</li></ul>   | <ul><li>OPEN API</li><li>시큐리티</li><li>리뷰</li><li>마이페이지</li></ul> |   
+
+<br>
 
 ■ 목적
 
 - 숙박 예약 서비스를 완성 및 협업
+
+## 📚 주요 기능
+
+<div align="center">
+  <table>
+    <tr align="center">
+      <th>로그인/회원가입</th>
+      <th>숙소/객실</th>
+    </tr>
+    <tr>      
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/496bb4d4-d79b-4a4f-ba55-cc5037d8aa28"
+height="400"></td>
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/032d7699-af9b-4082-a861-70d5704d7851" height="400"></td>      
+    </tr>    
+        <tr align="center">
+      <th>예약/장바구니</th>
+      <th>결제</th>         
+    </tr>
+    <tr>      
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/6aabc597-ccef-4555-bb57-87f981ec947b"
+height="400"></td>
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/efe32c44-6dc7-43f8-8b8c-e6a56176477a" height="400"></td>      
+    </tr>    
+            <tr align="center">
+      <th>예약내역/리뷰작성</th>
+      <th>주변숙소 검색</th>
+    </tr>
+    <tr>      
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/fd931cda-1bb2-4c1d-b742-bf8e8995a618"
+ alt="chatting/painting" height="400"></td>
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/bea1014c-7ae7-4c71-8043-d43a9e3ab314" height="400"></td>      
+    </tr> 
+                <tr align="center">
+      <th>카테고리</th>    
+    </tr>
+    <tr>      
+      <td><img src="https://github.com/TR1LL1ON/TR1LL1ON_FE/assets/134940630/fa80c45c-6170-44b8-a589-eaceb9bcc701"
+ alt="category" height="400"></td>     
+    </tr> 
+  </table>
+</div>
+
+</br>
+</br>
 
 <br/>
 
@@ -69,244 +125,6 @@
 <br/>
 
 
-
-
-
-# 패키지 구조
-
-```bash
-├── main
-│   ├── java
-│   │   └── com
-│   │       └── ybe
-│   │           └── tr1ll1on
-│   │               ├── AppStartupRunner.java
-│   │               ├── Tr1ll1onApplication.java
-│   │               ├── domain
-│   │               │   ├── accommodation
-│   │               │   │   ├── controller
-│   │               │   │   │   └── AccommodationController.java
-│   │               │   │   ├── dto
-│   │               │   │   │   ├── request
-│   │               │   │   │   │   └── AccommodationRequest.java
-│   │               │   │   │   └── response
-│   │               │   │   │       └── AccommodationResponse.java
-│   │               │   │   ├── model
-│   │               │   │   │   ├── Accommodation.java
-│   │               │   │   │   ├── AccommodationFacility.java
-│   │               │   │   │   ├── AccommodationImage.java
-│   │               │   │   │   └── Category.java
-│   │               │   │   ├── repository
-│   │               │   │   │   ├── AccommodationFacilityRepository.java
-│   │               │   │   │   ├── AccommodationImageRepository.java
-│   │               │   │   │   ├── AccommodationMapper.java
-│   │               │   │   │   ├── AccommodationRepository.java
-│   │               │   │   │   └── CategoryRepository.java
-│   │               │   │   └── service
-│   │               │   │       └── AccommodationService.java
-│   │               │   ├── cart
-│   │               │   │   ├── controller
-│   │               │   │   │   └── CartController.java
-│   │               │   │   ├── dto
-│   │               │   │   │   ├── request
-│   │               │   │   │   │   ├── AddCartItemRequest.java
-│   │               │   │   │   │   └── CartRequest.java
-│   │               │   │   │   └── response
-│   │               │   │   │       ├── AddCartItemResponse.java
-│   │               │   │   │       └── CartResponse.java
-│   │               │   │   ├── exception
-│   │               │   │   │   ├── CartIdNotFoundException.java
-│   │               │   │   │   ├── CartIdNotFoundExceptionCode.java
-│   │               │   │   │   ├── CartItemIdNotFoundException.java
-│   │               │   │   │   ├── CartItemIdNotFoundExceptionCode.java
-│   │               │   │   │   ├── ProductNotExistException.java
-│   │               │   │   │   ├── ProductNotExsitExceptionCode.java
-│   │               │   │   │   ├── UserAlreadyHasCartException.java
-│   │               │   │   │   ├── UserAlreadyHasCartExceptionCode.java
-│   │               │   │   │   ├── UserNotFoundException.java
-│   │               │   │   │   └── UserNotFoundExceptionCode.java
-│   │               │   │   ├── model
-│   │               │   │   │   ├── Cart.java
-│   │               │   │   │   └── CartItem.java
-│   │               │   │   ├── repository
-│   │               │   │   │   ├── CartItemRepository.java
-│   │               │   │   │   └── CartRepository.java
-│   │               │   │   └── service
-│   │               │   │       ├── CartService.java
-│   │               │   │       └── CartServiceImpl.java
-│   │               │   ├── likes
-│   │               │   │   ├── controller
-│   │               │   │   │   └── LikeController.java
-│   │               │   │   ├── dto
-│   │               │   │   │   └── LikeDTO.java
-│   │               │   │   ├── error
-│   │               │   │   │   └── LikeError.java
-│   │               │   │   ├── model
-│   │               │   │   │   └── Likes.java
-│   │               │   │   ├── repository
-│   │               │   │   │   └── LikeRepository.java
-│   │               │   │   └── service
-│   │               │   │       └── LikeService.java
-│   │               │   ├── order
-│   │               │   │   ├── controller
-│   │               │   │   │   └── OrderController.java
-│   │               │   │   ├── dto
-│   │               │   │   │   ├── request
-│   │               │   │   │   │   ├── OrderItemRequest.java
-│   │               │   │   │   │   └── OrderRequest.java
-│   │               │   │   │   └── response
-│   │               │   │   │       ├── OrderItemResponse.java
-│   │               │   │   │       └── OrderResponse.java
-│   │               │   │   ├── exception
-│   │               │   │   │   ├── OrderException.java
-│   │               │   │   │   ├── OrderExceptionCode.java
-│   │               │   │   │   ├── OrderItemNotFoundException.java
-│   │               │   │   │   └── OrderNotFoundException.java
-│   │               │   │   ├── model
-│   │               │   │   │   ├── OrderItem.java
-│   │               │   │   │   └── Orders.java
-│   │               │   │   ├── repository
-│   │               │   │   │   ├── OrderItemRepository.java
-│   │               │   │   │   └── OrderRepository.java
-│   │               │   │   └── service
-│   │               │   │       └── OrderService.java
-│   │               │   ├── product
-│   │               │   │   ├── controller
-│   │               │   │   │   └── ProductController.java
-│   │               │   │   ├── dto
-│   │               │   │   │   ├── request
-│   │               │   │   │   │   └── AccommodationRequest.java
-│   │               │   │   │   └── response
-│   │               │   │   │       ├── AccommodationDetailResponse.java
-│   │               │   │   │       ├── AccommodationFacilityResponse.java
-│   │               │   │   │       ├── AccommodationImageResponse.java
-│   │               │   │   │       ├── ProductFacilityResponse.java
-│   │               │   │   │       ├── ProductImageResponse.java
-│   │               │   │   │       ├── ProductResponse.java
-│   │               │   │   │       └── ProductSummaryListResponse.java
-│   │               │   │   ├── exception
-│   │               │   │   │   ├── ProductException.java
-│   │               │   │   │   └── ProductExceptionCode.java
-│   │               │   │   ├── model
-│   │               │   │   │   ├── Product.java
-│   │               │   │   │   ├── ProductFacility.java
-│   │               │   │   │   ├── ProductImage.java
-│   │               │   │   │   └── ProductInfoPerNight.java
-│   │               │   │   ├── repository
-│   │               │   │   │   ├── ProductFacilityRepository.java
-│   │               │   │   │   ├── ProductImageRepository.java
-│   │               │   │   │   ├── ProductInfoPerNightRepository.java
-│   │               │   │   │   └── ProductRepository.java
-│   │               │   │   └── service
-│   │               │   │       └── ProductService.java
-│   │               │   ├── review
-│   │               │   │   ├── controller
-│   │               │   │   │   └── ReviewController.java
-│   │               │   │   ├── dto
-│   │               │   │   │   ├── request
-│   │               │   │   │   │   ├── ReviewCreateRequest.java
-│   │               │   │   │   │   └── ReviewUpdateRequest.java
-│   │               │   │   │   └── response
-│   │               │   │   │       ├── ProductReviewListResponse.java
-│   │               │   │   │       ├── ReviewCreateResponse.java
-│   │               │   │   │       ├── ReviewDeleteResponse.java
-│   │               │   │   │       ├── ReviewUpdateResponse.java
-│   │               │   │   │       └── UserReviewListResponse.java
-│   │               │   │   ├── exception
-│   │               │   │   │   ├── AccommodationNotFoundException.java
-│   │               │   │   │   ├── ReviewAlreadyWrittenException.java
-│   │               │   │   │   ├── ReviewExceptionCode.java
-│   │               │   │   │   └── ReviewNotFoundException.java
-│   │               │   │   ├── model
-│   │               │   │   │   └── Review.java
-│   │               │   │   ├── repository
-│   │               │   │   │   └── ReviewRepository.java
-│   │               │   │   └── service
-│   │               │   │       └── ReviewService.java
-│   │               │   └── user
-│   │               │       ├── controller
-│   │               │       │   ├── AuthController.java
-│   │               │       │   └── UserController.java
-│   │               │       ├── dto
-│   │               │       │   ├── request
-│   │               │       │   │   ├── LoginRequest.java
-│   │               │       │   │   └── SignUpRequest.java
-│   │               │       │   └── response
-│   │               │       │       ├── LoginResponse.java
-│   │               │       │       ├── MyPageDetailResponse.java
-│   │               │       │       ├── MyPageListResponse.java
-│   │               │       │       └── SignUpResponse.java
-│   │               │       ├── exception
-│   │               │       │   ├── EmailAlreadyExistsException.java
-│   │               │       │   ├── InValidUserException.java
-│   │               │       │   └── InValidUserExceptionCode.java
-│   │               │       ├── model
-│   │               │       │   ├── User.java
-│   │               │       │   └── UserFacility.java
-│   │               │       ├── repository
-│   │               │       │   └── UserRepository.java
-│   │               │       └── service
-│   │               │           ├── AuthService.java
-│   │               │           └── UserService.java
-│   │               ├── global
-│   │               │   ├── common
-│   │               │   │   ├── AreaCode.java
-│   │               │   │   └── Payment.java
-│   │               │   ├── config
-│   │               │   │   ├── AuthConfig.java
-│   │               │   │   ├── MybatisConfig.java
-│   │               │   │   └── OpenApiConfig.java
-│   │               │   ├── constants
-│   │               │   │   └── ApiConstants.java
-│   │               │   ├── date
-│   │               │   │   ├── exception
-│   │               │   │   │   ├── InValidDateException.java
-│   │               │   │   │   └── InValidDateExceptionCode.java
-│   │               │   │   └── util
-│   │               │   │       └── DateUtil.java
-│   │               │   └── exception
-│   │               │       ├── ExceptionCode.java
-│   │               │       ├── ExceptionResponseDTO.java
-│   │               │       ├── TrillionException.java
-│   │               │       ├── TrillionExceptionCode.java
-│   │               │       └── TrillionExceptionHandler.java
-│   │               └── security
-│   │                   ├── common
-│   │                   │   └── Authority.java
-│   │                   ├── config
-│   │                   │   ├── JwtSecurityConfig.java
-│   │                   │   └── SecurityConfig.java
-│   │                   ├── constants
-│   │                   │   └── JwtConstants.java
-│   │                   ├── dto
-│   │                   │   └── TokenDto.java
-│   │                   ├── exception
-│   │                   │   ├── InvalidTokenException.java
-│   │                   │   ├── NotTokenException.java
-│   │                   │   ├── SecurityExceptionCode.java
-│   │                   │   └── UserNotFoundException.java
-│   │                   ├── jwt
-│   │                   │   ├── JwtAccessDeniedHandler.java
-│   │                   │   ├── JwtAuthenticationEntryPoint.java
-│   │                   │   ├── JwtAuthenticationProvider.java
-│   │                   │   ├── JwtAuthenticationSuccessHandler.java
-│   │                   │   ├── JwtFilter.java
-│   │                   │   └── JwtTokenProvider.java
-│   │                   ├── model
-│   │                   │   └── UserPrincipal.java
-│   │                   ├── service
-│   │                   │   └── CustomUserDetailsService.java
-│   │                   └── util
-│   │                       └── SecurityUtil.java
-│   └── resources
-│       ├── application.yml
-│       └── mapper
-│           └── AccommodationMapper.xml
-
-
-```
-
-<br/>
 
 # 협업
 
@@ -545,6 +363,243 @@ http://localhost:8080/reviews/{review_id}
 ```
 ![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/34dce937-20d3-4967-be47-3c28f29a19d1)
 
+<br>
+
+# 패키지 구조
+
+```bash
+├── main
+│   ├── java
+│   │   └── com
+│   │       └── ybe
+│   │           └── tr1ll1on
+│   │               ├── AppStartupRunner.java
+│   │               ├── Tr1ll1onApplication.java
+│   │               ├── domain
+│   │               │   ├── accommodation
+│   │               │   │   ├── controller
+│   │               │   │   │   └── AccommodationController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   └── AccommodationRequest.java
+│   │               │   │   │   └── response
+│   │               │   │   │       └── AccommodationResponse.java
+│   │               │   │   ├── model
+│   │               │   │   │   ├── Accommodation.java
+│   │               │   │   │   ├── AccommodationFacility.java
+│   │               │   │   │   ├── AccommodationImage.java
+│   │               │   │   │   └── Category.java
+│   │               │   │   ├── repository
+│   │               │   │   │   ├── AccommodationFacilityRepository.java
+│   │               │   │   │   ├── AccommodationImageRepository.java
+│   │               │   │   │   ├── AccommodationMapper.java
+│   │               │   │   │   ├── AccommodationRepository.java
+│   │               │   │   │   └── CategoryRepository.java
+│   │               │   │   └── service
+│   │               │   │       └── AccommodationService.java
+│   │               │   ├── cart
+│   │               │   │   ├── controller
+│   │               │   │   │   └── CartController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   ├── AddCartItemRequest.java
+│   │               │   │   │   │   └── CartRequest.java
+│   │               │   │   │   └── response
+│   │               │   │   │       ├── AddCartItemResponse.java
+│   │               │   │   │       └── CartResponse.java
+│   │               │   │   ├── exception
+│   │               │   │   │   ├── CartIdNotFoundException.java
+│   │               │   │   │   ├── CartIdNotFoundExceptionCode.java
+│   │               │   │   │   ├── CartItemIdNotFoundException.java
+│   │               │   │   │   ├── CartItemIdNotFoundExceptionCode.java
+│   │               │   │   │   ├── ProductNotExistException.java
+│   │               │   │   │   ├── ProductNotExsitExceptionCode.java
+│   │               │   │   │   ├── UserAlreadyHasCartException.java
+│   │               │   │   │   ├── UserAlreadyHasCartExceptionCode.java
+│   │               │   │   │   ├── UserNotFoundException.java
+│   │               │   │   │   └── UserNotFoundExceptionCode.java
+│   │               │   │   ├── model
+│   │               │   │   │   ├── Cart.java
+│   │               │   │   │   └── CartItem.java
+│   │               │   │   ├── repository
+│   │               │   │   │   ├── CartItemRepository.java
+│   │               │   │   │   └── CartRepository.java
+│   │               │   │   └── service
+│   │               │   │       ├── CartService.java
+│   │               │   │       └── CartServiceImpl.java
+│   │               │   ├── likes
+│   │               │   │   ├── controller
+│   │               │   │   │   └── LikeController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   └── LikeDTO.java
+│   │               │   │   ├── error
+│   │               │   │   │   └── LikeError.java
+│   │               │   │   ├── model
+│   │               │   │   │   └── Likes.java
+│   │               │   │   ├── repository
+│   │               │   │   │   └── LikeRepository.java
+│   │               │   │   └── service
+│   │               │   │       └── LikeService.java
+│   │               │   ├── order
+│   │               │   │   ├── controller
+│   │               │   │   │   └── OrderController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   ├── OrderItemRequest.java
+│   │               │   │   │   │   └── OrderRequest.java
+│   │               │   │   │   └── response
+│   │               │   │   │       ├── OrderItemResponse.java
+│   │               │   │   │       └── OrderResponse.java
+│   │               │   │   ├── exception
+│   │               │   │   │   ├── OrderException.java
+│   │               │   │   │   ├── OrderExceptionCode.java
+│   │               │   │   │   ├── OrderItemNotFoundException.java
+│   │               │   │   │   └── OrderNotFoundException.java
+│   │               │   │   ├── model
+│   │               │   │   │   ├── OrderItem.java
+│   │               │   │   │   └── Orders.java
+│   │               │   │   ├── repository
+│   │               │   │   │   ├── OrderItemRepository.java
+│   │               │   │   │   └── OrderRepository.java
+│   │               │   │   └── service
+│   │               │   │       └── OrderService.java
+│   │               │   ├── product
+│   │               │   │   ├── controller
+│   │               │   │   │   └── ProductController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   └── AccommodationRequest.java
+│   │               │   │   │   └── response
+│   │               │   │   │       ├── AccommodationDetailResponse.java
+│   │               │   │   │       ├── AccommodationFacilityResponse.java
+│   │               │   │   │       ├── AccommodationImageResponse.java
+│   │               │   │   │       ├── ProductFacilityResponse.java
+│   │               │   │   │       ├── ProductImageResponse.java
+│   │               │   │   │       ├── ProductResponse.java
+│   │               │   │   │       └── ProductSummaryListResponse.java
+│   │               │   │   ├── exception
+│   │               │   │   │   ├── ProductException.java
+│   │               │   │   │   └── ProductExceptionCode.java
+│   │               │   │   ├── model
+│   │               │   │   │   ├── Product.java
+│   │               │   │   │   ├── ProductFacility.java
+│   │               │   │   │   ├── ProductImage.java
+│   │               │   │   │   └── ProductInfoPerNight.java
+│   │               │   │   ├── repository
+│   │               │   │   │   ├── ProductFacilityRepository.java
+│   │               │   │   │   ├── ProductImageRepository.java
+│   │               │   │   │   ├── ProductInfoPerNightRepository.java
+│   │               │   │   │   └── ProductRepository.java
+│   │               │   │   └── service
+│   │               │   │       └── ProductService.java
+│   │               │   ├── review
+│   │               │   │   ├── controller
+│   │               │   │   │   └── ReviewController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   ├── ReviewCreateRequest.java
+│   │               │   │   │   │   └── ReviewUpdateRequest.java
+│   │               │   │   │   └── response
+│   │               │   │   │       ├── ProductReviewListResponse.java
+│   │               │   │   │       ├── ReviewCreateResponse.java
+│   │               │   │   │       ├── ReviewDeleteResponse.java
+│   │               │   │   │       ├── ReviewUpdateResponse.java
+│   │               │   │   │       └── UserReviewListResponse.java
+│   │               │   │   ├── exception
+│   │               │   │   │   ├── AccommodationNotFoundException.java
+│   │               │   │   │   ├── ReviewAlreadyWrittenException.java
+│   │               │   │   │   ├── ReviewExceptionCode.java
+│   │               │   │   │   └── ReviewNotFoundException.java
+│   │               │   │   ├── model
+│   │               │   │   │   └── Review.java
+│   │               │   │   ├── repository
+│   │               │   │   │   └── ReviewRepository.java
+│   │               │   │   └── service
+│   │               │   │       └── ReviewService.java
+│   │               │   └── user
+│   │               │       ├── controller
+│   │               │       │   ├── AuthController.java
+│   │               │       │   └── UserController.java
+│   │               │       ├── dto
+│   │               │       │   ├── request
+│   │               │       │   │   ├── LoginRequest.java
+│   │               │       │   │   └── SignUpRequest.java
+│   │               │       │   └── response
+│   │               │       │       ├── LoginResponse.java
+│   │               │       │       ├── MyPageDetailResponse.java
+│   │               │       │       ├── MyPageListResponse.java
+│   │               │       │       └── SignUpResponse.java
+│   │               │       ├── exception
+│   │               │       │   ├── EmailAlreadyExistsException.java
+│   │               │       │   ├── InValidUserException.java
+│   │               │       │   └── InValidUserExceptionCode.java
+│   │               │       ├── model
+│   │               │       │   ├── User.java
+│   │               │       │   └── UserFacility.java
+│   │               │       ├── repository
+│   │               │       │   └── UserRepository.java
+│   │               │       └── service
+│   │               │           ├── AuthService.java
+│   │               │           └── UserService.java
+│   │               ├── global
+│   │               │   ├── common
+│   │               │   │   ├── AreaCode.java
+│   │               │   │   └── Payment.java
+│   │               │   ├── config
+│   │               │   │   ├── AuthConfig.java
+│   │               │   │   ├── MybatisConfig.java
+│   │               │   │   └── OpenApiConfig.java
+│   │               │   ├── constants
+│   │               │   │   └── ApiConstants.java
+│   │               │   ├── date
+│   │               │   │   ├── exception
+│   │               │   │   │   ├── InValidDateException.java
+│   │               │   │   │   └── InValidDateExceptionCode.java
+│   │               │   │   └── util
+│   │               │   │       └── DateUtil.java
+│   │               │   └── exception
+│   │               │       ├── ExceptionCode.java
+│   │               │       ├── ExceptionResponseDTO.java
+│   │               │       ├── TrillionException.java
+│   │               │       ├── TrillionExceptionCode.java
+│   │               │       └── TrillionExceptionHandler.java
+│   │               └── security
+│   │                   ├── common
+│   │                   │   └── Authority.java
+│   │                   ├── config
+│   │                   │   ├── JwtSecurityConfig.java
+│   │                   │   └── SecurityConfig.java
+│   │                   ├── constants
+│   │                   │   └── JwtConstants.java
+│   │                   ├── dto
+│   │                   │   └── TokenDto.java
+│   │                   ├── exception
+│   │                   │   ├── InvalidTokenException.java
+│   │                   │   ├── NotTokenException.java
+│   │                   │   ├── SecurityExceptionCode.java
+│   │                   │   └── UserNotFoundException.java
+│   │                   ├── jwt
+│   │                   │   ├── JwtAccessDeniedHandler.java
+│   │                   │   ├── JwtAuthenticationEntryPoint.java
+│   │                   │   ├── JwtAuthenticationProvider.java
+│   │                   │   ├── JwtAuthenticationSuccessHandler.java
+│   │                   │   ├── JwtFilter.java
+│   │                   │   └── JwtTokenProvider.java
+│   │                   ├── model
+│   │                   │   └── UserPrincipal.java
+│   │                   ├── service
+│   │                   │   └── CustomUserDetailsService.java
+│   │                   └── util
+│   │                       └── SecurityUtil.java
+│   └── resources
+│       ├── application.yml
+│       └── mapper
+│           └── AccommodationMapper.xml
+
+
+```
+
+<br/>
 
 
 

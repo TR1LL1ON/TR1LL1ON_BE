@@ -28,13 +28,11 @@ public class User {
 
     private String name;
     private String email;
+    private String picture;
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
-
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-//    private Cart cart;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
@@ -49,11 +47,11 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Review> reviewList = new ArrayList<>();
 
-    public void setId(Long userId) {
-        this.id = userId;
-    }
+    public void setId(Long userId) { this.id = userId; }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
+    public void setName(String name) { this.name = name; }
+
+    public void setPicture(String picture) { this.picture = picture; }
+
+    public void setCart(Cart cart) { this.cart = cart; }
 }

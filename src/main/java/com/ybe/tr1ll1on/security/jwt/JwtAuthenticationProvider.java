@@ -27,7 +27,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
         } else {
             throw new SecurityException(SecurityExceptionCode.USER_NOT_FOUND);
         }

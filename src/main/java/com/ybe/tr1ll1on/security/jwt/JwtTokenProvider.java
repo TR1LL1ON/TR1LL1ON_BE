@@ -88,11 +88,11 @@ public class JwtTokenProvider {
     private void storeRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
 
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
-                .domain(".tr1ll1on.site")
-                .httpOnly(false)     // 1. JavaScript에서 쿠키에 접근을 막기 위해 httpOnly 설정
-                .secure(true)       // 2. HTTPS에서만 쿠키 전송을 허용
-                .path("/")      // 3. 쿠키가 전송될 수 있는 경로 설정
-                .sameSite("None")    // 4. 동일 사이트와 크로스 사이트에 모두 쿠키 전송이 가능
+                .domain(".tr1ll1on.site") // 1. 쿠키를 저장할 도메인을 지정
+                .httpOnly(false)     // 2. JavaScript에서 쿠키에 접근을 막기 위해 httpOnly 설정
+                .secure(true)       // 3. HTTPS에서만 쿠키 전송을 허용
+                .path("/")      // 4. 쿠키가 전송될 수 있는 경로 설정
+                .sameSite("None")    // 5. 동일 사이트와 크로스 사이트에 모두 쿠키 전송이 가능
                 .build();
 
         response.addHeader("Set-Cookie", cookie.toString());
