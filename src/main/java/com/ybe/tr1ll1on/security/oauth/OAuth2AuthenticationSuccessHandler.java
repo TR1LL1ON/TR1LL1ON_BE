@@ -13,9 +13,10 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
@@ -23,7 +24,6 @@ import java.util.Map;
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final ObjectMapper objectMapper;
 
     @Override
     public void onAuthenticationSuccess(
@@ -31,17 +31,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     ) throws IOException, ServletException {
         TokenInfo tokenInfo = jwtTokenProvider.generateTokenInfo(authentication, response);
 
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("tokenInfo", tokenInfo);
+        String targetUrl = UriComponentsBuilder.fromUriString("https://www.tr1ll1on.site/oauth2/redirect")
+                .queryParam("accessToken", tokenInfo.getAccessToken())
+                .queryParam("refreshToken", tokenInfo.getRefreshToken())
+                .build()
+                .encode(StandardCharsets.UTF_8)
+                .toUriString();
 
-        String responseBodyJson = objectMapper.writeValueAsString(responseBody);
-
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setCharacterEncoding("utf-8");
-        response.getWriter().write(responseBodyJson);
-
-        String redirectUrl = "https://www.tr1ll1on.site";
-        response.sendRedirect(redirectUrl);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }
