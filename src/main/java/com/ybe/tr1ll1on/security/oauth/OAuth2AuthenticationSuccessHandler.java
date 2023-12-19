@@ -31,9 +31,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     ) throws IOException, ServletException {
         TokenInfo tokenInfo = jwtTokenProvider.generateTokenInfo(authentication, response);
 
-        String targetUrl = UriComponentsBuilder.fromUriString("https://www.tr1ll1on.site/oauth2/redirect")
+        String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/oauth2/redirect")
                 .queryParam("accessToken", tokenInfo.getAccessToken())
-                .queryParam("refreshToken", tokenInfo.getRefreshToken())
                 .build()
                 .encode(StandardCharsets.UTF_8)
                 .toUriString();
