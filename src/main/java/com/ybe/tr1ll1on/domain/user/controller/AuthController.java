@@ -5,6 +5,7 @@ import com.ybe.tr1ll1on.domain.user.dto.request.SignUpRequest;
 import com.ybe.tr1ll1on.domain.user.dto.response.LoginResponse;
 import com.ybe.tr1ll1on.domain.user.dto.response.SignUpResponse;
 import com.ybe.tr1ll1on.domain.user.service.AuthService;
+import com.ybe.tr1ll1on.security.dto.TokenInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -58,15 +59,13 @@ public class AuthController {
         return ResponseEntity.ok(authService.logout(response));
     }
 
-
     @PostMapping("/refreshAccessToken")
     @Operation(summary = "리프레쉬 토큰 API", description = "리프레쉬 API 입니다.")
     @ApiResponse(responseCode = "201", description = "리프레쉬 성공시")
     @SecurityRequirement(name = "jwt")
-    public ResponseEntity<?> refreshAccessToken(
-            HttpServletRequest request
+    public ResponseEntity<TokenInfo> refreshAccessToken(
+            HttpServletRequest request, HttpServletResponse response
     ) {
-        ResponseEntity<String> result = authService.refreshAccessToken(request);
-        return new ResponseEntity<>(result.getBody(), result.getHeaders(), result.getStatusCode());
+        return ResponseEntity.ok(authService.refreshAccessToken(request, response));
     }
 }

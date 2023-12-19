@@ -91,14 +91,11 @@ public class AuthService {
     }
 
     @Transactional
-    public ResponseEntity<String> refreshAccessToken(HttpServletRequest request) {
+    public TokenInfo refreshAccessToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = jwtTokenProvider.getRefreshTokenFromRequest(request);
         Authentication authentication = jwtTokenProvider.getAuthenticationFromRefreshToken(refreshToken);
-        String newAccessToken = jwtTokenProvider.generateAccessToken(authentication);
 
-        HttpHeaders responseHeaders = createAuthorizationHeader(newAccessToken);
-
-        return new ResponseEntity<>("토큰 재발급 성공", responseHeaders, HttpStatus.OK);
+        return jwtTokenProvider.generateTokenInfo(authentication, response);
     }
 
     private Authentication authenticateUser(LoginRequest loginRequest) {
@@ -107,12 +104,6 @@ public class AuthService {
         return authenticationManagerBuilder.getObject().authenticate(authenticationToken);
     }
 
-    private HttpHeaders createAuthorizationHeader(String accessToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
-
-        return headers;
-    }
 
     private void deleteCookie(HttpServletResponse response) {
         Cookie cookie = new Cookie("refreshToken", null);
