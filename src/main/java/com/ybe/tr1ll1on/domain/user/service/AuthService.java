@@ -72,7 +72,7 @@ public class AuthService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new InValidUserException(InValidUserExceptionCode.USER_NOT_FOUND));
 
-        LoginResponse loginResponse = LoginResponse.builder()
+        return LoginResponse.builder()
                 .userDetails(
                         LoginResponse.UserDetailsResponse.builder()
                                 .userId(userId)
@@ -82,8 +82,6 @@ public class AuthService {
                 )
                 .tokenInfo(tokenInfo)
                 .build();
-
-        return loginResponse;
     }
 
     @Transactional

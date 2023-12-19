@@ -6,13 +6,10 @@ import com.ybe.tr1ll1on.security.exception.SecurityExceptionCode;
 import com.ybe.tr1ll1on.security.exception.SecurityException;
 import com.ybe.tr1ll1on.security.model.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +37,6 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .username(String.valueOf(user.getId()))
                 .password(user.getPassword())
                 .authority(user.getAuthority().toString())
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority(user.getAuthority().toString())))
                 .build();
     }
 }

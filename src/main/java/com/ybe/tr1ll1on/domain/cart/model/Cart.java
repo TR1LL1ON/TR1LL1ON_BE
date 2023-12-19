@@ -2,16 +2,17 @@ package com.ybe.tr1ll1on.domain.cart.model;
 
 import com.ybe.tr1ll1on.domain.user.model.User;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Table(name = "cart")
+@Getter
 @NoArgsConstructor
-
+@AllArgsConstructor
+@Builder
 public class Cart {
     @Id
     @Column(name = "cart_id")
