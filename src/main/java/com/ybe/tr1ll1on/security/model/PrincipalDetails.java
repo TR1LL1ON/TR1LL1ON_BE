@@ -4,26 +4,18 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.*;
 
 @Getter
-public class PrincipalDetails implements UserDetails {
+@Builder
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private final String username;
     private final String password;
     private final String authority;
-    private final Collection<GrantedAuthority> authorities;
-
-    @Builder
-    private PrincipalDetails(
-            String username, String password, String authority, Collection<GrantedAuthority> authorities
-    ) {
-        this.username = username;
-        this.password = password;
-        this.authority = authority;
-        this.authorities = authorities;
-    }
+    private Map<String, Object> attributes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -59,4 +51,11 @@ public class PrincipalDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    /* OAuth2User 인터페이스의 메서드들 */
+    @Override
+    public Map<String, Object> getAttributes() { return attributes; }
+
+    @Override
+    public String getName() { return username; }
 }

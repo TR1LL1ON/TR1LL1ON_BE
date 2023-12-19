@@ -1,6 +1,8 @@
 package com.ybe.tr1ll1on.security.config;
 
 import com.ybe.tr1ll1on.security.jwt.*;
+import com.ybe.tr1ll1on.security.oauth.CustomOAuth2UserService;
+import com.ybe.tr1ll1on.security.oauth.OAuth2AuthenticationSuccessHandler;
 import com.ybe.tr1ll1on.security.service.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,13 +33,20 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2LoginSuccessHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration, PrincipalDetailsService customUserDetailsService, PasswordEncoder passwordEncoder) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration,
+            PrincipalDetailsService customUserDetailsService,
+            PasswordEncoder passwordEncoder
+    ) throws Exception {
         ProviderManager authenticationManager = (ProviderManager) authenticationConfiguration.getAuthenticationManager();
         authenticationManager.getProviders().add(new JwtAuthenticationProvider(customUserDetailsService, passwordEncoder));
         return authenticationManager;
@@ -56,6 +65,7 @@ public class SecurityConfig {
                 .formLogin().disable()
                 // 3. HTTP 기본 인증을 비활성화 - RESTful API는 일반적으로 HTTP 기본 인증이 아닌 토큰 기반의 인증을 사용한다.
                 .httpBasic().disable();
+
         http
                 // Exception Handling 시 사용자 정의 예외 처리 핸들러 클래스가 추가된다.
                 .exceptionHandling()
@@ -72,11 +82,14 @@ public class SecurityConfig {
                 // 1. 시큐리티는 기본적으로 세션을 사용한다.
                 // 2. 현재 세션을 사용하지 않기 때문에, 세션을 생성하지 않도록 설정 (STATELESS 모드)
                 .sessionManagement()
-                .sessionCreationPolicy(STATELESS);
+                .sessionCreationPolicy(STATELESS)
+                .and()
+                .sessionManagement().disable();
 
         // 상품 조회(전체, 개별), 숙소 전체 리뷰 조회, 회원 가입은 로그인 없이 사용 가능하다.
         http.authorizeHttpRequests(request -> request
                 .requestMatchers("/").permitAll()
+                .requestMatchers("/login/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/products/**").permitAll()
                 .requestMatchers("/reviews/{accommodationId}").permitAll()
@@ -85,6 +98,12 @@ public class SecurityConfig {
                 .requestMatchers("/v1/api-docs/**").permitAll()
                 .anyRequest().authenticated()
         );
+
+        http
+                .oauth2Login()
+                .userInfoEndpoint().userService(customOAuth2UserService)
+                .and()
+                .successHandler(oAuth2LoginSuccessHandler);
 
         http
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
