@@ -103,21 +103,21 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 객실(상품) 정보를 얻음.
-     * @param p
+     * @param product
      * @param req
      * @return
      */
-    private ProductResponse getProductDetail(Product p, AccommodationRequest req) {
+    private ProductResponse getProductDetail(Product product, AccommodationRequest req) {
         Double averPrice = 0.0;
         Integer totalPrice = 0;
         boolean isSold = true;
-        Integer count = p.getCount(); //총 남은 객실
+        Integer count = product.getCount(); //총 남은 객실
         LocalDate checkIn = req.getCheckIn(), checkOut = req.getCheckOut();
 
         /* TODO 체크아웃 날짜 -1 을 해야, 1박이 됨 */
         List<ProductInfoPerNight> productInfoPerNightList =
-                productInfoPerNightRepository.findByDateBetweenAndProductId(
-                        checkIn, checkOut.minusDays(1), p.getId()
+                productInfoPerNightRepository.findByDateBetweenAndProduct(
+                        checkIn, checkOut.minusDays(1), product
                 );
 
         for (ProductInfoPerNight pi : productInfoPerNightList) {
@@ -134,23 +134,23 @@ public class ProductServiceImpl implements ProductService {
         averPrice = (double) (totalPrice / (Period.between(checkIn, checkOut).getDays()));
 
         return ProductResponse.builder()
-                .roomId(p.getId())
-                .roomName(p.getName())
-                .checkIn(p.getCheckInTime())
-                .checkOut(p.getCheckOutTime())
+                .roomId(product.getId())
+                .roomName(product.getName())
+                .checkIn(product.getCheckInTime())
+                .checkOut(product.getCheckOutTime())
                 .count(count)
                 .isSold(isSold)
-                .standardNumber(p.getStandardNumber())
-                .maxNumber(p.getMaximumNumber())
+                .standardNumber(product.getStandardNumber())
+                .maxNumber(product.getMaximumNumber())
                 .averPrice(averPrice)
                 .totalPrice(totalPrice)
                 .image(
-                        p.getProductImageList().stream().map(
+                        product.getProductImageList().stream().map(
                                 ProductImageResponse::of
                         ).collect(Collectors.toList())
                 )
                 .facility(
-                        ProductFacilityResponse.of(p.getProductFacility())
+                        ProductFacilityResponse.of(product.getProductFacility())
                 )
                 .build();
     }

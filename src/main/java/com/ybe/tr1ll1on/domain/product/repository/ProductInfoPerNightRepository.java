@@ -14,14 +14,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductInfoPerNightRepository extends JpaRepository<ProductInfoPerNight, Long> {
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    List<ProductInfoPerNight> findByDateBetweenAndProductId(
-            LocalDate checkIn, LocalDate checkOut, Long id
-    );
-
     @Query("SELECT p FROM ProductInfoPerNight p WHERE p.date BETWEEN :checkIn AND :checkOut AND p.product = :product")
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    List<ProductInfoPerNight> findByDateBetweenAndProductIdLock(
+    List<ProductInfoPerNight> findByDateBetweenAndProduct(
             @Param("checkIn") LocalDate checkIn,
             @Param("checkOut") LocalDate checkOut,
             @Param("product") Product product
