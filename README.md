@@ -1,3 +1,10 @@
+# 트릴리언 아키텍처
+
+![trillion_architecture](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/59862752/3e8c2328-8072-4a8b-bb58-b87376818960)
+
+
+
+
 # KPT 기간 보완사항
 
 - 무한 스크롤
@@ -90,13 +97,6 @@ height="400"></td>
 
 </br>
 </br>
-
-<br/>
-
-# 아키텍처
-
-![image](https://github.com/TR1LL1ON/TR1LL1ON_BE/assets/108813475/8c1c0e5a-f315-4feb-8363-ad5ffbd78be1)
-
 
 <br/>
 
